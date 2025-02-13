@@ -1,7 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
-import Link from 'next/link';
 
 interface ChatListProps {
   onSelectChat: (room: string) => void;

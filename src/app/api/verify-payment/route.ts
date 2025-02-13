@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 import axios from 'axios';
 
 export async function POST(request: Request) {
-  const { reference, productId } = await request.json();
+  const { reference } = await request.json();
 
   try {
     const paystackResponse = await axios.get(
