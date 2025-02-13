@@ -19,13 +19,13 @@
     "framer-motion": "^12.4.1",
     "lucide-react": "^0.471.0",
     "next": "15.1.4",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "react-hot-toast": "^2.4.1",
     "react-paystack": "^6.0.0",
     "socket.io-client": "^4.8.1",
     "swiper": "^11.2.2",
-    "zustand": "^5.0.1",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "zustand": "^5.0.1"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
@@ -37,7 +37,6 @@
     "@vitejs/plugin-react": "^4.3.3",
     "autoprefixer": "^10.4.20",
     "daisyui": "^4.12.23",
-    "eslint": "^9",
     "eslint-config-next": "15.1.4",
     "eslint-plugin-react": "^7.37.2",
     "eslint-plugin-react-hooks": "^5.0.0",
