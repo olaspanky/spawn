@@ -10,7 +10,7 @@
 import axios from "axios";
 
 const axiosInstance = axios.create({
-  baseURL: "http://localhost:5001/api", // Adjust the base URL as needed
+  baseURL: "https://9c7c3d14-9812-4a38-8a7e-f8da0f160461.us-east-1.cloud.genez.io/api", // Adjust the base URL as needed
 });
 
 // Add a request interceptor to include the token
