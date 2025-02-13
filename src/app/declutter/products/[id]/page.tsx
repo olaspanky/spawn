@@ -120,14 +120,18 @@ export default function ProductPage() {
   const onClose = () => {
     alert("Payment was not completed. Please try again.");
   };
-
   const handlePayment = () => {
     if (!product) {
       alert("Product information is missing.");
       return;
     }
-    initializePayment(onSuccess, onClose);
+  
+    initializePayment({
+      onSuccess,
+      onClose,
+    });
   };
+  
 
   const sellerId = product?.seller._id;
 
