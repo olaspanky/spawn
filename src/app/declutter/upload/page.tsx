@@ -113,7 +113,7 @@
 //       setUploadingImages(false);
   
 //       // Create item
-//       const response = await fetch('http://localhost:5000/api/items', {
+//       const response = await fetch('https://spawnback.onrender.com/api/items', {
 //         method: 'POST',
 //         headers: {
 //           'Content-Type': 'application/json',
@@ -438,7 +438,7 @@ export default function UploadPage() {
       const imageUrls = await handleImageUpload(images);
       setUploadingImages(false);
 
-      const response = await fetch('http://localhost:5000/api/items', {
+      const response = await fetch('https://spawnback.onrender.com/api/items', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

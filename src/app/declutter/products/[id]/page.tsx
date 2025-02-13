@@ -51,7 +51,7 @@ export default function ProductPage() {
       try {
         if (!id) return;
 
-        const response = await fetch(`http://localhost:5000/api/items/${id}`);
+        const response = await fetch(`https://spawnback.onrender.com/api/items/${id}`);
         if (!response.ok) throw new Error('Product not found');
         const data = await response.json();
 
@@ -101,7 +101,7 @@ export default function ProductPage() {
         setPaymentSuccessful(true);
         alert('Payment successful! Your order is being processed.');
 
-        const updatedProductResponse = await fetch(`http://localhost:5000/api/items/${id}`);
+        const updatedProductResponse = await fetch(`https://spawnback.onrender.com/api/items/${id}`);
         if (updatedProductResponse.ok) {
           const updatedProduct = await updatedProductResponse.json();
           setProduct(updatedProduct);

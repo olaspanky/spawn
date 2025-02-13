@@ -11,13 +11,13 @@ interface ChatProps {
 const Chat: React.FC<ChatProps> = ({ room }) => {
   const [message, setMessage] = useState<string>('');
   const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const socket = useSocket('http://localhost:5000'); // Replace with your backend URL
+  const socket = useSocket('https://spawnback.onrender.com'); // Replace with your backend URL
   const { user } = useAuth();
 
   useEffect(() => {
     const fetchMessages = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/api/messages/${room}`);
+        const response = await fetch(`https://spawnback.onrender.com/api/messages/${room}`);
         if (response.ok) {
           const data = await response.json();
           setMessages(data);
@@ -52,7 +52,7 @@ const Chat: React.FC<ChatProps> = ({ room }) => {
       };
 
       try {
-        const response = await fetch('http://localhost:5000/api/messages', {
+        const response = await fetch('https://spawnback.onrender.com/api/messages', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ room, ...newMessage }),

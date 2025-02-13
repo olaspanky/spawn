@@ -7,7 +7,7 @@ import axiosInstance from "../lib/axios";
 import io from "socket.io-client"; // Import Socket.IO client
 
 const BASE_URL =
-  process.env.PORT || (process.env.NODE_ENV === "development" ? "http://localhost:5001" : "/");
+  process.env.NEXT_PUBLIC_API_URL || (process.env.NODE_ENV === "development" ? "https://chatapp-r2c3.onrender.com" : "https://452dcdfb-45d4-413e-a5e8-39706dd532ac.us-east-1.cloud.genez.io/");
 
 export const useAuthStore = create<AuthStore>((set, get) => {
   let storedToken: string | null = null;

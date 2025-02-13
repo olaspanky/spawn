@@ -10,8 +10,7 @@
 import axios from "axios";
 
 const axiosInstance = axios.create({
-  baseURL: "https://9c7c3d14-9812-4a38-8a7e-f8da0f160461.us-east-1.cloud.genez.io/api", // Adjust the base URL as needed
-});
+  baseURL: process.env.NODE_ENV === "development" ? "https://chatapp-r2c3.onrender.com/api" : "https://452dcdfb-45d4-413e-a5e8-39706dd532ac.us-east-1.cloud.genez.io/api",});
 
 // Add a request interceptor to include the token
 axiosInstance.interceptors.request.use((config) => {
