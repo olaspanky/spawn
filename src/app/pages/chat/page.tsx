@@ -1,13 +1,13 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { useChatStore } from "../../store/useChatStore"; // Ensure correct path
 import Sidebar from "../../components/Sidebar";
 import NoChatSelected from "../../components/NoChatSelected";
 import ChatContainer from "../../components/ChatContainer";
 
-const ChatPage: React.FC = () => {
+const ChatPageContent: React.FC = () => {
   const { selectedUser, setSelectedUserById, getUsers } = useChatStore();
   const searchParams = useSearchParams();
   const sellerId = searchParams.get("sellerId");
@@ -16,13 +16,8 @@ const ChatPage: React.FC = () => {
     const handleIncomingChat = async () => {
       if (sellerId) {
         try {
-          // Fetch all users
           await getUsers();
-
-          // Select seller's chat
           await setSelectedUserById(sellerId);
-
-          // Clean up URL for better UX
           window.history.replaceState({}, "", "/pages/chat");
         } catch (error) {
           console.error("Error setting up chat:", error);
@@ -44,6 +39,15 @@ const ChatPage: React.FC = () => {
         </div>
       </div>
     </div>
+  );
+};
+
+// Wrap in Suspense to fix Next.js error
+const ChatPage: React.FC = () => {
+  return (
+    <Suspense fallback={<div>Loading chat...</div>}>
+      <ChatPageContent />
+    </Suspense>
   );
 };
 
