@@ -418,7 +418,7 @@ export default function ProductPage() {
         <div className="md:flex">
           {/* Left: Image Gallery */}
 
-          <div className='flex flex-row'>
+          <div className='flex gap-6 lg:flex-row'>
 
           <div className="md:w-1/2  ">
             <div className="lg:p-4">

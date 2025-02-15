@@ -337,12 +337,12 @@ export default function Home() {
         </div>
 
         {/* Hero Section with Search and Filter */}
-        <div className="max-w-6xl mx-auto p-3 lg:px-4 lg:py-6 flex flex-col lg:flex-row lg:items-center gap-4">
-          <div className="flex-grow relative">
+        <div className="max-w-6xl mx-auto p-3 lg:px-4 lg:py-6 flex flex-col w-full lg:items-center gap-4">
+          <div className="flex-grow relative w-full">
             <input
               type="text"
               placeholder="Search for items..."
-              className="w-full lg:py-3 pl-12 pr-4 text-[16px] lg:text-md rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all"
+              className="w-full lg:py-3 pl-12 pr-4 text-[16px] lg:text-md rounded-lg bg-white border border-gray-200 focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
@@ -356,9 +356,9 @@ export default function Home() {
               </button>
             )}
           </div>
-          <div className="bg-white rounded-lg shadow-md p-4 w-full lg:w-auto">
+          <div className="bg-white rounded-lg shadow-md p-4 w-full lg:w-full">
             <h3 className="lg:text-lg text-xs font-semibold text-gray-900 mb-4">Filter by Category</h3>
-            <div className="flex flex-wrap gap-3">
+            <div className="flex flex-wrap w-full gap-3">
               {categories.map((category) => (
                 <button
                   key={category}
@@ -387,7 +387,7 @@ export default function Home() {
               {selectedCategory !== 'All' ? `${selectedCategory} Items` : 'All Listings'}
               <span className="ml-2 text-sm text-gray-500">({filteredItems.length})</span>
             </h3>
-            <div className="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-3 lg:gap-6">
               {filteredItems.map((item) => (
                 <Link key={item._id} href={`/declutter/products/${item._id}`}>
                   <ListingCard item={item} />
@@ -427,14 +427,14 @@ const ListingCard = ({ item }: { item: Item }) => {
         </div>
       </div>
       <div className="lg:p-4 p-1">
-        <h4 className="font-semibold text-gray-900 mb-1 truncate text-[4px] lg:text-base">{item.title}</h4>
+        <h4 className="font-semibold text-gray-900 mb-1 truncate text-[10px] lg:text-base">{item.title}</h4>
         <div className="flex justify-between items-center mt-2">
-          <span className="text-orange-600 font-bold text-[8px] lg:text-lg">
+          <span className="text-orange-600 font-bold text-[12px] lg:text-lg">
             ₦{item.price.toLocaleString()}
           </span>
           <div className="flex items-center text-gray-600">
             <MapPinIcon className="lg:h-4 lg:w-4 h-1 w-1 mr-1.5 text-orange-500" />
-            <span className="text-[4px] lg:text-sm">{item.location}</span>
+            <span className="text-[10px] lg:text-sm">{item.location}</span>
           </div>
         </div>
       </div>
