@@ -20,6 +20,16 @@ export default {
         font1: ["var(--font-montserrat)", "sans-serif"],
         font2: ["var(--font-robo-slab)", "serif"],
       },
+
+        keyframes: {
+    fadeIn: {
+      '0%': { opacity: '0' },
+      '100%': { opacity: '1' },
+    }
+  },
+  animation: {
+    fadeIn: 'fadeIn 0.3s ease-in-out',
+  },
     },
   },
   plugins: [daisyui],
