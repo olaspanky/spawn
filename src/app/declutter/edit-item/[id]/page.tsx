@@ -1,70 +1,79 @@
 "use client";
 
-import { useEffect, useState } from 'react';
-import { useRouter, useParams } from 'next/navigation';
-import { useAuth } from '@/app/context/AuthContext';
+import { useEffect, useState } from "react";
+import { useRouter, useParams } from "next/navigation";
+import { useAuth } from "@/app/context/AuthContext";
 
 const EditItem = () => {
   const router = useRouter();
   const { id } = useParams();
   const { token } = useAuth();
-  const [item, setItem] = useState(null);
+  const [item, setItem] = useState<any>(null); // Use a more specific type if possible
   const [formData, setFormData] = useState({
-    title: '',
-    price: '',
-    description: '',
-    location: '',
-    category: '',
-    images: [],
+    title: "",
+    price: "",
+    description: "",
+    location: "",
+    category: "",
+    images: [] as string[],
   });
   const [images, setImages] = useState<File[]>([]); // New images to upload
   const [previewUrls, setPreviewUrls] = useState<string[]>([]); // Previews for new images
   const [existingImages, setExistingImages] = useState<string[]>([]); // Existing Cloudinary URLs
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
+
+  // Redirect if no token
+  useEffect(() => {
+    if (!token) {
+      router.push("/declutter/login");
+    }
+  }, [token, router]);
 
   // Fetch item data
   useEffect(() => {
     const fetchItem = async () => {
+      if (!id || !token) return;
+
       try {
         const response = await fetch(`https://spawnback.onrender.com/api/items/${id}`, {
-          headers: { 'x-auth-token': token }, // Updated to match middleware
+          headers: {
+            "x-auth-token": token || "", // Fallback to empty string if token is null/undefined
+          },
         });
-        if (!response.ok) throw new Error('Failed to fetch item');
+        if (!response.ok) throw new Error("Failed to fetch item");
         const data = await response.json();
         setItem(data);
         setFormData({
-          title: data.title || '',
-          price: data.price || '',
-          description: data.description || '',
-          location: data.location || '',
-          category: data.category || '',
+          title: data.title || "",
+          price: data.price || "",
+          description: data.description || "",
+          location: data.location || "",
+          category: data.category || "",
           images: data.images || [],
         });
-        setExistingImages(data.images || []); // Load existing images
+        setExistingImages(data.images || []);
       } catch (error) {
-        console.error('Failed to fetch item:', error);
+        console.error("Failed to fetch item:", error);
       }
     };
 
-    if (id && token) {
-      fetchItem();
-    }
+    fetchItem();
   }, [id, token]);
 
   // Handle text input changes
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
   // Handle new image selection
-  const handleImageChange = (e) => {
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newFiles = Array.from(e.target.files || []);
     const totalImages = existingImages.length + images.length + newFiles.length;
 
     if (totalImages > 4) {
-      setError('Maximum 4 images allowed');
+      setError("Maximum 4 images allowed");
       return;
     }
 
@@ -72,18 +81,18 @@ const EditItem = () => {
     const newUrls = newFiles.map((file) => URL.createObjectURL(file));
     setImages(updatedImages);
     setPreviewUrls([...previewUrls, ...newUrls]);
-    setError('');
+    setError("");
   };
 
   // Remove an existing image
-  const removeExistingImage = (index) => {
+  const removeExistingImage = (index: number) => {
     const updatedExistingImages = existingImages.filter((_, i) => i !== index);
     setExistingImages(updatedExistingImages);
     setFormData({ ...formData, images: updatedExistingImages });
   };
 
   // Remove a new image
-  const removeNewImage = (index) => {
+  const removeNewImage = (index: number) => {
     const updatedImages = images.filter((_, i) => i !== index);
     const updatedPreviews = previewUrls.filter((_, i) => i !== index);
     URL.revokeObjectURL(previewUrls[index]);
@@ -92,26 +101,23 @@ const EditItem = () => {
   };
 
   // Upload new images to Cloudinary
-  const handleImageUpload = async (files) => {
+  const handleImageUpload = async (files: File[]) => {
     try {
       const cloudinaryUrls = [];
       for (const file of files) {
         const uploadData = new FormData();
-        uploadData.append('file', file);
-        uploadData.append('upload_preset', 'spanky');
-        uploadData.append('cloud_name', 'dfz5jgfxo');
+        uploadData.append("file", file);
+        uploadData.append("upload_preset", "spanky");
+        uploadData.append("cloud_name", "dfz5jgfxo");
 
-        const response = await fetch(
-          'https://api.cloudinary.com/v1_1/dfz5jgfxo/image/upload',
-          {
-            method: 'POST',
-            body: uploadData,
-          }
-        );
+        const response = await fetch("https://api.cloudinary.com/v1_1/dfz5jgfxo/image/upload", {
+          method: "POST",
+          body: uploadData,
+        });
 
         if (!response.ok) {
           const errorData = await response.json();
-          throw new Error(errorData.error?.message || 'Image upload failed');
+          throw new Error(errorData.error?.message || "Image upload failed");
         }
 
         const data = await response.json();
@@ -119,15 +125,22 @@ const EditItem = () => {
       }
       return cloudinaryUrls;
     } catch (err) {
-      throw new Error(err instanceof Error ? err.message : 'Image upload failed');
+      throw new Error(err instanceof Error ? err.message : "Image upload failed");
     }
   };
 
   // Handle form submission
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setError('');
+    setError("");
+
+    if (!token) {
+      setError("Authentication required");
+      setLoading(false);
+      router.push("/declutter/login");
+      return;
+    }
 
     try {
       let updatedImageUrls = [...existingImages];
@@ -139,32 +152,33 @@ const EditItem = () => {
 
       const updatedFormData = {
         ...formData,
-        price: parseInt(formData.price.toString().replace(/\D/g, '')),
+        price: parseInt(formData.price.toString().replace(/\D/g, "")),
         images: updatedImageUrls,
       };
 
       const response = await fetch(`https://spawnback.onrender.com/api/items/${id}`, {
-        method: 'PUT',
+        method: "PUT",
         headers: {
-          'Content-Type': 'application/json',
-          'x-auth-token': token, // Updated to match middleware
+          "Content-Type": "application/json",
+          "x-auth-token": token, // Token is guaranteed to be string here
         },
         body: JSON.stringify(updatedFormData),
       });
 
-      if (!response.ok) throw new Error('Failed to update item');
+      if (!response.ok) throw new Error("Failed to update item");
 
       // Clean up preview URLs
       previewUrls.forEach((url) => URL.revokeObjectURL(url));
-      router.push('/declutter/manage-items');
+      router.push("/declutter/manage-items");
     } catch (error) {
-      setError(error.message || 'Failed to update item');
-      console.error('Error:', error);
+      setError(error instanceof Error ? error.message : "Failed to update item");
+      console.error("Error:", error);
     } finally {
       setLoading(false);
     }
   };
 
+  if (!token) return null; // Redirect handled in useEffect
   if (!item) return <div className="text-center text-gray-500">Loading...</div>;
 
   return (
@@ -227,9 +241,7 @@ const EditItem = () => {
             </select>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Images (Max 4)
-            </label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Images (Max 4)</label>
             {/* Display existing images */}
             {existingImages.length > 0 && (
               <div className="mt-2 grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -316,7 +328,7 @@ const EditItem = () => {
             disabled={loading}
             className="w-full bg-orange-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-orange-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {loading ? 'Saving Changes...' : 'Save Changes'}
+            {loading ? "Saving Changes..." : "Save Changes"}
           </button>
         </form>
       </div>
