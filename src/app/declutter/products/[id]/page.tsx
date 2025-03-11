@@ -36,6 +36,7 @@ export default function ProductPage() {
   const [isVerifying, setIsVerifying] = useState(false);
   const { token, logout, user } = useAuth();
   const router = useRouter();
+  const [showPopup, setShowPopup] = useState(false); // Added for popup
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -123,10 +124,24 @@ export default function ProductPage() {
     });
   };
 
-  const handleClick = () => {
+  // Updated handleClick for popup
+  const handleClick = (e: React.MouseEvent) => {
     if (!user) {
-      router.push("/login");
+      e.preventDefault(); // Prevent Link navigation
+      setShowPopup(true); // Show popup
     }
+    // If user is logged in, Link will navigate to /pages/chat?sellerId=${sellerId}
+  };
+
+  // Handle login redirect
+  const handleLogin = () => {
+    setShowPopup(false);
+    router.push("/declutter/login");
+  };
+
+  // Handle cancel
+  const handleCancel = () => {
+    setShowPopup(false);
   };
 
   const sellerId = product?.seller._id;
@@ -171,7 +186,7 @@ export default function ProductPage() {
 
   return (
     <div className="min-h-screen overflow-hidden bg-gradient-to-br from-black/95 to-gray-900/95 backdrop-blur-lg border-t border-white/10 font-sans">
-      <nav className=" shadow-sm sticky top-0 z-10">
+      <nav className="shadow-sm sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center">
           <Link href="/" className="text-gray-600 hover:text-orange-600 transition">
             <ArrowLeftIcon className="h-5 w-5 lg:h-6 lg:w-6" />
@@ -182,7 +197,7 @@ export default function ProductPage() {
         </div>
       </nav>
 
-      <main className="max-w-7xl mx-auto my-6 shadow-sm rounded-lg overflow-hidden ">
+      <main className="max-w-7xl mx-auto my-6 shadow-sm rounded-lg overflow-hidden">
         <div className="flex gap-6 lg:flex-row flex-row">
           {/* Left: Image Gallery */}
           <div className="md:w-1/2 p-2 lg:p-6">
@@ -305,6 +320,32 @@ export default function ProductPage() {
           </div>
         </div>
       </main>
+
+      {/* Popup Modal */}
+      {showPopup && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="bg-white rounded-xl shadow-lg p-6 max-w-sm w-full text-center">
+            <h2 className="text-xl font-bold text-gray-900 mb-4">Login Required</h2>
+            <p className="text-gray-600 mb-6">
+              You need to be logged in to chat with the seller. Would you like to login now?
+            </p>
+            <div className="flex justify-center space-x-4">
+              <button
+                onClick={handleCancel}
+                className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400 transition"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleLogin}
+                className="bg-orange-600 text-white px-4 py-2 rounded-lg hover:bg-orange-700 transition"
+              >
+                Login Now
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

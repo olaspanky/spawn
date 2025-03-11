@@ -14,7 +14,7 @@ const LayoutWrapper = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="min-h-screen flex flex-col">
       { !isLoginOrSignup && (isDeclutterRoute ? <Navbar /> : <Nav searchTerm={searchTerm} setSearchTerm={setSearchTerm} />)}
-      <main className="flex-1">{children}</main>
+      <main className="flex-1 pt-12">{children}</main>
     </div>
   );
 };

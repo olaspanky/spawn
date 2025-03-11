@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { useState, useEffect, useMemo, useRef } from 'react';
-import Image from 'next/image';
+import { useState, useEffect, useMemo, useRef } from "react";
+import Image from "next/image";
 import {
   ShoppingCartIcon,
   MagnifyingGlassIcon,
@@ -10,11 +10,13 @@ import {
   ChevronLeftIcon,
   ChevronRightIcon,
   Bars3Icon,
-  HeartIcon
-} from '@heroicons/react/24/outline';
-import { HeartIcon as HeartIconSolid } from '@heroicons/react/24/solid';
-import Link from 'next/link';
-import { useAuth } from './context/AuthContext';
+  HeartIcon,
+  ChevronDownIcon,
+  ChevronUpIcon,
+} from "@heroicons/react/24/outline";
+import { HeartIcon as HeartIconSolid } from "@heroicons/react/24/solid";
+import Link from "next/link";
+import { useAuth } from "./context/AuthContext";
 
 interface Item {
   _id: string;
@@ -29,35 +31,33 @@ interface Item {
 }
 
 export default function Home() {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState<string>('All');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState<string>("All");
   const [items, setItems] = useState<Item[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [currentFeaturedIndex, setCurrentFeaturedIndex] = useState(0);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [favorites, setFavorites] = useState<string[]>([]);
+  const [filterOpen, setFilterOpen] = useState(true);
   const featuredItemsRef = useRef<HTMLDivElement>(null);
-  
 
-  // Fetch items from backend
   useEffect(() => {
     const fetchItems = async () => {
       try {
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/items`);
-        if (!response.ok) throw new Error('Failed to fetch items');
+        if (!response.ok) throw new Error("Failed to fetch items");
         const data = await response.json();
         setItems(data);
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to load items');
+        setError(err instanceof Error ? err.message : "Failed to load items");
       } finally {
         setLoading(false);
       }
     };
 
-    // Load any saved favorites from localStorage
-    const savedFavorites = localStorage.getItem('tradehub-favorites');
+    const savedFavorites = localStorage.getItem("tradehub-favorites");
     if (savedFavorites) {
       setFavorites(JSON.parse(savedFavorites));
     }
@@ -65,59 +65,49 @@ export default function Home() {
     fetchItems();
   }, []);
 
-  // Save favorites to localStorage when they change
   useEffect(() => {
-    localStorage.setItem('tradehub-favorites', JSON.stringify(favorites));
+    localStorage.setItem("tradehub-favorites", JSON.stringify(favorites));
   }, [favorites]);
 
-  // Automatic sliding for featured items
   useEffect(() => {
     if (!items.length) return;
-    
+
     const interval = setInterval(() => {
-      setCurrentFeaturedIndex((prevIndex) => 
+      setCurrentFeaturedIndex((prevIndex) =>
         prevIndex === Math.min(items.length - 1, 3) ? 0 : prevIndex + 1
       );
-    }, 5000); // Extended to 5 seconds for better user experience
-    
+    }, 5000);
+
     return () => clearInterval(interval);
   }, [items]);
 
-  // Pause slider when user hovers over it
-  const pauseSlider = () => {
-    // Implementation would clear and reset the interval
-    // This is a placeholder for the actual implementation
-  };
+  const pauseSlider = () => {};
 
-  // Get unique categories
   const categories = useMemo(() => {
-    const allCategories = items.map(item => item.category);
-    return ['All', ...Array.from(new Set(allCategories))];
+    const allCategories = items.map((item) => item.category);
+    return ["All", ...Array.from(new Set(allCategories))];
   }, [items]);
 
-  // Filter items
   const filteredItems = useMemo(() => {
-    return items.filter(item => {
+    return items.filter((item) => {
       const matchesSearch = item.title.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesCategory = selectedCategory === 'All' || item.category === selectedCategory;
+      const matchesCategory = selectedCategory === "All" || item.category === selectedCategory;
       return matchesSearch && matchesCategory;
     });
   }, [searchTerm, selectedCategory, items]);
 
-  // Featured items - first 4 items or all if less than 4
   const featuredItems = useMemo(() => {
     return items.slice(0, Math.min(4, items.length));
   }, [items]);
 
-  // Navigation for featured slider
   const handlePrevFeatured = () => {
-    setCurrentFeaturedIndex((prevIndex) => 
+    setCurrentFeaturedIndex((prevIndex) =>
       prevIndex === 0 ? Math.min(featuredItems.length - 1, 3) : prevIndex - 1
     );
   };
 
   const handleNextFeatured = () => {
-    setCurrentFeaturedIndex((prevIndex) => 
+    setCurrentFeaturedIndex((prevIndex) =>
       prevIndex === Math.min(featuredItems.length - 1, 3) ? 0 : prevIndex + 1
     );
   };
@@ -125,10 +115,8 @@ export default function Home() {
   const toggleFavorite = (e: React.MouseEvent, itemId: string) => {
     e.preventDefault();
     e.stopPropagation();
-    setFavorites(prev => 
-      prev.includes(itemId) 
-        ? prev.filter(id => id !== itemId)
-        : [...prev, itemId]
+    setFavorites((prev) =>
+      prev.includes(itemId) ? prev.filter((id) => id !== itemId) : [...prev, itemId]
     );
   };
 
@@ -136,157 +124,161 @@ export default function Home() {
   if (error) return <ErrorState error={error} />;
 
   return (
-    <div className="min-h-screen font-sans antialiased relative overflow-hidden">
-      {/* Enhanced gradient background */}
+    <div className="min-h-screen font-sans antialiased relative">
+      {/* Background Layers */}
       <div className="fixed inset-0 bg-gradient-to-br from-gray-950 via-gray-900 to-black z-0"></div>
       <div className="fixed inset-0 bg-[url('/noise-texture.png')] opacity-5 z-0"></div>
       <div className="fixed inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(249,115,22,0.05)_0%,transparent_600px)] z-0"></div>
-      
-      {/* Main content */}
-      <div className="relative z-10 ">
-        {/* Header section - Enhanced with better animation */}
-        
-      
 
-        {/* Featured items slider - Enhanced with better gradients and animations */}
-        <div className="relative overflow-hidden backdrop-blur-md bg-black/40 border-b border-white/5 shadow-md  font-semibold">
-  <div
-    ref={featuredItemsRef}
-    className="container mx-auto px-4 py-8 md:py-16"
-    onMouseEnter={pauseSlider}
-    onMouseLeave={pauseSlider}
-  >
-    <div className="relative h-[380px] sm:h-[420px] md:h-[520px] w-full overflow-hidden rounded-2xl border border-white/10 shadow-xl shadow-black/50">
-      {featuredItems.map((item, index) => (
-        <div
-          key={item._id}
-          className={`absolute inset-0 transition-all duration-700 ease-in-out flex flex-col md:flex-row items-center ${
-            index === currentFeaturedIndex ? 'opacity-100 z-10 scale-100' : 'opacity-0 z-0 scale-95'
-          }`}
-        >
-          {/* Text Section - Left on desktop, bottom on mobile */}
-          <div className="w-full md:w-1/2 p-4 md:p-10 text-white z-10 order-2 md:order-1">
-            <div className="mb-2 md:mb-3">
-              <span className="text-[10px] sm:text-xs md:text-xs uppercase tracking-widest text-orange-300 bg-orange-900/20 px-2 py-1 md:px-3 md:py-1 rounded-full">
-                {item.category}
-              </span>
-            </div>
-            <h1 className="text-lg sm:text-xl md:text-5xl font-extrabold leading-tight bg-clip-text text-transparent bg-gradient-to-r from-white to-orange-200 mb-2 md:mb-4 truncate w-full">
-              {item.title}
-            </h1>
-            <p className="text-base sm:text-lg md:text-2xl font-medium text-gray-200 mb-3 md:mb-6">
-              ₦{item.price.toLocaleString()}
-            </p>
-            <div className="flex items-center mb-4 md:mb-8">
-              <MapPinIcon className="h-4 w-4 md:h-5 md:w-5 text-orange-400 mr-1.5 md:mr-2" />
-              <span className="text-gray-300 text-xs sm:text-sm md:text-base truncate">{item.location}</span>
-            </div>
-            <Link href={`/declutter/products/${item._id}`}>
-              <button className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white px-4 py-2 sm:px-6 sm:py-2.5 md:px-6 md:py-3 rounded-xl text-xs sm:text-sm md:text-sm font-semibold tracking-wide transition-all duration-300 shadow-md md:shadow-lg hover:shadow-orange-600/40 hover:scale-105">
-                View Details
-              </button>
-            </Link>
-          </div>
-
-          {/* Image Section - Right on desktop, top on mobile */}
-          <div className="w-full md:w-1/2 relative h-[220px] sm:h-[260px] md:h-[400px] overflow-hidden rounded-t-2xl md:rounded-lg mt-0 md:mt-0 md:mx-6 order-1 md:order-2">
-            {item.images && item.images.length > 0 ? (
-              <div className="relative w-full h-full group">
-                <Image
-                  src={item.images[0]}
-                  alt={item.title}
-                  fill
-                  className="object-cover transition-transform duration-1000 ease-out group-hover:scale-115"
-                  sizes="(max-width: 640px) 100vw, (max-width: 768px) 80vw, 50vw"
-                  priority={index === 0}
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-300"></div>
-                <button
-                  className="absolute bottom-3 right-3 bg-black/80 backdrop-blur-md rounded-full p-2 hover:bg-black/95 transition-all duration-200"
-                  onClick={(e) => toggleFavorite(e, item._id)}
-                  aria-label={favorites.includes(item._id) ? 'Remove from favorites' : 'Add to favorites'}
-                >
-                  {favorites.includes(item._id) ? (
-                    <HeartIconSolid className="h-5 w-5 text-red-500" />
-                  ) : (
-                    <HeartIcon className="h-5 w-5 text-white" />
-                  )}
-                </button>
-              </div>
-            ) : (
-              <div className="w-full h-full flex items-center justify-center bg-gray-900/50 backdrop-blur-md">
-                <ShoppingCartIcon className="h-12 w-12 md:h-16 md:w-16 text-gray-500" />
-              </div>
-            )}
-          </div>
-        </div>
-      ))}
-    </div>
-
-    {/* Navigation Dots */}
-    <div className="flex justify-center mt-4 md:mt-6 space-x-2 md:space-x-3">
-      {featuredItems.map((_, index) => (
-        <button
-          key={index}
-          onClick={() => setCurrentFeaturedIndex(index)}
-          className={`transition-all duration-300 ease-in-out rounded-full ${
-            index === currentFeaturedIndex
-              ? 'h-2 w-6 md:h-2 md:w-8 bg-orange-500'
-              : 'h-2 w-2 bg-white/30 hover:bg-white/50'
-          }`}
-          aria-label={`Go to slide ${index + 1}`}
-        />
-      ))}
-    </div>
-  </div>
-</div>
-
-        {/* Category Filter Section - Enhanced with better scrolling */}
-        <div className=" sticky top-0 mx-auto px-4 lg:px-12 py-6 md:py-8 mt-4">
-          <div className="overflow-x-auto py-2 md:py-3 scrollbar-hidden relative flex flex-col lg:flex-row justify-between gap-5  w-full">
-            <div className="flex space-x-3 md:space-x-4 min-w-min">
-              {categories.map((category) => (
-                <button
-                  key={category}
-                  onClick={() => setSelectedCategory(category)}
-                  className={`px-4 py-2 rounded-full text-xs md:text-sm transition-all duration-300 whitespace-nowrap ${
-                    selectedCategory === category
-                      ? 'bg-gradient-to-r from-orange-600 to-orange-500 text-white scale-105 shadow-lg shadow-orange-600/20'
-                      : 'bg-white/5 text-gray-300 hover:bg-white/10 border border-white/10 hover:border-white/20'
+      {/* Main Content */}
+      <div className="relative z-10">
+        {/* Featured Items Slider */}
+        <div className="relative overflow-hidden backdrop-blur-md bg-black/40 border-b border-white/5 shadow-md font-semibold">
+          <div
+            ref={featuredItemsRef}
+            className="container mx-auto px-4 py-8 md:py-16"
+            onMouseEnter={pauseSlider}
+            onMouseLeave={pauseSlider}
+          >
+            <div className="relative h-[380px] sm:h-[420px] md:h-[520px] w-full overflow-hidden rounded-2xl border border-white/10 shadow-xl shadow-black/50">
+              {featuredItems.map((item, index) => (
+                <div
+                  key={item._id}
+                  className={`absolute inset-0 transition-all duration-700 ease-in-out flex flex-col md:flex-row items-center ${
+                    index === currentFeaturedIndex ? "opacity-100 z-10 scale-100" : "opacity-0 z-0 scale-95"
                   }`}
                 >
-                  {category}
-                </button>
+                  <div className="w-full md:w-1/2 p-4 md:p-10 text-white z-10 order-2 md:order-1">
+                    <div className="mb-2 md:mb-3">
+                      <span className="text-[10px] sm:text-xs md:text-xs uppercase tracking-widest text-orange-300 bg-orange-900/20 px-2 py-1 md:px-3 md:py-1 rounded-full">
+                        {item.category}
+                      </span>
+                    </div>
+                    <h1 className="text-lg sm:text-xl md:text-5xl font-extrabold leading-tight bg-clip-text text-transparent bg-gradient-to-r from-white to-orange-200 mb-2 md:mb-4 truncate w-full">
+                      {item.title}
+                    </h1>
+                    <p className="text-base sm:text-lg md:text-2xl font-medium text-gray-200 mb-3 md:mb-6">
+                      ₦{item.price.toLocaleString()}
+                    </p>
+                    <div className="flex items-center mb-4 md:mb-8">
+                      <MapPinIcon className="h-4 w-4 md:h-5 md:w-5 text-orange-400 mr-1.5 md:mr-2" />
+                      <span className="text-gray-300 text-xs sm:text-sm md:text-base truncate">
+                        {item.location}
+                      </span>
+                    </div>
+                    <Link href={`/declutter/products/${item._id}`}>
+                      <button className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white px-4 py-2 sm:px-6 sm:py-2.5 md:px-6 md:py-3 rounded-xl text-xs sm:text-sm md:text-sm font-semibold tracking-wide transition-all duration-300 shadow-md md:shadow-lg hover:shadow-orange-600/40 hover:scale-105">
+                        View Details
+                      </button>
+                    </Link>
+                  </div>
+                  <div className="w-full md:w-1/2 relative h-[220px] sm:h-[260px] md:h-[400px] overflow-hidden rounded-t-2xl md:rounded-lg mt-0 md:mt-0 md:mx-6 order-1 md:order-2">
+                    {item.images && item.images.length > 0 ? (
+                      <div className="relative w-full h-full group">
+                        <Image
+                          src={item.images[0]}
+                          alt={item.title}
+                          fill
+                          className="object-cover transition-transform duration-1000 ease-out group-hover:scale-115"
+                          sizes="(max-width: 640px) 100vw, (max-width: 768px) 80vw, 50vw"
+                          priority={index === 0}
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-300"></div>
+                        <button
+                          className="absolute bottom-3 right-3 bg-black/80 backdrop-blur-md rounded-full p-2 hover:bg-black/95 transition-all duration-200"
+                          onClick={(e) => toggleFavorite(e, item._id)}
+                          aria-label={favorites.includes(item._id) ? "Remove from favorites" : "Add to favorites"}
+                        >
+                          {favorites.includes(item._id) ? (
+                            <HeartIconSolid className="h-5 w-5 text-red-500" />
+                          ) : (
+                            <HeartIcon className="h-5 w-5 text-white" />
+                          )}
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center bg-gray-900/50 backdrop-blur-md">
+                        <ShoppingCartIcon className="h-12 w-12 md:h-16 md:w-16 text-gray-500" />
+                      </div>
+                    )}
+                  </div>
+                </div>
               ))}
             </div>
+            <div className="flex justify-center mt-4 md:mt-6 space-x-2 md:space-x-3">
+              {featuredItems.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentFeaturedIndex(index)}
+                  className={`transition-all duration-300 ease-in-out rounded-full ${
+                    index === currentFeaturedIndex
+                      ? "h-2 w-6 md:h-2 md:w-8 bg-orange-500"
+                      : "h-2 w-2 bg-white/30 hover:bg-white/50"
+                  }`}
+                  aria-label={`Go to slide ${index + 1}`}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
 
-            <div className="hidden md:flex space-x-6 items-center">
-                <button 
-                  onClick={() => setSearchOpen(!searchOpen)}
-                  className="text-gray-300 hover:text-white transition-all duration-300 ease-in-out"
-                  aria-label="Search"
-                >
-                  <MagnifyingGlassIcon className="h-5 w-5" />
-                </button>
-                
-               
-              </div>
+        {/* Sticky Filter Section */}
+        <div className="sticky top-12 z-30 bg-black/90 backdrop-blur-md border-b border-white/10 shadow-md">
+          <div className="mx-auto px-4 lg:px-12 py-4 md:py-6 max-w-7xl">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-lg md:text-xl font-semibold text-white">Filter Categories</h3>
+              <button
+                onClick={() => setFilterOpen(!filterOpen)}
+                className="text-gray-300 hover:text-white transition-colors"
+                aria-label={filterOpen ? "Collapse filters" : "Expand filters"}
+              >
+                {filterOpen ? (
+                  <ChevronUpIcon className="h-6 w-6" />
+                ) : (
+                  <ChevronDownIcon className="h-6 w-6" />
+                )}
+              </button>
+            </div>
 
-              <div className="flex md:hidden items-center space-x-4">
-                <button 
-                  onClick={() => setSearchOpen(!searchOpen)}
-                  className="text-gray-300 hover:text-white transition-colors p-1 active:scale-90"
-                  aria-label="Search"
-                >
-                  <MagnifyingGlassIcon className="h-5 w-5" />
-                </button>
-                
-              
+            {filterOpen && (
+              <div className="overflow-x-auto py-2 md:py-3 scrollbar-hidden relative flex flex-col lg:flex-row justify-between gap-5 w-full animate-fadeIn">
+                <div className="flex space-x-3 md:space-x-4 min-w-min">
+                  {categories.map((category) => (
+                    <button
+                      key={category}
+                      onClick={() => setSelectedCategory(category)}
+                      className={`px-4 py-2 rounded-full text-xs md:text-sm transition-all duration-300 whitespace-nowrap ${
+                        selectedCategory === category
+                          ? "bg-gradient-to-r from-orange-600 to-orange-500 text-white scale-105 shadow-lg shadow-orange-600/20"
+                          : "bg-white/5 text-gray-300 hover:bg-white/10 border border-white/10 hover:border-white/20"
+                      }`}
+                    >
+                      {category}
+                    </button>
+                  ))}
+                </div>
+                <div className="hidden md:flex space-x-6 items-center">
+                  <button
+                    onClick={() => setSearchOpen(!searchOpen)}
+                    className="text-gray-300 hover:text-white transition-all duration-300 ease-in-out"
+                    aria-label="Search"
+                  >
+                    <MagnifyingGlassIcon className="h-5 w-5" />
+                  </button>
+                </div>
+                <div className="flex md:hidden items-center space-x-4">
+                  <button
+                    onClick={() => setSearchOpen(!searchOpen)}
+                    className="text-gray-300 hover:text-white transition-colors p-1 active:scale-90"
+                    aria-label="Search"
+                  >
+                    <MagnifyingGlassIcon className="h-5 w-5" />
+                  </button>
+                </div>
               </div>
-            {/* Scroll indicator shadows */}
-              </div>
+            )}
 
-          {searchOpen && (
+            {searchOpen && filterOpen && (
               <div className="mt-3 pb-3 border-t border-white/10 pt-3 animate-fadeIn">
                 <div className="relative">
                   <input
@@ -300,7 +292,7 @@ export default function Home() {
                   <MagnifyingGlassIcon className="h-5 w-5 text-gray-400 absolute top-2.5 left-3" />
                   {searchTerm && (
                     <button
-                      onClick={() => setSearchTerm('')}
+                      onClick={() => setSearchTerm("")}
                       className="absolute right-3 top-2.5 text-gray-400 hover:text-white"
                     >
                       <XMarkIcon className="h-5 w-5" />
@@ -309,25 +301,26 @@ export default function Home() {
                 </div>
               </div>
             )}
+          </div>
         </div>
 
-        {/* Listings - Enhanced with responsive grid and animations */}
-        <div className="container mx-auto px-4 py-6 md:py-8 mb-8">
+        {/* Listings Section */}
+        <div className="relative z-10 container mx-auto px-4 py-6 md:py-8 mb-8">
           {filteredItems.length === 0 ? (
             <EmptyState searchTerm={searchTerm} />
           ) : (
             <>
               <h3 className="text-lg md:text-xl font-semibold text-white mb-4 md:mb-6 flex justify-between items-center">
                 <span>
-                  {selectedCategory !== 'All' ? `${selectedCategory} Items` : 'All Listings'}
+                  {selectedCategory !== "All" ? `${selectedCategory} Items` : "All Listings"}
                   <span className="ml-2 text-sm text-gray-400">({filteredItems.length})</span>
                 </span>
               </h3>
               <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
                 {filteredItems.map((item) => (
                   <Link key={item._id} href={`/declutter/products/${item._id}`}>
-                    <ListingCard 
-                      item={item} 
+                    <ListingCard
+                      item={item}
                       isFavorite={favorites.includes(item._id)}
                       toggleFavorite={toggleFavorite}
                     />
@@ -338,8 +331,8 @@ export default function Home() {
           )}
         </div>
 
-        {/* Footer - Added for completeness */}
-        <footer className="border-t border-white/10 bg-black/40 backdrop-blur-md">
+        {/* Footer */}
+        <footer className="relative z-10 border-t border-white/10 bg-black/40 backdrop-blur-md">
           <div className="container mx-auto px-4 py-6">
             <div className="flex flex-col md:flex-row justify-between items-center">
               <div className="mb-4 md:mb-0">
@@ -370,12 +363,12 @@ export default function Home() {
   );
 }
 
-const ListingCard = ({ 
-  item, 
-  isFavorite, 
-  toggleFavorite 
-}: { 
-  item: Item; 
+const ListingCard = ({
+  item,
+  isFavorite,
+  toggleFavorite,
+}: {
+  item: Item;
   isFavorite: boolean;
   toggleFavorite: (e: React.MouseEvent, id: string) => void;
 }) => {
@@ -401,11 +394,9 @@ const ListingCard = ({
           </div>
         )}
         <div className="absolute top-2 right-2 bg-black/70 backdrop-blur-sm rounded-full px-2 py-0.5">
-          <span className="text-[10px] md:text-xs font-medium text-white">
-            {item.category}
-          </span>
+          <span className="text-[10px] md:text-xs font-medium text-white">{item.category}</span>
         </div>
-        <button 
+        <button
           className="absolute bottom-2 right-2 bg-black/70 backdrop-blur-sm rounded-full p-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover:bg-black/90"
           onClick={(e) => toggleFavorite(e, item._id)}
           aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
