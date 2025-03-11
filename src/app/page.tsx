@@ -242,7 +242,7 @@ export default function Home() {
 </div>
 
         {/* Category Filter Section - Enhanced with better scrolling */}
-        <div className=" sticky top-0 mx-auto px-4 py-6 md:py-8 mt-4">
+        <div className=" sticky top-0 mx-auto px-4 lg:px-12 py-6 md:py-8 mt-4">
           <div className="overflow-x-auto py-2 md:py-3 scrollbar-hidden relative flex flex-col lg:flex-row justify-between gap-5  w-full">
             <div className="flex space-x-3 md:space-x-4 min-w-min">
               {categories.map((category) => (
