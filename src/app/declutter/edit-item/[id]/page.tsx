@@ -27,7 +27,7 @@ const EditItem = () => {
   useEffect(() => {
     const fetchItem = async () => {
       try {
-        const response = await fetch(`http://${process.env.NEXT_PUBLIC_API_URL}/api/items/${id}`, {
+        const response = await fetch(`https://spawnback.onrender.com/api/items/${id}`, {
           headers: { 'x-auth-token': token }, // Updated to match middleware
         });
         if (!response.ok) throw new Error('Failed to fetch item');
@@ -143,7 +143,7 @@ const EditItem = () => {
         images: updatedImageUrls,
       };
 
-      const response = await fetch(`http://${process.env.NEXT_PUBLIC_API_URL}/api/items/${id}`, {
+      const response = await fetch(`https://spawnback.onrender.com/api/items/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

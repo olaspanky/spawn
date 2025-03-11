@@ -25,7 +25,7 @@ const ManageItems = () => {
       }
 
       try {
-        const response = await fetch(`http://${process.env.NEXT_PUBLIC_API_URL}/api/items/user/${user.id}`, {
+        const response = await fetch(`https://spawnback.onrender.com/api/items/user/${user.id}`, {
           headers: token ? { 'x-auth-token': token } : undefined,
         });
         if (!response.ok) {
@@ -46,7 +46,7 @@ const ManageItems = () => {
 
   const handleDelete = async (id) => {
     try {
-      const response = await fetch(`http://${process.env.NEXT_PUBLIC_API_URL}/api/items/${id}`, {
+      const response = await fetch(`https://spawnback.onrender.com/api/items/${id}`, {
         method: 'DELETE',
         headers: token ? { 'x-auth-token': token } : undefined,
       });
