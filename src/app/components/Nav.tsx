@@ -1,3 +1,5 @@
+"use client";
+
 import { useAuth } from "../context/AuthContext";
 import Link from "next/link";
 import {
@@ -8,9 +10,10 @@ import {
   XMarkIcon,
   Bars3Icon,
   BellIcon,
-  ClipboardDocumentListIcon
-} from '@heroicons/react/24/outline';
-import { useState } from 'react';
+  ClipboardDocumentListIcon,
+} from "@heroicons/react/24/outline";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface NavbarProps {
   searchTerm: string;
@@ -20,10 +23,6 @@ interface NavbarProps {
 export default function Navbar({ searchTerm, setSearchTerm }: NavbarProps) {
   const { token, logout, user } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [searchOpen, setSearchOpen] = useState(false);
-
-  console.log("nav user is ", user);
-
 
   // Determine greeting based on current hour
   const now = new Date();
@@ -38,137 +37,197 @@ export default function Navbar({ searchTerm, setSearchTerm }: NavbarProps) {
   }
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+  const closeMenu = () => setIsMenuOpen(false);
 
   const Greeting = () => (
-    <div className="flex items-center space-x-2 text-lg text-white">
+    <motion.div
+      className="flex items-center space-x-2 text-sm sm:text-base text-white"
+      initial={{ opacity: 0, y: -10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
       <span>{greeting},</span>
-      <span className="text-orange-600 font-medium">{user?.name || "User"}</span>
-    </div>
+      <span className="text-orange-400 font-medium">{user?.name || "User"}</span>
+    </motion.div>
   );
 
+  // Animation variants for mobile menu
+  const menuVariants = {
+    hidden: { opacity: 0, y: -20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.3, ease: "easeOut" } },
+    exit: { opacity: 0, y: -20, transition: { duration: 0.2, ease: "easeIn" } },
+  };
+
   return (
-    <nav className="backdrop-blur-md bg-black/40 border-b border-white/5 shadow-md sticky top-0 z-50 font-semibold">
-      <div className="container mx-auto px-4 py-4 flex items-center justify-between">
+    <nav className="backdrop-blur-lg bg-black/70 border-b border-white/10 shadow-xl sticky top-0 z-50 font-sans">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
         {/* Left: Logo */}
-        <div>
-          <h2 className="text-xl font-bold text-white">
-            <Link href="/">
-              <div className="inline-flex items-center hover:text-orange-400 transition-colors">
+        <motion.div
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <h2 className="text-xl sm:text-2xl font-bold text-white">
+            <Link href="/" onClick={closeMenu}>
+              <div className="inline-flex items-center hover:text-orange-400 transition-colors duration-300">
                 TRADE<span className="text-orange-500">HUB</span>
               </div>
             </Link>
           </h2>
-        </div>
-
-       
+        </motion.div>
 
         {/* Right: Navigation Links */}
-        <div className="hidden md:flex items-center space-x-6">
+        <div className="hidden md:flex items-center space-x-6 lg:space-x-8">
           {token ? (
             <>
-              <Link href="/notifications">
-                <BellIcon className="h-6 w-6 text-gray-700 hover:text-orange-600" />
-              </Link>
-              <Link href="/declutter/manage-items">
-                <div className="inline-flex items-center px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors">
-                  Sell Item
-                  <ShoppingCartIcon className="ml-2 h-5 w-5" />
-                </div>
-              </Link>
-              <Link href="/pages/chat">
-                <div className="inline-flex items-center px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors">
-                  View Messages
-                  <ClipboardDocumentListIcon className="ml-2 h-5 w-5" />
-                </div>
-              </Link>
-              <button
+              <motion.div whileHover={{ scale: 1.1 }} transition={{ duration: 0.2 }}>
+                <Link href="/" onClick={closeMenu}>
+                  <BellIcon className="h-6 w-6 lg:h-7 lg:w-7 text-white hover:text-orange-400 transition-colors duration-300" />
+                </Link>
+              </motion.div>
+              <motion.div whileHover={{ scale: 1.05 }} transition={{ duration: 0.2 }}>
+                <Link href="/declutter/manage-items" onClick={closeMenu}>
+                  <div className="inline-flex items-center px-4 py-2 lg:px-6 lg:py-3 bg-orange-600 text-white rounded-xl hover:bg-orange-700 transition-colors duration-300 shadow-md hover:shadow-lg">
+                    Sell Item
+                    <ShoppingCartIcon className="ml-2 h-5 w-5 lg:h-6 lg:w-6" />
+                  </div>
+                </Link>
+              </motion.div>
+              <motion.div whileHover={{ scale: 1.05 }} transition={{ duration: 0.2 }}>
+                <Link href="/pages/chat" onClick={closeMenu}>
+                  <div className="inline-flex items-center px-4 py-2 lg:px-6 lg:py-3 bg-orange-600 text-white rounded-xl hover:bg-orange-700 transition-colors duration-300 shadow-md hover:shadow-lg">
+                    View Messages
+                    <ClipboardDocumentListIcon className="ml-2 h-5 w-5 lg:h-6 lg:w-6" />
+                  </div>
+                </Link>
+              </motion.div>
+              <motion.button
                 onClick={logout}
-                className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-orange-600 transition-colors"
+                className="px-4 py-2 lg:px-6 lg:py-3 text-sm lg:text-base font-medium text-white hover:text-orange-400 transition-colors duration-300"
+                whileHover={{ scale: 1.05 }}
+                transition={{ duration: 0.2 }}
               >
                 Logout
-              </button>
+              </motion.button>
             </>
           ) : (
-            <div className="hidden md:flex space-x-6 items-center">
-              <Link href="/declutter/upload">
-                <div className="inline-flex items-center bg-orange-600 text-white px-4 py-2 text-sm rounded-full font-semibold hover:bg-orange-700 transition-colors shadow-lg hover:shadow-xl">
-                  Sell Item
-                  <ShoppingCartIcon className="h-4 w-4 ml-2" />
-                </div>
-              </Link>
-              <Link href="/declutter/login">
-                <div className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-orange-600 transition-colors">
-                  Sign In
-                </div>
-              </Link>
+            <div className="hidden md:flex space-x-6 lg:space-x-8 items-center">
+              <motion.div whileHover={{ scale: 1.05 }} transition={{ duration: 0.2 }}>
+                <Link href="/declutter/upload" onClick={closeMenu}>
+                  <div className="inline-flex items-center bg-orange-600 text-white px-4 py-2 lg:px-6 lg:py-3 text-sm lg:text-base rounded-full font-semibold hover:bg-orange-700 transition-colors duration-300 shadow-md hover:shadow-lg">
+                    Sell Item
+                    <ShoppingCartIcon className="h-4 w-4 lg:h-5 lg:w-5 ml-2" />
+                  </div>
+                </Link>
+              </motion.div>
+              <motion.div whileHover={{ scale: 1.05 }} transition={{ duration: 0.2 }}>
+                <Link href="/declutter/login" onClick={closeMenu}>
+                  <div className="px-4 py-2 lg:px-6 lg:py-3 text-sm lg:text-base font-medium text-white hover:text-orange-400 transition-colors duration-300">
+                    Sign In
+                  </div>
+                </Link>
+              </motion.div>
             </div>
           )}
         </div>
 
-        {/* Mobile: Search + Menu */}
+        {/* Mobile: Greeting + Menu Toggle */}
         <div className="md:hidden flex items-center justify-end space-x-4">
-        
           <Greeting />
-          <button
+          <motion.button
             onClick={toggleMenu}
-            className="text-gray-700 hover:text-orange-600 focus:outline-none"
+            className="text-white hover:text-orange-400 focus:outline-none"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95 }}
+            transition={{ duration: 0.2 }}
           >
-            <Bars3Icon className="h-6 w-6" />
-          </button>
+            {isMenuOpen ? <XMarkIcon className="h-6 w-6" /> : <Bars3Icon className="h-6 w-6" />}
+          </motion.button>
         </div>
       </div>
 
-      {/* Mobile Search Bar */}
-      
-
       {/* Mobile Menu */}
-      {isMenuOpen && (
-        <div className="md:hidden bg-white shadow-md">
-          <div className="px-4 py-4 space-y-4">
-            {token ? (
-              <>
-                <Link href="/notifications">
-                  <div className="flex items-center space-x-2 py-2">
-                    <BellIcon className="h-6 w-6 text-gray-700" />
-                    <span className="text-gray-700">Notifications</span>
-                  </div>
+      <AnimatePresence>
+        {isMenuOpen && (
+          <motion.div
+            className="md:hidden bg-white/95 backdrop-blur-md shadow-xl border-t border-white/10"
+            variants={menuVariants}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+          >
+            <div className="px-4 py-6 space-y-4">
+              {token ? (
+                <>
+                  <Link href="/" onClick={closeMenu}>
+                    <motion.div
+                      className="flex items-center space-x-2 py-2 text-gray-800 hover:text-orange-600"
+                      whileHover={{ x: 5 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <BellIcon className="h-6 w-6" />
+                      <span>Notifications</span>
+                    </motion.div>
+                  </Link>
+                  <Link href="/declutter/manage-items" onClick={closeMenu}>
+                    <motion.div
+                      className="flex items-center space-x-2 py-2 text-gray-800 hover:text-orange-600"
+                      whileHover={{ x: 5 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <ShoppingCartIcon className="h-6 w-6" />
+                      <span>Sell Item</span>
+                    </motion.div>
+                  </Link>
+                  <Link href="/declutter/requests" onClick={closeMenu}>
+                    <motion.div
+                      className="flex items-center space-x-2 py-2 text-gray-800 hover:text-orange-600"
+                      whileHover={{ x: 5 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <ClipboardDocumentListIcon className="h-6 w-6" />
+                      <span>                    View Messages
+                      </span>
+                    </motion.div>
+                  </Link>
+                  <Link href="/declutter/manage-items" onClick={closeMenu}>
+                    <motion.div
+                      className="flex items-center space-x-2 py-2 text-gray-800 hover:text-orange-600"
+                      whileHover={{ x: 5 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <ClipboardDocumentListIcon className="h-6 w-6" />
+                      <span>Manage Products</span>
+                    </motion.div>
+                  </Link>
+                  <hr className="my-2 border-gray-200" />
+                  <motion.button
+                    onClick={() => {
+                      logout();
+                      closeMenu();
+                    }}
+                    className="flex items-center text-gray-800 hover:text-orange-600 py-2"
+                    whileHover={{ x: 5 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    Logout
+                  </motion.button>
+                </>
+              ) : (
+                <Link href="/declutter/login" onClick={closeMenu}>
+                  <motion.div
+                    className="flex items-center text-gray-800 hover:text-orange-600 py-2"
+                    whileHover={{ x: 5 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    Sign In
+                  </motion.div>
                 </Link>
-                <Link href="/declutter/manage-items">
-                <div className="flex items-center space-x-2 py-2">
-                    <ShoppingCartIcon className="h-6 w-6 text-gray-700" />
-                    <span className="text-gray-700">Sell Item</span>
-                  </div>
-                </Link>
-                <Link href="/declutter/requests">
-                  <div className="flex items-center space-x-2 py-2">
-                    <ClipboardDocumentListIcon className="h-6 w-6 text-gray-700" />
-                    <span className="text-gray-700">View Requests</span>
-                  </div>
-                </Link>
-                <Link href="/declutter/manage-items">
-                  <div className="flex items-center space-x-2 py-2">
-                    <ClipboardDocumentListIcon className="h-6 w-6 text-gray-700" />
-                    <span className="text-gray-700">Manage Products</span>
-                  </div>
-                </Link>
-                <hr className="my-2" />
-                <button
-                  onClick={logout}
-                  className="flex items-center text-gray-700 hover:text-orange-600 py-2"
-                >
-                  Logout
-                </button>
-              </>
-            ) : (
-              <Link href="/declutter/login">
-                <div className="flex items-center text-gray-700 hover:text-orange-600 py-2">
-                  Sign In
-                </div>
-              </Link>
-            )}
-          </div>
-        </div>
-      )}
+              )}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </nav>
   );
 }
