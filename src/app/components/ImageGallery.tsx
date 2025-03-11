@@ -26,20 +26,21 @@ export default function ImageGallery({ images, title }: ImageGalleryProps) {
   };
 
   return (
-    <div className="lg:space-y-3 lg:max-w-4xl mx-auto bg-white p-1 lg:p-4">
+    <div className="lg:space-y-3 lg:max-w-4xl mx-auto bg-transparent p-1 lg:p-4 rounded-lg shadow-lg">
       {/* Main Slider */}
-      <div className="relative h-[20vh] lg:w-96 w-[50vw] lg:h-[450px] bg-gradient-to-br from-gray-900 to-gray-800 rounded-3xl overflow-hidden shadow-2xl group">
+      <div className="relative h-[20vh] lg:w-96 w-[50vw] lg:h-[450px]  rounded-3xl overflow-hidden shadow-2xl group">
         <Swiper
           modules={[Navigation, Thumbs, EffectFade, Autoplay]}
           effect="fade"
+          fadeEffect={{ crossFade: true }} // Ensures full fade-out before fade-in
           speed={800}
           autoplay={{ delay: 5000, disableOnInteraction: false }}
           spaceBetween={0}
           slidesPerView={1}
           loop={images.length > 1}
           navigation={{
-            nextEl: '.swiper-button-next',
-            prevEl: '.swiper-button-prev',
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
           }}
           thumbs={{ swiper: thumbsSwiper }}
           onSlideChange={handleSlideChange}
@@ -47,29 +48,22 @@ export default function ImageGallery({ images, title }: ImageGalleryProps) {
         >
           {images.map((image, index) => (
             <SwiperSlide key={index}>
-              <div className="relative h-[20vh] lg:h-[450px] lg:w-96 w-[50vw] cursor-zoom-in">
+              <div
+                className="relative h-[20vh] lg:h-[450px] lg:w-96 w-[50vw] cursor-zoom-in"
+                onClick={() => setSelectedImage(images[activeIndex])}
+              >
                 <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10" />
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.5 }}
-                  className="relative h-full"
-                  onClick={() => {
-                    setSelectedImage(images[activeIndex]);
-                  }}
-                >
-                  <Image
-                    src={image}
-                    alt={`${title} - Image ${index + 1}`}
-                    fill
-                    className="object-contain transform transition-transform duration-500 group-hover:scale-105"
-                    priority={index === 0}
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                  />
-                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                    <ZoomIn className="w-12 h-12 text-white drop-shadow-lg" />
-                  </div>
-                </motion.div>
+                <Image
+                  src={image}
+                  alt={`${title} - Image ${index + 1}`}
+                  fill
+                  className="object-contain transform transition-transform duration-500 group-hover:scale-105"
+                  priority={index === 0}
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                />
+                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20">
+                  <ZoomIn className="w-12 h-12 text-white drop-shadow-lg" />
+                </div>
               </div>
             </SwiperSlide>
           ))}
@@ -104,7 +98,9 @@ export default function ImageGallery({ images, title }: ImageGalleryProps) {
                   src={image}
                   alt={`Thumbnail ${index + 1}`}
                   fill
-                  className="object-cover bg-white hover:opacity-100 "
+                  className={`object-cover bg-gray-700 transition-opacity duration-300 ${
+                    activeIndex === index ? "opacity-100" : "opacity-60"
+                  }`}
                   sizes="(max-width: 768px) 20vw, 10vw"
                 />
                 <div className="absolute inset-0 bg-black/20 hover:bg-black/0 transition-colors" />

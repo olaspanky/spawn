@@ -60,7 +60,7 @@ export default function SignupPage() {
             <input
               type="text"
               required
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+              className="w-full px-4 py-2 border bg-white border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
               value={formData.username}
               onChange={(e) => setFormData({ ...formData, username: e.target.value })}
             />
@@ -73,7 +73,7 @@ export default function SignupPage() {
             <input
               type="email"
               required
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+              className="w-full px-4 py-2 border bg-white border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
             />
@@ -87,7 +87,7 @@ export default function SignupPage() {
               type="password"
               required
               minLength={6}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+              className="w-full px-4 py-2 border bg-white border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
               value={formData.password}
               onChange={(e) => setFormData({ ...formData, password: e.target.value })}
             />

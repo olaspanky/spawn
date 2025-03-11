@@ -22,6 +22,9 @@ export default function Navbar({ searchTerm, setSearchTerm }: NavbarProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
 
+  console.log("nav user is ", user);
+
+
   // Determine greeting based on current hour
   const now = new Date();
   const hour = now.getHours();
@@ -57,27 +60,7 @@ export default function Navbar({ searchTerm, setSearchTerm }: NavbarProps) {
           </h2>
         </div>
 
-        {/* Center: Search Bar (Desktop) */}
-        <div className="hidden md:flex flex-1 max-w-2xl mx-8">
-          <div className="relative w-full">
-            <input
-              type="text"
-              placeholder="Search for items..."
-              className="w-full py-2 pl-10 pr-10 text-sm rounded-lg bg-white/10 border border-white/20 focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all text-white"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-            <MagnifyingGlassIcon className="h-5 w-5 text-gray-400 absolute left-3 top-2.5" />
-            {searchTerm && (
-              <button
-                onClick={() => setSearchTerm('')}
-                className="absolute right-3 top-2.5 text-gray-400 hover:text-white"
-              >
-                <XMarkIcon className="h-5 w-5" />
-              </button>
-            )}
-          </div>
-        </div>
+       
 
         {/* Right: Navigation Links */}
         <div className="hidden md:flex items-center space-x-6">
@@ -86,15 +69,15 @@ export default function Navbar({ searchTerm, setSearchTerm }: NavbarProps) {
               <Link href="/notifications">
                 <BellIcon className="h-6 w-6 text-gray-700 hover:text-orange-600" />
               </Link>
-              <Link href="/declutter/upload">
+              <Link href="/declutter/manage-items">
                 <div className="inline-flex items-center px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors">
                   Sell Item
                   <ShoppingCartIcon className="ml-2 h-5 w-5" />
                 </div>
               </Link>
-              <Link href="/declutter/requests">
+              <Link href="/pages/chat">
                 <div className="inline-flex items-center px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors">
-                  View Requests
+                  View Messages
                   <ClipboardDocumentListIcon className="ml-2 h-5 w-5" />
                 </div>
               </Link>
@@ -124,12 +107,7 @@ export default function Navbar({ searchTerm, setSearchTerm }: NavbarProps) {
 
         {/* Mobile: Search + Menu */}
         <div className="md:hidden flex items-center justify-end space-x-4">
-          <button
-            onClick={() => setSearchOpen(!searchOpen)}
-            className="text-gray-300 hover:text-white transition-colors"
-          >
-            <MagnifyingGlassIcon className="h-5 w-5" />
-          </button>
+        
           <Greeting />
           <button
             onClick={toggleMenu}
@@ -141,28 +119,7 @@ export default function Navbar({ searchTerm, setSearchTerm }: NavbarProps) {
       </div>
 
       {/* Mobile Search Bar */}
-      {searchOpen && (
-        <div className="md:hidden px-4 py-2 border-t border-white/10">
-          <div className="relative">
-            <input
-              type="text"
-              placeholder="Search for items..."
-              className="w-full py-2 pl-10 pr-10 text-sm rounded-lg bg-white/10 border border-white/20 focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all text-white"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-            <MagnifyingGlassIcon className="h-5 w-5 text-gray-400 absolute left-3 top-2.5" />
-            {searchTerm && (
-              <button
-                onClick={() => setSearchTerm('')}
-                className="absolute right-3 top-2.5 text-gray-400 hover:text-white"
-              >
-                <XMarkIcon className="h-5 w-5" />
-              </button>
-            )}
-          </div>
-        </div>
-      )}
+      
 
       {/* Mobile Menu */}
       {isMenuOpen && (
@@ -176,8 +133,8 @@ export default function Navbar({ searchTerm, setSearchTerm }: NavbarProps) {
                     <span className="text-gray-700">Notifications</span>
                   </div>
                 </Link>
-                <Link href="http://localhost:5173">
-                  <div className="flex items-center space-x-2 py-2">
+                <Link href="/declutter/manage-items">
+                <div className="flex items-center space-x-2 py-2">
                     <ShoppingCartIcon className="h-6 w-6 text-gray-700" />
                     <span className="text-gray-700">Sell Item</span>
                   </div>
@@ -186,6 +143,12 @@ export default function Navbar({ searchTerm, setSearchTerm }: NavbarProps) {
                   <div className="flex items-center space-x-2 py-2">
                     <ClipboardDocumentListIcon className="h-6 w-6 text-gray-700" />
                     <span className="text-gray-700">View Requests</span>
+                  </div>
+                </Link>
+                <Link href="/declutter/manage-items">
+                  <div className="flex items-center space-x-2 py-2">
+                    <ClipboardDocumentListIcon className="h-6 w-6 text-gray-700" />
+                    <span className="text-gray-700">Manage Products</span>
                   </div>
                 </Link>
                 <hr className="my-2" />

@@ -11,33 +11,33 @@ export default function LoginPage() {
   const [error, setError] = useState('');
   const { login } = useAuth();
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError("");
-  
+
     try {
-      const response = await fetch("https://spawnback.onrender.com/api/users/login", {
+      const response = await fetch("http://${process.env.NEXT_PUBLIC_API_URL}/api/users/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
-  
+
       const data = await response.json();
-  
+
       if (!response.ok) {
         throw new Error(data.message || "Login failed");
       }
-  
+
       // Ensure localStorage is available before accessing it
       if (typeof window !== "undefined") {
         localStorage.setItem("authToken", data.token);
         localStorage.setItem("authUser", JSON.stringify(data.user));
       }
-  
+
       // Call the login function from useAuth
       login(data.token, data.user);
-  
+
       // Redirect to home page
       router.push("/");
     } catch (err) {
@@ -46,7 +46,6 @@ export default function LoginPage() {
       setLoading(false);
     }
   };
-  
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
@@ -58,7 +57,7 @@ export default function LoginPage() {
             <input
               type="email"
               required
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+              className="w-full px-4 py-2 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
             />
@@ -68,7 +67,7 @@ export default function LoginPage() {
             <input
               type="password"
               required
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+              className="w-full px-4 py-2 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
               value={formData.password}
               onChange={(e) => setFormData({ ...formData, password: e.target.value })}
             />
@@ -77,7 +76,7 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-orange-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-orange-700 transition-colors disabled:opacity-50"
+            className="w-full bg-orange-600  text-white py-3 px-4 rounded-lg font-medium hover:bg-orange-700 transition-colors disabled:opacity-50"
           >
             {loading ? 'Logging In...' : 'Log In'}
           </button>

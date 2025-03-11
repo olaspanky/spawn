@@ -9,10 +9,11 @@ const LayoutWrapper = ({ children }: { children: React.ReactNode }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const pathname = usePathname();
   const isDeclutterRoute = pathname.startsWith("/pages");
+  const isLoginOrSignup = pathname === "/declutter/login" || pathname === "/declutter/signup";
 
   return (
     <div className="min-h-screen flex flex-col">
-      {isDeclutterRoute ? <Navbar /> : <Nav searchTerm={searchTerm} setSearchTerm={setSearchTerm} />}
+      { !isLoginOrSignup && (isDeclutterRoute ? <Navbar /> : <Nav searchTerm={searchTerm} setSearchTerm={setSearchTerm} />)}
       <main className="flex-1">{children}</main>
     </div>
   );
