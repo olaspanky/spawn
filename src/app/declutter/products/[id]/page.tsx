@@ -497,7 +497,7 @@ export default function ProductPage() {
   const onSuccess = async (response: PaystackResponse) => {
     setIsVerifying(true);
     try {
-      const verificationResponse = await fetch("http://localhost:5000/api/purchases/verify-payment", {
+      const verificationResponse = await fetch("http://localhost:5000/api/purchase/verify-payment", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -581,42 +581,94 @@ export default function ProductPage() {
 
   const sellerId = product?.seller._id;
 
-  if (loading) return <div>Loading...</div>; // Simplified for brevity
-  if (error) return <div>Error: {error}</div>;
-  if (!product) return <div>Product not found</div>;
+  if (loading)
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="animate-pulse text-center">
+          <div className="h-12 w-12 mx-auto mb-4 rounded-full bg-orange-200"></div>
+          <div className="h-4 w-32 mx-auto bg-gray-200 rounded"></div>
+        </div>
+      </div>
+    );
+
+  if (error)
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-center p-8 max-w-md">
+          <div className="text-red-500 mb-4">❌</div>
+          <h2 className="text-2xl font-semibold text-gray-700 mb-2">Oops!</h2>
+          <p className="text-gray-500">{error}</p>
+          <Link href="/" className="inline-block mt-6 text-orange-600 hover:text-orange-700">
+            Return to Homepage
+          </Link>
+        </div>
+      </div>
+    );
+
+  if (!product)
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-center p-8 max-w-md">
+          <div className="text-yellow-500 mb-4">🔍</div>
+          <h2 className="text-2xl font-semibold text-gray-700 mb-2">Product Not Found</h2>
+          <p className="text-gray-500">We couldn't find the product you're looking for.</p>
+          <Link href="/" className="inline-block mt-6 text-orange-600 hover:text-orange-700">
+            Discover Other Products
+          </Link>
+        </div>
+      </div>
+    );
 
   return (
-    <div className="min-h-screen overflow-hidden font-sans bg-gradient-to-br from-black/95 to-gray-900/95 backdrop-blur-lg border-t border-white/10 dark:bg-gradient-to-br dark:from-white dark:to-gray-100 dark:backdrop-blur-none dark:border-t-0">
-      <nav className="shadow-sm sticky top-0 z-10">
+<div className="min-h-screen overflow-hidden font-sans 
+  bg-gradient-to-br from-black/95 to-gray-900/95 
+  backdrop-blur-lg border-t border-white/10
+  dark:bg-gradient-to-br dark:from-white dark:to-gray-100 
+  dark:backdrop-blur-none dark:border-t-0">
+          <nav className="shadow-sm sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center">
           <Link href="/" className="text-gray-600 hover:text-orange-600 transition">
             <ArrowLeftIcon className="h-5 w-5 lg:h-6 lg:w-6" />
           </Link>
-          <h1 className="text-lg lg:text-2xl font-semibold ml-4 truncate dark:text-black text-white">{product.title}</h1>
+          <h1 className="text-lg lg:text-2xl font-semibold ml-4 truncate dark:text-black text-white">
+            {product.title}
+          </h1>
         </div>
       </nav>
 
       <main className="max-w-7xl mx-auto my-6 shadow-sm rounded-lg overflow-hidden">
-        <div className="flex gap-6 lg:flex-row flex-col">
+        <div className="flex gap-6 lg:flex-row flex-row">
+          {/* Left: Image Gallery */}
           <div className="md:w-1/2 p-2 lg:p-6">
             <ImageGallery images={product.images} title={product.title} />
           </div>
+
+          {/* Right: Product Info */}
           <div className="md:w-1/2 p-2 lg:p-8 space-y-2 lg:space-y-6">
             <div>
               <h2 className="text-[12px] lg:text-3xl font-bold dark:text-black text-white">{product.title}</h2>
               <div className="mt-4 flex items-center">
                 <TagIcon className="h-5 w-5 lg:h-6 lg:w-6 text-orange-600 mr-2" />
-                <span className="text-[12px] lg:text-3xl font-semibold text-orange-600">₦{product.price.toLocaleString()}</span>
+                <span className="text-[12px] lg:text-3xl font-semibold text-orange-600">
+                  ₦{product.price.toLocaleString()}
+                </span>
               </div>
             </div>
+
             <div className="bg-orange-50 p-1 lg:p-6 rounded-lg">
-              <h3 className="font-semibold mb-2 text-gray-800 text-[8px] lg:text-lg">Product Details</h3>
-              <p className="text-gray-700 whitespace-pre-line text-[6px] lg:text-base">{product.description}</p>
+              <h3 className="font-semibold mb-2 text-gray-800 text-[8px] lg:text-lg">
+                Product Details
+              </h3>
+              <p className="text-gray-700 whitespace-pre-line text-[6px] lg:text-base">
+                {product.description}
+              </p>
             </div>
+
             <div className="flex items-center text-gray-600">
               <MapPinIcon className="h-1 w-1 lg:h-6 lg:w-6 mr-2 text-gray-500" />
               <span className="text-[8px] lg:text-base">{product.location}</span>
             </div>
+
             <div className="bg-green-50 p-1 lg:p-6 rounded-lg lg:space-y-4">
               <h3 className="font-semibold flex items-center text-gray-800 text-[8px] lg:text-lg">
                 <ShieldCheckIcon className="h-1 w-1 lg:h-6 lg:w-6 mr-2 text-green-600" />
@@ -624,7 +676,9 @@ export default function ProductPage() {
               </h3>
               <div className="flex flex-col space-y-2">
                 <div className="flex items-center">
-                  <span className="text-gray-700 font-medium text-[8px] lg:text-base">{product.seller.username}</span>
+                  <span className="text-gray-700 font-medium text-[8px] lg:text-base">
+                    {product.seller.username}
+                  </span>
                   {product.seller.verified && (
                     <div className="ml-2 bg-green-100 text-green-700 text-[6px] lg:text-sm px-2 py-1 rounded-full flex items-center">
                       <ShieldCheckIcon className="h-1 w-1 lg:h-4 lg:w-4 mr-1" />
@@ -632,7 +686,10 @@ export default function ProductPage() {
                     </div>
                   )}
                 </div>
-                <a href={`tel:${product.seller.phone}`} className="inline-flex items-center text-green-600 hover:text-green-700 text-[8px] lg:text-base">
+                <a
+                  href={`tel:${product.seller.phone}`}
+                  className="inline-flex items-center text-green-600 hover:text-green-700 text-[8px] lg:text-base"
+                >
                   <PhoneIcon className="h-2 w-2 lg:h-6 lg:w-6 mr-2" />
                   {product.seller.phone}
                 </a>
@@ -641,6 +698,7 @@ export default function ProductPage() {
           </div>
         </div>
 
+        {/* Payment Section */}
         <div className="border-t border-gray-200 px-6 py-8 lg:px-8 space-y-6">
           {!paymentSuccessful && (
             <div className="max-w-lg mx-auto">
@@ -651,9 +709,25 @@ export default function ProductPage() {
               >
                 {isVerifying ? (
                   <>
-                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    <svg
+                      className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      ></circle>
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      ></path>
                     </svg>
                     Verifying Payment...
                   </>
@@ -662,10 +736,12 @@ export default function ProductPage() {
                 )}
               </button>
               <p className="text-[8px] lg:text-sm text-gray-500 mt-3 text-center">
-                Payments made outside this platform are not covered by our Terms of Service, and we cannot guarantee buyer protection or dispute resolution.
+                Payments made outside this platform are not covered by our Terms of Service, and we
+                cannot guarantee buyer protection or dispute resolution.
               </p>
             </div>
           )}
+
           <div className="flex justify-center">
             <Link href={user ? `/pages/chat?sellerId=${sellerId}` : "#"} passHref>
               <div
@@ -675,23 +751,34 @@ export default function ProductPage() {
                 <div className="w-6 h-6 lg:w-12 lg:h-12 p-2 rounded-lg bg-orange-600 flex items-center justify-center">
                   <MessageSquare className="w-3 h-3 lg:w-6 lg:h-6 text-white" />
                 </div>
-                <span className="text-orange-800 p-2 text-xs lg:text-lg font-medium">{user ? "Chat with Seller" : "Login to Chat"}</span>
+                <span className="text-orange-800 p-2 text-xs lg:text-lg font-medium">
+                  {user ? "Chat with Seller" : "Login to Chat"}
+                </span>
               </div>
             </Link>
           </div>
         </div>
       </main>
 
+      {/* Popup Modal */}
       {showPopup && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="bg-white rounded-xl shadow-lg p-6 max-w-sm w-full text-center">
             <h2 className="text-xl font-bold text-gray-900 mb-4">Login Required</h2>
-            <p className="text-gray-600 mb-6">You need to be logged in to chat with the seller. Would you like to login now?</p>
+            <p className="text-gray-600 mb-6">
+              You need to be logged in to chat with the seller. Would you like to login now?
+            </p>
             <div className="flex justify-center space-x-4">
-              <button onClick={handleCancel} className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400 transition">
+              <button
+                onClick={handleCancel}
+                className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400 transition"
+              >
                 Cancel
               </button>
-              <button onClick={handleLogin} className="bg-orange-600 text-white px-4 py-2 rounded-lg hover:bg-orange-700 transition">
+              <button
+                onClick={handleLogin}
+                className="bg-orange-600 text-white px-4 py-2 rounded-lg hover:bg-orange-700 transition"
+              >
                 Login Now
               </button>
             </div>
