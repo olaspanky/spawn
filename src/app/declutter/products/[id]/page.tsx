@@ -547,10 +547,7 @@ export default function ProductPage() {
       return;
     }
 
-    if (!config.email || config.email === "user@example.com") {
-      alert("User email is required for payment. Please update your profile.");
-      return;
-    }
+   
 
     if (config.amount <= 0) {
       alert("Invalid product price.");
