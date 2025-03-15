@@ -112,7 +112,7 @@ export default function ProductPage() {
   const onSuccess = async (response: PaystackResponse) => {
     setIsVerifying(true);
     try {
-      const verificationResponse = await fetch("http://localhost:5000/api/verify-payment", {
+      const verificationResponse = await fetch("http://localhost:5000/api/purchases/verify-payment", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -133,7 +133,7 @@ export default function ProductPage() {
   
       if (verificationData.success) {
         setPaymentSuccessful(true);
-        router.push(`/purchases/${verificationData.order._id}`);
+        router.push(`/declutter/purchase/${verificationData.order._id}`);
       } else {
         throw new Error(verificationData.message || "Payment verification failed");
       }
