@@ -518,7 +518,7 @@ export default function ProductPage() {
 
       if (verificationData.success) {
         setPaymentSuccessful(true);
-        router.push(`/declutter/purchases/${verificationData.order._id}`);
+        router.push(`/declutter/purchase/${verificationData.order._id}`);
       } else {
         throw new Error(verificationData.message || "Payment verification failed");
       }
