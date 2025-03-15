@@ -115,9 +115,23 @@
 //   );
 // }
 
-import React from 'react';
+import React, { useEffect } from 'react';
 
-const WebForm: React.FC = () => {
+const ZohoWebForm: React.FC = () => {
+  useEffect(() => {
+    // Load the analytics script dynamically
+    const script = document.createElement('script');
+    script.src = 'https://crm.zohopublic.com/crm/WebFormAnalyticsServeServlet?rid=56901fe96d4e2a0863f7b35bc52cacef0b37a8295a840273ba9b2cce9565f231816200dbc47651f37e77ce55a0058e48gid15da7e95dfb4beaac913b59a0b7ee7fac521eae58838c5b24ce813cec97cfedbgidb15462ae4bccaed39f965572c47d83cf04f8202e7687ae7279b63ed9771a8afagide1fcfd3c709fa4b1555930be67750e51955986747b7ac80f249d00fb097916c5&tw=e5dcef9c73c5ef014b12021265ea56e3969af99a255f0c368ef88d88ccacd89b';
+    script.async = true;
+    script.id = 'wf_anal';
+    document.body.appendChild(script);
+
+    // Cleanup function to remove the script when the component unmounts
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const form = event.currentTarget;
@@ -167,9 +181,9 @@ const WebForm: React.FC = () => {
         acceptCharset="UTF-8"
         className="space-y-4"
       >
-        <input type="hidden" name="xnQsjsdp" value="b9410bacec86440897475107d0e1b9051d46e4841d207ee1dad4e722d4e85a87" />
+        <input type="hidden" name="xnQsjsdp" value="f38ab4bc9fbd8218900dd56f391a3ec3364de10d5076798b5d75bb9ac77e7789" />
         <input type="hidden" name="zc_gad" id="zc_gad" value="" />
-        <input type="hidden" name="xmIwtLD" value="b1373a98d06872973f6e6f0c074baee1e5c1f3855080108a8ad803a086421d9cd6e4171c5ecaac6538f0ad3a2fe82705" />
+        <input type="hidden" name="xmIwtLD" value="8ea2b64f97dd968b3d4e7d91e23eb0aa891e8565ba4df7e2492d17b6dfb5c1b29496c72d73bef92e7b8182234cd091bb" />
         <input type="hidden" name="actionType" value="TGVhZHM=" />
         <input type="hidden" name="returnURL" value="null" />
 
@@ -258,4 +272,4 @@ const WebForm: React.FC = () => {
   );
 };
 
-export default WebForm;
+export default ZohoWebForm;
