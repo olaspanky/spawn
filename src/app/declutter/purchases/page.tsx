@@ -48,7 +48,7 @@ const PurchasesPage = () => {
         }
 
         setLoading(true);
-        const response = await fetch("http://localhost:5000/api/purchases/purchases", {
+        const response = await fetch("https://spawnback.onrender.com/api/purchases/purchases", {
           headers: {
             "Content-Type": "application/json",
             "x-auth-token": token,
