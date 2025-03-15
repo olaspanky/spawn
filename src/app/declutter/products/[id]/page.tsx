@@ -497,7 +497,7 @@ export default function ProductPage() {
   const onSuccess = async (response: PaystackResponse) => {
     setIsVerifying(true);
     try {
-      const verificationResponse = await fetch("https://spawnback.onrender.com/api/purchase/verify-payment", {
+      const verificationResponse = await fetch("https://spawnback.onrender.com/api/purchases/verify-payment", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
