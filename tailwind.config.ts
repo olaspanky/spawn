@@ -12,6 +12,10 @@ export default {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        primary: {
+          light: '#3b82f6', // blue-500
+          dark: '#60a5fa',  // blue-400
+        },
         orange: {
           600: '#FF5A1F', // Primary brand color
         }
@@ -32,6 +36,7 @@ export default {
   },
     },
   },
+  darkMode: 'class', // This enables the dark mode variant
   plugins: [daisyui],
   daisyui: {
     themes: [

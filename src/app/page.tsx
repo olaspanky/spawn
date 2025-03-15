@@ -126,14 +126,14 @@ export default function Home() {
   return (
     <div className="min-h-screen font-sans antialiased relative">
       {/* Background Layers */}
-      <div className="fixed inset-0 bg-gradient-to-br from-gray-950 via-gray-900 to-black z-0"></div>
-      <div className="fixed inset-0 bg-[url('/noise-texture.png')] opacity-5 z-0"></div>
-      <div className="fixed inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(249,115,22,0.05)_0%,transparent_600px)] z-0"></div>
+      <div className="fixed inset-0 dark:bg-white bg-gradient-to-br from-gray-950 via-gray-900 to-black z-0"></div>
+      <div className="fixed inset-0 dark:bg-white bg-[url('/noise-texture.png')] opacity-5 z-0"></div>
+      <div className="fixed inset-0 dark:bg-white bg-[radial-gradient(circle_at_30%_20%,rgba(249,115,22,0.05)_0%,transparent_600px)] z-0"></div>
 
       {/* Main Content */}
       <div className="relative z-10">
         {/* Featured Items Slider */}
-        <div className="relative overflow-hidden backdrop-blur-md bg-black/40 border-b border-white/5 shadow-md font-semibold">
+        <div className="relative overflow-hidden dark:bg-white backdrop-blur-md bg-black/40 border-b border-white/5 shadow-md font-semibold">
           <div
             ref={featuredItemsRef}
             className="container mx-auto px-4 py-8 md:py-16"
@@ -150,24 +150,24 @@ export default function Home() {
                 >
                   <div className="w-full md:w-1/2 p-4 md:p-10 text-white z-10 order-2 md:order-1">
                     <div className="mb-2 md:mb-3">
-                      <span className="text-[10px] sm:text-xs md:text-xs uppercase tracking-widest text-orange-300 bg-orange-900/20 px-2 py-1 md:px-3 md:py-1 rounded-full">
+                      <span className="text-[10px] sm:text-xs md:text-xs uppercase tracking-widest dark:text-black text-orange-300 bg-orange-900/20 px-2 py-1 md:px-3 md:py-1 rounded-full">
                         {item.category}
                       </span>
                     </div>
-                    <h1 className="text-lg sm:text-xl md:text-5xl font-extrabold leading-tight bg-clip-text text-transparent bg-gradient-to-r from-white to-orange-200 mb-2 md:mb-4 truncate w-full">
+                    <h1 className="text-lg sm:text-xl md:text-5xl font-extrabold leading-tight bg-clip-text text-transparent dark:text-black bg-gradient-to-r from-white to-orange-200 mb-2 md:mb-4 truncate w-full">
                       {item.title}
                     </h1>
-                    <p className="text-base sm:text-lg md:text-2xl font-medium text-gray-200 mb-3 md:mb-6">
+                    <p className="text-base sm:text-lg md:text-2xl font-medium dark:text-black text-gray-200 mb-3 md:mb-6">
                       ₦{item.price.toLocaleString()}
                     </p>
                     <div className="flex items-center mb-4 md:mb-8">
                       <MapPinIcon className="h-4 w-4 md:h-5 md:w-5 text-orange-400 mr-1.5 md:mr-2" />
-                      <span className="text-gray-300 text-xs sm:text-sm md:text-base truncate">
+                      <span className="text-gray-300 text-xs sm:text-sm md:text-base dark:text-black truncate">
                         {item.location}
                       </span>
                     </div>
                     <Link href={`/declutter/products/${item._id}`}>
-                      <button className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white px-4 py-2 sm:px-6 sm:py-2.5 md:px-6 md:py-3 rounded-xl text-xs sm:text-sm md:text-sm font-semibold tracking-wide transition-all duration-300 shadow-md md:shadow-lg hover:shadow-orange-600/40 hover:scale-105">
+                      <button className="bg-gradient-to-r dark:text-rwhite from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white px-4 py-2 sm:px-6 sm:py-2.5 md:px-6 md:py-3 rounded-xl text-xs sm:text-sm md:text-sm font-semibold tracking-wide transition-all duration-300 shadow-md md:shadow-lg hover:shadow-orange-600/40 hover:scale-105">
                         View Details
                       </button>
                     </Link>
@@ -212,8 +212,8 @@ export default function Home() {
                   onClick={() => setCurrentFeaturedIndex(index)}
                   className={`transition-all duration-300 ease-in-out rounded-full ${
                     index === currentFeaturedIndex
-                      ? "h-2 w-6 md:h-2 md:w-8 bg-orange-500"
-                      : "h-2 w-2 bg-white/30 hover:bg-white/50"
+                      ? "h-2 w-6 md:h-2 md:w-8  bg-orange-500"
+                      : "h-2 w-2 dark:bg-black bg-white/30 hover:bg-white/50"
                   }`}
                   aria-label={`Go to slide ${index + 1}`}
                 />
@@ -223,13 +223,13 @@ export default function Home() {
         </div>
 
         {/* Sticky Filter Section */}
-        <div className="sticky top-12 z-30 bg-black/90 backdrop-blur-md border-b border-white/10 shadow-md">
+        <div className="sticky top-12 z-30 dark:bg-white bg-black/90 backdrop-blur-md border-b border-white/10 shadow-md">
           <div className="mx-auto px-4 lg:px-12 py-4 md:py-6 max-w-7xl">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-lg md:text-xl font-semibold text-white">Filter Categories</h3>
               <button
                 onClick={() => setFilterOpen(!filterOpen)}
-                className="text-gray-300 hover:text-white transition-colors"
+                className="text-gray-300 dark:text-black dark:hover:text-gray-500 hover:text-white transition-colors"
                 aria-label={filterOpen ? "Collapse filters" : "Expand filters"}
               >
                 {filterOpen ? (
@@ -249,8 +249,8 @@ export default function Home() {
                       onClick={() => setSelectedCategory(category)}
                       className={`px-4 py-2 rounded-full text-xs md:text-sm transition-all duration-300 whitespace-nowrap ${
                         selectedCategory === category
-                          ? "bg-gradient-to-r from-orange-600 to-orange-500 text-white scale-105 shadow-lg shadow-orange-600/20"
-                          : "bg-white/5 text-gray-300 hover:bg-white/10 border border-white/10 hover:border-white/20"
+                          ? "bg-gradient-to-r from-orange-600 to-orange-500 text-white  scale-105 shadow-lg shadow-orange-600/20"
+                          : "bg-white/5 text-gray-300 hover:bg-white/10 border dark:text-black border-white/10 hover:border-white/20"
                       }`}
                     >
                       {category}
@@ -310,7 +310,7 @@ export default function Home() {
             <EmptyState searchTerm={searchTerm} />
           ) : (
             <>
-              <h3 className="text-lg md:text-xl font-semibold text-white mb-4 md:mb-6 flex justify-between items-center">
+              <h3 className="text-lg md:text-xl font-semibold text-white  mb-4 md:mb-6 flex justify-between items-center">
                 <span>
                   {selectedCategory !== "All" ? `${selectedCategory} Items` : "All Listings"}
                   <span className="ml-2 text-sm text-gray-400">({filteredItems.length})</span>
@@ -409,7 +409,7 @@ const ListingCard = ({
         </button>
       </div>
       <div className="p-3 md:p-4 text-white">
-        <h4 className="font-semibold mb-1 truncate text-sm md:text-base">{item.title}</h4>
+        <h4 className="font-semibold mb-1 truncate text-sm dark:text-black md:text-base">{item.title}</h4>
         <div className="flex justify-between items-center mt-2">
           <span className="text-orange-500 font-bold text-sm md:text-base">
             ₦{item.price.toLocaleString()}
@@ -470,3 +470,13 @@ const EmptyState = ({ searchTerm }: { searchTerm: string }) => (
     <p className="text-gray-400 text-sm">Try adjusting your search or filter criteria</p>
   </div>
 );
+
+
+
+
+
+
+
+
+
+

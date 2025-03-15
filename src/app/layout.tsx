@@ -1,3 +1,60 @@
+// import type { Metadata } from "next";
+// import { Geist, Geist_Mono } from "next/font/google";
+// import "./globals.css";
+// import { AuthProvider } from "./context/AuthContext";
+// import LayoutWrapper from "./components/LayoutWrapper";
+// import { Montserrat } from "next/font/google";
+// import { Roboto_Slab } from "next/font/google";
+// import ClientAuthProvider from "./components/ClientAuthProvider"; // Import the client component
+// import Theme from "./components/Theme"; 
+// import ThemeToggle from "./components/ThemeToggle";
+
+// const geistSans = Geist({
+//   variable: "--font-geist-sans",
+//   subsets: ["latin"],
+// });
+
+// const geistMono = Geist_Mono({
+//   variable: "--font-geist-mono",
+//   subsets: ["latin"],
+// });
+// const font1 = Montserrat({
+//   variable: "--font-montserrat",
+//   subsets: ["latin"],
+// });
+// const font2 = Roboto_Slab({
+//   variable: "--font-robo-slab",
+//   subsets: ["latin"],
+// });
+
+// export const metadata: Metadata = {
+//   title: "DeclutterNG",
+//   description: "Sell your clutter easily",
+// };
+
+// export default function RootLayout({
+//   children,
+// }: Readonly<{
+//   children: React.ReactNode;
+// }>) {
+//   return (
+//     <html lang="en" suppressHydrationWarning>
+//       <body
+//         className={`${geistSans.variable} ${geistMono.variable} ${font1.variable} ${font2.variable} antialiased`} >
+//         <Theme /> {/* Ensure Theme component is added here */}
+//         <AuthProvider>
+//           <ClientAuthProvider />
+//           <LayoutWrapper>
+
+//             {children}
+//             <ThemeToggle />
+
+//             </LayoutWrapper>
+//         </AuthProvider>
+//       </body>
+//     </html>
+//   );
+// }
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
@@ -5,8 +62,9 @@ import { AuthProvider } from "./context/AuthContext";
 import LayoutWrapper from "./components/LayoutWrapper";
 import { Montserrat } from "next/font/google";
 import { Roboto_Slab } from "next/font/google";
-import ClientAuthProvider from "./components/ClientAuthProvider"; // Import the client component
+import ClientAuthProvider from "./components/ClientAuthProvider";
 import Theme from "./components/Theme"; 
+import ThemeToggle from "./components/ThemeToggle";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -37,13 +95,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${font1.variable} ${font2.variable} antialiased`} >
+        className={`${geistSans.variable} ${geistMono.variable} ${font1.variable} ${font2.variable} antialiased`}
+      >
         <Theme /> {/* Ensure Theme component is added here */}
         <AuthProvider>
           <ClientAuthProvider />
-          <LayoutWrapper>{children}</LayoutWrapper>
+          {/* Add the ThemeToggle with fixed positioning outside the LayoutWrapper */}
+          <div className="fixed top-4 right-4 z-50">
+            <ThemeToggle />
+          </div>
+          <LayoutWrapper>
+            {children}
+          </LayoutWrapper>
         </AuthProvider>
       </body>
     </html>

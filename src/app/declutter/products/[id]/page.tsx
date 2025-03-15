@@ -21,7 +21,7 @@ interface Product {
   images: string[];
   seller: {
     username: string;
-    _id: string;
+    _id: string; 
     phone: string;
     verified: boolean;
   };
@@ -37,6 +37,8 @@ export default function ProductPage() {
   const { token, logout, user } = useAuth();
   const router = useRouter();
   const [showPopup, setShowPopup] = useState(false); // Added for popup
+
+  console.log("user", user);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -61,42 +63,77 @@ export default function ProductPage() {
     fetchProduct();
   }, [id]);
 
+  // const config = {
+  //   reference: new Date().getTime().toString(),
+  //   email: "user@example.com", // Replace with actual buyer's email
+  //   amount: product ? product.price * 100 : 0, // Convert to kobo
+  //   publicKey: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY || "your_paystack_public_key",
+  // };
+
+
   const config = {
     reference: new Date().getTime().toString(),
-    email: "user@example.com", // Replace with actual buyer's email
-    amount: product ? product.price * 100 : 0, // Convert to kobo
+    email: "user@example.com", // Ensure user email is available
+    amount: product ? product.price * 100 : 0, // Ensure product price is valid
     publicKey: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY || "your_paystack_public_key",
+    metadata: {
+      custom_fields: [
+        {
+          display_name: "User ID",
+          variable_name: "user_id",
+          value: user?.id || ""
+        },
+        {
+          display_name: "Product ID",
+          variable_name: "product_id",
+          value: id?.toString() || ""
+        }
+      ]
+    }
   };
 
   const initializePayment = usePaystackPayment(config);
 
-  const onSuccess = async (response: { reference: string }) => {
+ 
+  console.log("Payment Config:", config);
+
+  interface PaystackResponse {
+    reference: string;
+  }
+
+  interface VerificationResponse {
+    success: boolean;
+    order: {
+      _id: string;
+    };
+    message?: string;
+  }
+
+  const onSuccess = async (response: PaystackResponse) => {
     setIsVerifying(true);
     try {
-      const verificationResponse = await fetch("/api/verify-payment", {
+      const verificationResponse = await fetch("http://localhost:5000/api/verify-payment", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "x-auth-token": token || "" // Ensure token is a string
+        },
         body: JSON.stringify({
           reference: response.reference,
-          productId: id,
+          itemID: id, // Changed from productId to itemID
         }),
       });
-
+  
       if (!verificationResponse.ok) {
-        throw new Error("Payment verification failed");
+        const errorData = await verificationResponse.json();
+        throw new Error(errorData.message || "Payment verification failed");
       }
-
-      const verificationData = await verificationResponse.json();
-
+  
+      const verificationData: VerificationResponse = await verificationResponse.json();
+  
       if (verificationData.success) {
         setPaymentSuccessful(true);
-        alert("Payment successful! Your order is being processed.");
-
-        const updatedProductResponse = await fetch(`https://spawnback.onrender.com/api/items/${id}`);
-        if (updatedProductResponse.ok) {
-          const updatedProduct = await updatedProductResponse.json();
-          setProduct(updatedProduct);
-        }
+        router.push(`/purchases/${verificationData.order._id}`);
       } else {
         throw new Error(verificationData.message || "Payment verification failed");
       }
@@ -107,6 +144,9 @@ export default function ProductPage() {
       setIsVerifying(false);
     }
   };
+  
+  
+
 
   const onClose = () => {
     alert("Payment was not completed. Please try again.");
@@ -117,7 +157,17 @@ export default function ProductPage() {
       alert("Product information is missing.");
       return;
     }
-
+  
+    if (!user?.name) {
+      alert("User name is required for payment. Please log in.");
+      return;
+    }
+  
+    if (product.price <= 0) {
+      alert("Invalid product price.");
+      return;
+    }
+  
     initializePayment({
       onSuccess,
       onClose,
@@ -185,13 +235,17 @@ export default function ProductPage() {
     );
 
   return (
-    <div className="min-h-screen overflow-hidden bg-gradient-to-br from-black/95 to-gray-900/95 backdrop-blur-lg border-t border-white/10 font-sans">
-      <nav className="shadow-sm sticky top-0 z-10">
+<div className="min-h-screen overflow-hidden font-sans 
+  bg-gradient-to-br from-black/95 to-gray-900/95 
+  backdrop-blur-lg border-t border-white/10
+  dark:bg-gradient-to-br dark:from-white dark:to-gray-100 
+  dark:backdrop-blur-none dark:border-t-0">
+          <nav className="shadow-sm sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center">
           <Link href="/" className="text-gray-600 hover:text-orange-600 transition">
             <ArrowLeftIcon className="h-5 w-5 lg:h-6 lg:w-6" />
           </Link>
-          <h1 className="text-lg lg:text-2xl font-semibold ml-4 truncate text-white">
+          <h1 className="text-lg lg:text-2xl font-semibold ml-4 truncate dark:text-black text-white">
             {product.title}
           </h1>
         </div>
@@ -207,7 +261,7 @@ export default function ProductPage() {
           {/* Right: Product Info */}
           <div className="md:w-1/2 p-2 lg:p-8 space-y-2 lg:space-y-6">
             <div>
-              <h2 className="text-[12px] lg:text-3xl font-bold text-white">{product.title}</h2>
+              <h2 className="text-[12px] lg:text-3xl font-bold dark:text-black text-white">{product.title}</h2>
               <div className="mt-4 flex items-center">
                 <TagIcon className="h-5 w-5 lg:h-6 lg:w-6 text-orange-600 mr-2" />
                 <span className="text-[12px] lg:text-3xl font-semibold text-orange-600">

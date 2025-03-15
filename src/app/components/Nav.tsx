@@ -59,7 +59,7 @@ export default function Navbar({ searchTerm, setSearchTerm }: NavbarProps) {
   };
 
   return (
-    <nav className="backdrop-blur-lg bg-black/70 border-b border-white/10 shadow-xl sticky top-0 z-50 font-sans">
+    <nav className="backdrop-blur-lg dark:bg-white bg-black/70 border-b border-white/10 shadow-xl sticky top-0 z-20 font-sans">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
         {/* Left: Logo */}
         <motion.div
@@ -69,7 +69,7 @@ export default function Navbar({ searchTerm, setSearchTerm }: NavbarProps) {
         >
           <h2 className="text-xl sm:text-2xl font-bold text-white">
             <Link href="/" onClick={closeMenu}>
-              <div className="inline-flex items-center hover:text-orange-400 transition-colors duration-300">
+              <div className="inline-flex items-center dark:text-black hover:text-orange-400 transition-colors duration-300">
                 TRADE<span className="text-orange-500">HUB</span>
               </div>
             </Link>
@@ -77,12 +77,12 @@ export default function Navbar({ searchTerm, setSearchTerm }: NavbarProps) {
         </motion.div>
 
         {/* Right: Navigation Links */}
-        <div className="hidden md:flex items-center space-x-6 lg:space-x-8">
+        <div className="hidden md:flex items-center dark:text-black space-x-6 lg:space-x-8">
           {token ? (
             <>
               <motion.div whileHover={{ scale: 1.1 }} transition={{ duration: 0.2 }}>
                 <Link href="/" onClick={closeMenu}>
-                  <BellIcon className="h-6 w-6 lg:h-7 lg:w-7 text-white hover:text-orange-400 transition-colors duration-300" />
+                  <BellIcon className="h-6 w-6 lg:h-7 lg:w-7 text-white  hover:text-orange-400 transition-colors duration-300" />
                 </Link>
               </motion.div>
               <motion.div whileHover={{ scale: 1.05 }} transition={{ duration: 0.2 }}>
@@ -111,10 +111,10 @@ export default function Navbar({ searchTerm, setSearchTerm }: NavbarProps) {
               </motion.button>
             </>
           ) : (
-            <div className="hidden md:flex space-x-6 lg:space-x-8 items-center">
+            <div className="hidden md:flex space-x-6 lg:space-x-8 dark:text-black items-center">
               <motion.div whileHover={{ scale: 1.05 }} transition={{ duration: 0.2 }}>
                 <Link href="/declutter/upload" onClick={closeMenu}>
-                  <div className="inline-flex items-center bg-orange-600 text-white px-4 py-2 lg:px-6 lg:py-3 text-sm lg:text-base rounded-full font-semibold hover:bg-orange-700 transition-colors duration-300 shadow-md hover:shadow-lg">
+                  <div className="inline-flex items-center bg-orange-600 dark:text-black text-white px-4 py-2 lg:px-6 lg:py-3 text-sm lg:text-base rounded-full font-semibold hover:bg-orange-700 transition-colors duration-300 shadow-md hover:shadow-lg">
                     Sell Item
                     <ShoppingCartIcon className="h-4 w-4 lg:h-5 lg:w-5 ml-2" />
                   </div>
@@ -122,7 +122,7 @@ export default function Navbar({ searchTerm, setSearchTerm }: NavbarProps) {
               </motion.div>
               <motion.div whileHover={{ scale: 1.05 }} transition={{ duration: 0.2 }}>
                 <Link href="/declutter/login" onClick={closeMenu}>
-                  <div className="px-4 py-2 lg:px-6 lg:py-3 text-sm lg:text-base font-medium text-white hover:text-orange-400 transition-colors duration-300">
+                  <div className="px-4 py-2 lg:px-6 lg:py-3 text-sm lg:text-base font-medium dark:text-black text-white hover:text-orange-400 transition-colors duration-300">
                     Sign In
                   </div>
                 </Link>
