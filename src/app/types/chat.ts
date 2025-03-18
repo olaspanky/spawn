@@ -49,14 +49,13 @@ export interface ChatStore {
   isUsersLoading: boolean;
   isMessagesLoading: boolean;
   getUsers: () => Promise<void>;
-  setSelectedUserById: (userId: string) => Promise<void>;
+  setSelectedUserById: (sellerId: string) => Promise<void>;
   getMessages: (userId: string) => Promise<void>;
-  setMessages: (messages: Message[]) => void; // Added setMessages property
-
   sendMessage: (messageData: { text: string; image?: string | null }) => Promise<void>;
   subscribeToMessages: () => void;
   unsubscribeFromMessages: () => void;
-  setSelectedUser: (user: User | null) => void;
+  setSelectedUser: (selectedUser: User | null) => void;
+  setMessages: (messages: Message[] | ((prevMessages: Message[]) => Message[])) => void;
 }
 
 

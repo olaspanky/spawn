@@ -36,7 +36,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         usersList = get().users;
       }
 
-      const user = usersList.find(u => u._id === sellerId);
+      const user = usersList.find((u) => u._id === sellerId);
 
       if (!user) {
         toast.error("User not found");
@@ -47,7 +47,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       await get().getMessages(sellerId);
     } catch (error) {
       toast.error("Failed to load user chat");
-      console.error('Error loading user:', error);
+      console.error("Error loading user:", error);
     }
   },
 
@@ -89,12 +89,12 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       console.error("No user selected for chat.");
       return;
     }
-  
+
     let socket = useAuthStore.getState().socket;
     if (!socket) {
       console.error("Socket is not available. Attempting to reconnect...");
       useAuthStore.getState().connectSocket();
-      
+
       setTimeout(() => {
         socket = useAuthStore.getState().socket;
         if (!socket) {
@@ -103,21 +103,20 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         }
         socket.on("newMessage", (newMessage: Message) => {
           if (newMessage.senderId !== selectedUser._id) return;
-          set({ messages: [...get().messages, newMessage] });
+          set((state) => ({ messages: [...state.messages, newMessage] }));
         });
       }, 2000); // Delay to allow socket reconnection
     } else {
       socket.on("newMessage", (newMessage: Message) => {
         if (newMessage.senderId !== selectedUser._id) return;
-        set({ messages: [...get().messages, newMessage] });
+        set((state) => ({ messages: [...state.messages, newMessage] }));
       });
     }
   },
-  
 
   unsubscribeFromMessages: () => {
     const socket = useAuthStore.getState().socket;
-    socket.off("newMessage");
+    socket?.off("newMessage"); // Use optional chaining in case socket is null
   },
 
   setSelectedUser: (selectedUser: User | null) => {
@@ -127,7 +126,9 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     }
   },
 
-  setMessages: (messages: Message[]) => {
-    set({ messages });
+  setMessages: (messages: Message[] | ((prevMessages: Message[]) => Message[])) => {
+    set((state) =>
+      typeof messages === "function" ? { messages: messages(state.messages) } : { messages }
+    );
   },
 }));

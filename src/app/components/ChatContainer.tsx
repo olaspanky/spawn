@@ -5,8 +5,8 @@ import MessageInput from "./MessageInput";
 import MessageSkeleton from "./skeletons/MessageSkeleton";
 import { useAuthStore } from "../store/useAuthStore";
 import { formatMessageTime } from "../lib/utils";
-import { ChatStore, AuthStore } from "../types/chat";
-import io from "socket.io-client";
+import { ChatStore, AuthStore, Message } from "../types/chat";
+import io, { Socket } from "socket.io-client";
 
 interface ChatContainerProps {
   className?: string;
@@ -46,15 +46,15 @@ const ChatContainer: React.FC<ChatContainerProps> = ({ className, onBack }) => {
     });
 
     socketRef.current.on("newMessage", (newMessage: any) => {
-      setMessages((prevMessages) => [...prevMessages, newMessage]); // Use functional update
+      setMessages((prevMessages: Message[]) => [...prevMessages, newMessage as Message]); // Use functional update
       console.log("Received new message:", newMessage);
     });
 
-    socketRef.current.on("connect_error", (error) => {
+    socketRef.current.on("connect_error", (error: Error) => {
       console.error("Socket connection error:", error.message);
     });
 
-    socketRef.current.on("disconnect", (reason) => {
+    socketRef.current.on("disconnect", (reason: string) => {
       console.log("Socket disconnected:", reason);
     });
 
