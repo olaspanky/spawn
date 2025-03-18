@@ -51,13 +51,58 @@ export interface ChatStore {
   getUsers: () => Promise<void>;
   setSelectedUserById: (userId: string) => Promise<void>;
   getMessages: (userId: string) => Promise<void>;
+  setMessages: (messages: Message[]) => void; // Added setMessages property
+
   sendMessage: (messageData: { text: string; image?: string | null }) => Promise<void>;
   subscribeToMessages: () => void;
   unsubscribeFromMessages: () => void;
   setSelectedUser: (user: User | null) => void;
 }
 
+
+
 export interface ThemeStore {
   theme: string;
   setTheme: (theme: string) => void;
+}
+
+
+
+export interface User2 {
+  _id: string;
+  username: string;
+  verified?: boolean;
+  rating?: number;
+  ratingCount?: number;
+  scamReports?: number;
+  phone?: string;
+}
+
+export interface MeetingDetails {
+  location: string;
+  time: string; // ISO string
+}
+
+export interface Item {
+  _id: string;
+  title: string;
+  price: number;
+  description: string;
+  images: string[];
+  status: string;
+}
+
+export interface Order {
+  _id: string;
+  buyer: string | User;
+  seller: string | User;
+  item: Item;
+  price: number;
+  paymentReference: string;
+  status: 'pending' | 'completed' | 'cancelled' | 'refund_requested';
+  trackingStatus: 'paid' | 'meeting_scheduled' | 'completed' | 'refund_requested' | 'refunded';
+  meetingDetails?: MeetingDetails;
+  refundReason?: string;
+  createdAt: string;
+  updatedAt: string;
 }

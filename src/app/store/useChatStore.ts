@@ -126,4 +126,8 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       get().getMessages(selectedUser._id);
     }
   },
+
+  setMessages: (messages: Message[]) => {
+    set({ messages });
+  },
 }));

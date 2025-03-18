@@ -6,11 +6,18 @@ import MessageSkeleton from "./skeletons/MessageSkeleton";
 import { useAuthStore } from "../store/useAuthStore";
 import { formatMessageTime } from "../lib/utils";
 import { ChatStore, AuthStore } from "../types/chat";
+import io from "socket.io-client";
 
-const ChatContainer: React.FC = () => {
+interface ChatContainerProps {
+  className?: string;
+  onBack?: () => void;
+}
+
+const ChatContainer: React.FC<ChatContainerProps> = ({ className, onBack }) => {
   const {
     messages,
     getMessages,
+    setMessages,
     isMessagesLoading,
     selectedUser,
     subscribeToMessages,
@@ -19,26 +26,56 @@ const ChatContainer: React.FC = () => {
 
   const { authUser } = useAuthStore() as AuthStore;
   const messageEndRef = useRef<HTMLDivElement | null>(null);
+  const socketRef = useRef<any>(null);
+
+  
 
   useEffect(() => {
-    if (selectedUser?._id) {
-      getMessages(selectedUser._id);
-      subscribeToMessages();
+    if (!selectedUser?._id) return;
 
-      return () => unsubscribeFromMessages();
-    }
-  }, [selectedUser?._id, getMessages, subscribeToMessages, unsubscribeFromMessages]);
+    // Initialize Socket.IO connection
+    socketRef.current = io("https://chatapp-r2c3.onrender.com", {
+      reconnection: true,
+      reconnectionAttempts: 5,
+      reconnectionDelay: 1000,
+    });
+
+    socketRef.current.on("connect", () => {
+      console.log("Connected to socket:", socketRef.current.id);
+      socketRef.current.emit("joinChat", selectedUser._id);
+    });
+
+    socketRef.current.on("newMessage", (newMessage: any) => {
+      setMessages((prevMessages) => [...prevMessages, newMessage]); // Use functional update
+      console.log("Received new message:", newMessage);
+    });
+
+    socketRef.current.on("connect_error", (error) => {
+      console.error("Socket connection error:", error.message);
+    });
+
+    socketRef.current.on("disconnect", (reason) => {
+      console.log("Socket disconnected:", reason);
+    });
+
+    getMessages(selectedUser._id); // Initial fetch
+
+    return () => {
+      socketRef.current.disconnect();
+      unsubscribeFromMessages();
+    };
+  }, [selectedUser?._id, getMessages, setMessages, unsubscribeFromMessages]);
 
   useEffect(() => {
-    if (messageEndRef.current && messages) {
+    if (messageEndRef.current && messages.length > 0) {
       messageEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [messages]);
 
   if (isMessagesLoading) {
     return (
-      <div className="flex-1 flex flex-col overflow-auto">
-        <ChatHeader />
+      <div className={`flex-1 flex flex-col overflow-auto ${className || ""}`}>
+        <ChatHeader onBack={onBack} />
         <MessageSkeleton />
         <MessageInput />
       </div>
@@ -46,14 +83,13 @@ const ChatContainer: React.FC = () => {
   }
 
   return (
-    <div className="flex-1 flex flex-col overflow-auto">
-      <ChatHeader />
+    <div className={`flex-1 flex flex-col overflow-auto ${className || ""}`}>
+      <ChatHeader onBack={onBack} />
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
         {messages.map((message) => (
           <div
             key={message._id}
             className={`chat ${message.senderId === authUser?._id ? "chat-end" : "chat-start"}`}
-            ref={messageEndRef}
           >
             <div className="chat-image avatar">
               <div className="size-10 rounded-full border">
@@ -84,6 +120,7 @@ const ChatContainer: React.FC = () => {
             </div>
           </div>
         ))}
+        <div ref={messageEndRef} />
       </div>
       <MessageInput />
     </div>

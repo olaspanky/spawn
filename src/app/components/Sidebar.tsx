@@ -5,20 +5,34 @@ import SidebarSkeleton from "./skeletons/SidebarSkeleton";
 import { Users } from "lucide-react";
 import { ChatStore, AuthStore } from "../types/chat";
 
-const Sidebar: React.FC = () => {
+interface SidebarProps {
+  onChatSelect: () => void; // Prop for mobile chat navigation
+}
+
+const Sidebar: React.FC<SidebarProps> = ({ onChatSelect }) => {
   const { getUsers, users, selectedUser, setSelectedUser, isUsersLoading } = useChatStore() as ChatStore;
-  const { onlineUsers } = useAuthStore() as AuthStore;
+  const { onlineUsers, authUser } = useAuthStore() as AuthStore; // Added authUser
   const [showOnlineOnly, setShowOnlineOnly] = useState<boolean>(false);
 
-  console.log("onlineUsers", onlineUsers);
+  console.log("🔵 All users:", users);
+  console.log("🟢 Online Users:", onlineUsers);
+  console.log("🟤 Auth User:", authUser);
+
+  useEffect(() => {
+    console.log("🟡 Sidebar updated! Online Users:", onlineUsers);
+  }, [onlineUsers]);
 
   useEffect(() => {
     getUsers();
   }, [getUsers]);
 
-  const filteredUsers = showOnlineOnly
-    ? users.filter((user) => onlineUsers.includes(user._id))
-    : users;
+  // Filter out the authenticated user from the list
+  const filteredUsers = (showOnlineOnly
+    ? users.filter((user) => onlineUsers.includes(user._id.toString()))
+    : users
+  ).filter((user) => user._id.toString() !== authUser?._id?.toString());
+
+  console.log("🟣 Filtered Users (Visible):", filteredUsers);
 
   if (isUsersLoading) return <SidebarSkeleton />;
 
@@ -44,40 +58,40 @@ const Sidebar: React.FC = () => {
       </div>
 
       <div className="overflow-y-auto w-full py-3">
-        {filteredUsers.map((user) => (
-          <button
-            key={user._id}
-            onClick={() => setSelectedUser(user)}
-            className={`
-              w-full p-3 flex items-center gap-3
-              hover:bg-base-300 transition-colors
-              ${selectedUser?._id === user._id ? "bg-base-300 ring-1 ring-base-300" : ""}
-            `}
-          >
-            <div className="relative mx-auto lg:mx-0">
-              <img
-                src={user.profilePic || "/avatar.png"}
-                alt={user.username}
-                className="size-12 object-cover rounded-full"
-              />
-              {onlineUsers.includes(user._id) && (
-                <span
-                  className="absolute bottom-0 right-0 size-3 bg-green-500
-                  rounded-full ring-2 ring-zinc-900"
+        {filteredUsers.length > 0 ? (
+          filteredUsers.map((user) => (
+            <button
+              key={user._id}
+              onClick={() => {
+                setSelectedUser(user);
+                onChatSelect(); // Trigger chat open on mobile
+              }}
+              className={`
+                w-full p-3 flex items-center gap-3
+                hover:bg-base-300 transition-colors
+                ${selectedUser?._id === user._id ? "bg-base-300 ring-1 ring-base-300" : ""}
+              `}
+            >
+              <div className="relative mx-auto lg:mx-0">
+                <img
+                  src={user.profilePic || "/avatar.png"}
+                  alt={user.username}
+                  className="size-12 object-cover rounded-full"
                 />
-              )}
-            </div>
-            <div className="hidden lg:block text-left min-w-0">
-              <div className="font-medium truncate">{user.username}</div>
-              <div className="text-sm text-zinc-400">
-                {onlineUsers.includes(user._id) ? "Online" : "Offline"}
+                {onlineUsers.includes(user._id.toString()) && (
+                  <span className="absolute bottom-0 right-0 size-3 bg-green-500 rounded-full ring-2 ring-zinc-900" />
+                )}
               </div>
-            </div>
-          </button>
-        ))}
-
-        {filteredUsers.length === 0 && (
-          <div className="text-center text-zinc-500 py-4">No online users</div>
+              <div className="hidden lg:block text-left min-w-0">
+                <div className="font-medium truncate">{user.username}</div>
+                <div className="text-sm text-zinc-400">
+                  {onlineUsers.includes(user._id.toString()) ? "Online" : "Offline"}
+                </div>
+              </div>
+            </button>
+          ))
+        ) : (
+          <div className="text-center text-zinc-500 py-4">No users available</div>
         )}
       </div>
     </aside>
