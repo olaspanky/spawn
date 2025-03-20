@@ -103,9 +103,7 @@ export default function RootLayout({
         <AuthProvider>
           <ClientAuthProvider />
           {/* Add the ThemeToggle with fixed positioning outside the LayoutWrapper */}
-          <div className="fixed top-4 right-4 z-50">
-            <ThemeToggle />
-          </div>
+          
           <LayoutWrapper>
             {children}
           </LayoutWrapper>

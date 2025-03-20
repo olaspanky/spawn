@@ -140,7 +140,7 @@ export default function Home() {
             onMouseEnter={pauseSlider}
             onMouseLeave={pauseSlider}
           >
-            <div className="relative h-[380px] sm:h-[420px] md:h-[520px] w-full overflow-hidden rounded-2xl border border-white/10 shadow-xl shadow-black/50">
+            <div className="relative h-[380px] sm:h-[420px] md:h-[520px] w-full overflow-hidden rounded-2xl border dark:border-orange-500 border-white/10 shadow-xl shadow-black/50">
               {featuredItems.map((item, index) => (
                 <div
                   key={item._id}
@@ -332,16 +332,16 @@ export default function Home() {
         </div>
 
         {/* Footer */}
-        <footer className="relative z-10 border-t border-white/10 bg-black/40 backdrop-blur-md">
+        <footer className="relative z-10 dark:border-t dark:border-black  border-t border-white/10 dark:bg-white bg-black/40 backdrop-blur-md">
           <div className="container mx-auto px-4 py-6">
             <div className="flex flex-col md:flex-row justify-between items-center">
               <div className="mb-4 md:mb-0">
-                <h2 className="text-xl font-bold text-white">
+                <h2 className="text-xl font-bold text-white dark:text-black">
                   TRADE<span className="text-orange-500">HUB</span>
                 </h2>
-                <p className="text-gray-400 text-sm mt-1">The marketplace for all your needs</p>
+                <p className="text-gray-400 dark:text-black text-sm mt-1">The marketplace for all your needs</p>
               </div>
-              <div className="flex space-x-4 text-sm text-gray-400">
+              <div className="flex space-x-4 text-sm text-gray-400 dark:text-black">
                 <Link href="/terms">
                   <span className="hover:text-white transition-colors">Terms</span>
                 </Link>
@@ -425,7 +425,7 @@ const ListingCard = ({
 };
 
 const LoadingState = () => (
-  <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-black">
+  <div className="flex items-center justify-center min-h-screen dark:bg-gradient-to-br dark:from-white dark:via-white dark:to-white bg-gradient-to-br from-gray-950 via-gray-900 to-black">
     <div className="text-center">
       <div className="relative w-16 h-16 mx-auto mb-4">
         <div className="absolute inset-0 rounded-full border-t-2 border-orange-500 animate-spin"></div>
