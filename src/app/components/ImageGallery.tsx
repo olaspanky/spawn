@@ -26,9 +26,9 @@ export default function ImageGallery({ images, title }: ImageGalleryProps) {
   };
 
   return (
-    <div className="lg:space-y-3 lg:max-w-4xl mx-auto bg-transparent p-1 lg:p-4 rounded-lg shadow-lg">
+    <div className="lg:space-y-3 lg:max-w-4xl mx-auto p-1 lg:p-4 ">
       {/* Main Slider */}
-      <div className="relative h-[20vh] lg:w-96 w-[50vw] lg:h-[450px]  rounded-3xl overflow-hidden shadow-2xl group">
+      <div className="relative h-[20vh] lg:w-96 w-full lg:h-[450px]  rounded-3xl overflow-hidden group">
         <Swiper
           modules={[Navigation, Thumbs, EffectFade, Autoplay]}
           effect="fade"
@@ -49,10 +49,10 @@ export default function ImageGallery({ images, title }: ImageGalleryProps) {
           {images.map((image, index) => (
             <SwiperSlide key={index}>
               <div
-                className="relative h-[20vh] lg:h-[450px] lg:w-96 w-[50vw] cursor-zoom-in"
+                className="relative h-[20vh] lg:h-[450px] lg:w-96 w-full cursor-zoom-in"
                 onClick={() => setSelectedImage(images[activeIndex])}
               >
-                <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10" />
+                <div className="absolute inset-0  opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10" />
                 <Image
                   src={image}
                   alt={`${title} - Image ${index + 1}`}
@@ -103,7 +103,7 @@ export default function ImageGallery({ images, title }: ImageGalleryProps) {
                   }`}
                   sizes="(max-width: 768px) 20vw, 10vw"
                 />
-                <div className="absolute inset-0 bg-black/20 hover:bg-black/0 transition-colors" />
+                <div className="absolute inset-0  hover:bg-black/0 transition-colors" />
               </motion.div>
             </SwiperSlide>
           ))}
@@ -141,7 +141,7 @@ export default function ImageGallery({ images, title }: ImageGalleryProps) {
                 alt="Enlarged view"
                 width={1200}
                 height={800}
-                className="rounded-2xl object-contain w-full h-full shadow-2xl"
+                className="rounded-2xl object-contain w-full h-full "
               />
             </motion.div>
           </motion.div>

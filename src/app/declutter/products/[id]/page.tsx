@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeftIcon, ShieldCheckIcon, PhoneIcon, MapPinIcon, TagIcon } from "@heroicons/react/24/outline";
+import { ArrowLeftIcon, ShieldCheckIcon, PhoneIcon, MapPinIcon, TagIcon, UserIcon } from "@heroicons/react/24/outline";
 import dynamic from "next/dynamic";
 import { usePaystackPayment } from "react-paystack";
 import { MessageSquare, PencilIcon } from "lucide-react";
@@ -210,7 +210,7 @@ export default function ProductPage() {
 
   return (
     <div className="min-h-screen font-sans bg-gradient-to-br from-slate-900 to-slate-800 text-gray-100 dark:bg-gradient-to-br dark:from-gray-50 dark:to-white dark:text-gray-800">
-      <nav className="sticky top-0 z-10 backdrop-blur-lg bg-slate-900/80 dark:bg-white/80 border-b border-slate-700/50 dark:border-slate-200/50">
+      <nav className="sticky top-0 z-10 backdrop-blur-lg bg-slate-900/80 dark:bg-white/80">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center">
           <Link href="/" className="transition-colors duration-300 text-slate-400 hover:text-orange-500">
             <ArrowLeftIcon className="h-6 w-6" />
@@ -221,7 +221,7 @@ export default function ProductPage() {
         </div>
       </nav>
 
-      <main className="max-w-7xl mx-auto my-8 px-4 sm:px-6 lg:px-8">
+      <main className="max-w-7xl mx-auto  lg:my-8 px-4 sm:px-3 lg:px-8">
         <div className="bg-slate-800/50 dark:bg-white rounded-2xl overflow-hidden shadow-xl border border-slate-700/50 dark:border-slate-200/30">
           <div className="flex flex-col lg:flex-row">
             <div className="lg:w-1/2 p-4 lg:p-8">
@@ -230,67 +230,64 @@ export default function ProductPage() {
               </div>
             </div>
 
-            <div className="lg:w-1/2 p-6 lg:p-8 space-y-6">
+            <div className="lg:w-1/2 p-2 lg:p-8 space-y-2 lg:space-y-6">
               <div className="space-y-3">
-                <h2 className="text-2xl lg:text-3xl font-bold">{product.title}</h2>
                 <div className="flex items-center">
                   <TagIcon className="h-6 w-6 text-orange-500 mr-2" />
-                  <span className="text-2xl lg:text-3xl font-semibold text-orange-500">
+                  <span className="text-lg lg:text-3xl font-semibold text-orange-500">
                     ₦{product.price.toLocaleString()}
                   </span>
                 </div>
               </div>
 
-              <div className="bg-slate-700/50 dark:bg-orange-50 p-6 rounded-xl shadow-inner">
-                <h3 className="font-semibold mb-3 text-lg text-white dark:text-gray-800 flex items-center">
-                  <span className="bg-orange-500 w-2 h-6 rounded-full mr-3"></span>
+              <div className="bg-slate-700/50 dark:bg-orange-50 p-2 lg:p-6 rounded-xl shadow-inner">
+                <h3 className="font-semibold mb-3 text-md lg:text-lg text-white dark:text-gray-800 flex items-center">
                   Product Details
                 </h3>
-                <p className="text-slate-300 dark:text-gray-700 whitespace-pre-line leading-relaxed">
+                <p className="text-slate-300 dark:text-gray-700 whitespace-pre-line text-xs lg:text-md leading-relaxed">
                   {product.description}
                 </p>
               </div>
 
-              <div className="flex items-center text-slate-300 dark:text-slate-600">
-                <MapPinIcon className="h-5 w-5 mr-2 text-slate-400 dark:text-slate-500" />
-                <span>{product.location}</span>
-              </div>
-
-              <div className="bg-slate-700/50 dark:bg-green-50 p-6 rounded-xl shadow-inner">
+              <div className="bg-slate-700/50 text-md lg:text-lg dark:bg-green-50 p-2 lg:p-6 rounded-xl shadow-inner">
                 <h3 className="font-semibold flex items-center text-white dark:text-gray-800 text-lg mb-4">
-                  <ShieldCheckIcon className="h-5 w-5 mr-2 text-green-500" />
                   Seller Information
                 </h3>
-                <div className="flex flex-col space-y-3">
+                <div className="flex flex-col space-y-3 text-xs lg:text-md">
                   <div className="flex items-center">
-                    <span className="text-slate-200 dark:text-gray-700 font-medium">
-                      {product.seller.username}
+                    <span className="text-slate-200 flex items-center dark:text-gray-700 font-medium">
+                    <UserIcon className="lg:h-5 lg:w-5 h-3 w-3 mr-2 text-green-500" />
+                       {product.seller.username}
                     </span>
                     {product.seller.verified && (
                       <div className="ml-2 bg-green-900/30 dark:bg-green-100 text-green-400 dark:text-green-700 text-sm px-3 py-1 rounded-full flex items-center">
-                        <ShieldCheckIcon className="h-4 w-4 mr-1" />
+                        <ShieldCheckIcon className="lg:h-5 lg:w-5 h-3 w-3 mr-1" />
                         Verified
                       </div>
                     )}
                   </div>
-                  <a
+                  <div className="flex items-center text-xs lg:text-md text-slate-300 dark:text-slate-600">
+                <MapPinIcon className="lg:h-5 lg:w-5 h-3 w-3 mr-2 text-xs text-slate-400 dark:text-slate-500" />
+                <span>{product.location}</span>
+              </div>
+                  {/* <a
                     href={`tel:${product.seller.phone}`}
                     className="inline-flex items-center text-green-400 dark:text-green-600 hover:text-green-300 dark:hover:text-green-700 transition-colors duration-300"
                   >
                     <PhoneIcon className="h-5 w-5 mr-2" />
                     {product.seller.phone}
-                  </a>
+                  </a> */}
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="border-t border-slate-700/50 dark:border-slate-200/50 px-6 py-8 space-y-6 bg-slate-900/30 dark:bg-slate-50/50">
+          <div className="border-t border-slate-700/50 dark:border-slate-200/50 lg:px-6 lg:py-8 p-3 space-y-3 lg:space-y-6 bg-slate-900/30 dark:bg-slate-50/50">
             {!paymentSuccessful && !isSeller && (
               <div className="max-w-lg mx-auto">
                 <button
                   onClick={handlePayment}
-                  className="w-full py-4 bg-gradient-to-r from-green-600 to-green-500 text-white font-semibold rounded-xl shadow-lg hover:from-green-700 hover:to-green-600 transition-all duration-300 transform hover:scale-[1.02] flex items-center justify-center text-lg"
+                  className="w-full p-2 lg:py-4 bg-gradient-to-r from-green-600 to-green-500 text-white font-semibold rounded-xl shadow-lg hover:from-green-700 hover:to-green-600 transition-all duration-300 transform hover:scale-[1.02] flex items-center justify-center text-sm lg:text-lg"
                   disabled={isVerifying}
                 >
                   {isVerifying ? (
@@ -321,21 +318,21 @@ export default function ProductPage() {
                     "Pay Now with Paystack"
                   )}
                 </button>
-                <p className="text-sm text-slate-400 dark:text-slate-500 mt-3 text-center">
+                <p className="text-xs lg:text-sm text-slate-400 dark:text-slate-500 mt-3 text-center">
                   Payments made outside this platform are not covered by our Terms of Service, and we
                   cannot guarantee buyer protection or dispute resolution.
                 </p>
               </div>
             )}
 
-            <div className="flex justify-center mt-6">
+            <div className="flex justify-center m-2 lg:mt-6">
               {isSeller ? (
                 <Link href="/declutter/manage-items" passHref>
                   <div className="flex items-center p-3 gap-3 rounded-xl bg-gradient-to-r from-orange-600/20 to-orange-500/20 hover:from-orange-600/30 hover:to-orange-500/30 dark:bg-orange-100 dark:hover:bg-orange-200 transition-all duration-300 cursor-pointer transform hover:scale-[1.02]">
-                    <div className="w-12 h-12 p-3 rounded-xl bg-gradient-to-br from-orange-600 to-orange-500 shadow-lg flex items-center justify-center">
+                    <div className="lg:w-12 lg:h-12 w-5 h-5 p-3 rounded-xl bg-gradient-to-br from-orange-600 to-orange-500 shadow-lg flex items-center justify-center">
                       <PencilIcon className="w-5 h-5 text-white" />
                     </div>
-                    <span className="text-orange-300 dark:text-orange-800 text-lg font-medium">
+                    <span className="text-orange-300 dark:text-orange-800 text-sm lg:text-lg font-medium">
                       Manage Item
                     </span>
                   </div>
@@ -346,10 +343,10 @@ export default function ProductPage() {
                     className="flex items-center p-3 gap-3 rounded-xl bg-gradient-to-r from-orange-600/20 to-orange-500/20 hover:from-orange-600/30 hover:to-orange-500/30 dark:bg-orange-100 dark:hover:bg-orange-200 transition-all duration-300 cursor-pointer transform hover:scale-[1.02]"
                     onClick={handleClick}
                   >
-                    <div className="w-12 h-12 p-3 rounded-xl bg-gradient-to-br from-orange-600 to-orange-500 shadow-lg flex items-center justify-center">
-                      <MessageSquare className="w-5 h-5 text-white" />
+                    <div className="lg:w-12 lg:h-12 w-5 h-5 p-3 rounded-xl bg-gradient-to-br from-orange-600 to-orange-500 shadow-lg flex items-center justify-center">
+                      <MessageSquare className="lg:w-5 lg:h-5 w-3 h-3 text-white" />
                     </div>
-                    <span className="text-orange-300 dark:text-orange-800 text-lg font-medium">
+                    <span className="text-orange-300 dark:text-orange-800 text-sm lg:text-lg font-medium">
                       {user ? "Chat with Seller" : "Login to Chat"}
                     </span>
                   </div>

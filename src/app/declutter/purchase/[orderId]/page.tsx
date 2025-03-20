@@ -530,39 +530,39 @@ export default function OrderDetails() {
             <div className="flex items-center">
               <CheckCircleIcon className="h-8 w-8 text-green-500 mr-3" />
               <div>
-                <h2 className="text-lg font-semibold text-green-700">Payment Successful!</h2>
-                <p className="text-sm text-green-600">Funds are held until you confirm receipt.</p>
+                <h2 className="text-sm lg:text-lg font-semibold text-green-700">Payment Successful!</h2>
+                <p className=" text-xs lg:text-sm text-green-600">Funds are held until you confirm receipt.</p>
               </div>
             </div>
             <div className="text-green-500 text-sm">✓ Paid</div>
           </div>
         )}
 
-        <div className="flex gap-6 lg:flex-row flex-col">
+        <div className="flex gap-2 lg:gap-6 lg:flex-row flex-col">
           <div className="md:w-1/2 p-6">
             <ImageGallery images={order.item.images} title={order.item.title} />
           </div>
 
-          <div className="md:w-1/2 p-8 space-y-6">
+          <div className="md:w-1/2 p-2 lg:p-8 space-y-5 lg:space-y-6">
             <div>
-              <h2 className="text-3xl font-bold">{order.item.title}</h2>
+              <h2 className="text-xl lg:text-3xl font-bold">{order.item.title}</h2>
               <div className="mt-4 flex items-center">
-                <span className="text-3xl font-semibold text-orange-600">₦{order.price.toLocaleString()}</span>
+                <span className="text-xl lg:text-3xl font-semibold text-orange-600">₦{order.price.toLocaleString()}</span>
               </div>
             </div>
 
-            <div className="bg-orange-50 p-6 rounded-lg">
-              <h3 className="font-semibold mb-2 text-gray-800 text-lg">Item Details</h3>
-              <p className="text-gray-700 whitespace-pre-line">{order.item.description}</p>
+            <div className="bg-orange-50 p-2 lg:p-6 rounded-lg">
+              <h3 className="font-semibold mb-2 text-gray-800 text-sm lg:text-lg">Item Details</h3>
+              <p className="text-gray-700 whitespace-pre-line text-xs lg:text-sm">{order.item.description}</p>
             </div>
 
-            <div className="bg-green-50 p-6 rounded-lg space-y-4">
-              <h3 className="font-semibold flex items-center text-gray-800 text-lg">
-                <ShieldCheckIcon className="h-6 w-6 mr-2 text-green-600" />
+            <div className="bg-green-50 p-2 lg:p-6 rounded-lg space-y-4">
+              <h3 className="font-semibold flex items-center text-gray-800 text-sm lg:text-lg">
+                <ShieldCheckIcon className="h-6 w-6 mr-2 text-green-600 " />
                 Seller Information
               </h3>
               <div className="flex flex-col space-y-2">
-                <div className="flex items-center">
+                <div className="flex items-center text-xs lg:text-sm">
                   <span className="text-gray-700 font-medium">{seller.username}</span>
                   {seller.verified && (
                     <div className="ml-2 bg-green-100 text-green-700 text-sm px-2 py-1 rounded-full flex items-center">
@@ -583,7 +583,7 @@ export default function OrderDetails() {
               </div>
             </div>
 
-            <div className="space-y-2">
+            <div className="space-y-2 text-xs lg:text-sm">
               <p><span className="font-medium">Order ID:</span> {order._id}</p>
               <p><span className="font-medium">Payment Reference:</span> {order.paymentReference}</p>
               <p><span className="font-medium">Order Placed:</span> {new Date(order.createdAt).toLocaleString()}</p>
@@ -649,10 +649,10 @@ export default function OrderDetails() {
           <div className="flex justify-center">
             <Link href={`/pages/chat?orderId=${order._id}`} passHref>
               <div className="flex items-center p-3 gap-3 rounded-lg bg-orange-100 hover:bg-orange-200 transition cursor-pointer">
-                <div className="w-12 h-12 p-2 rounded-lg bg-orange-600 flex items-center justify-center">
-                  <MessageSquare className="w-6 h-6 text-white" />
+                <div className="lg:w-12 lg:h-12 h-5 w-5 p-2 rounded-lg bg-orange-600 flex items-center justify-center">
+                  <MessageSquare className="lg:w-6 lg:h-6 h-3 w-3 text-white" />
                 </div>
-                <span className="text-orange-800 p-2 text-lg font-medium">Chat with Seller</span>
+                <span className="text-orange-800 p-2 text-sm lg:text-lg font-medium">Chat with Seller</span>
               </div>
             </Link>
           </div>

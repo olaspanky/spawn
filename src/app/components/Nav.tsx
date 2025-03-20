@@ -3,17 +3,17 @@
 import { useAuth } from "../context/AuthContext";
 import Link from "next/link";
 import {
-  BellIcon, // For notifications
-  ShoppingCartIcon, // For selling items
-  ChatBubbleLeftIcon, // For messages/chat
-  CreditCardIcon, // For transactions/purchases
-  Cog6ToothIcon, // For managing products/settings
-  ArrowRightOnRectangleIcon, // For logout
+  BellIcon,
+  ShoppingCartIcon,
+  ChatBubbleLeftIcon,
+  CreditCardIcon,
+  Cog6ToothIcon,
+  ArrowRightOnRectangleIcon,
   XMarkIcon,
   Bars3Icon,
   ChevronDownIcon,
 } from "@heroicons/react/24/outline";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react"; // Added useEffect and useRef
 import { motion, AnimatePresence } from "framer-motion";
 import ThemeToggle from "./ThemeToggle";
 
@@ -26,6 +26,8 @@ export default function Navbar({ searchTerm, setSearchTerm }: NavbarProps) {
   const { token, logout, user } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null); // Ref for mobile menu
+  const dropdownRef = useRef<HTMLDivElement>(null); // Ref for dropdown
 
   const now = new Date();
   const hour = now.getHours();
@@ -38,7 +40,7 @@ export default function Navbar({ searchTerm, setSearchTerm }: NavbarProps) {
 
   const Greeting = () => (
     <motion.div
-      className="flex items-center space-x-2 text-sm sm:text-base text-white"
+      className="flex items-center space-x-2 text-sm sm:text-base dark:text-black text-white"
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
@@ -78,6 +80,23 @@ export default function Navbar({ searchTerm, setSearchTerm }: NavbarProps) {
     exit: { opacity: 0, y: 10, scale: 0.95, transition: { duration: 0.15 } },
   };
 
+  // Close menu and dropdown on outside click
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node) && isMenuOpen) {
+        closeMenu();
+      }
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node) && isDropdownOpen) {
+        closeDropdown();
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isMenuOpen, isDropdownOpen]);
+
   return (
     <nav className="backdrop-blur-lg bg-gradient-to-r from-black/80 via-black/70 to-black/80 dark:from-white dark:via-white dark:to-white border-b border-white/10 dark:border-gray-200/20 shadow-2xl sticky top-0 z-50 font-sans">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
@@ -100,6 +119,7 @@ export default function Navbar({ searchTerm, setSearchTerm }: NavbarProps) {
         <div className="hidden md:flex items-center space-x-6 lg:space-x-8">
           {token ? (
             <>
+              <Greeting />
               <motion.div whileHover={{ scale: 1.1 }} transition={{ duration: 0.2 }}>
                 <Link href="/" onClick={closeMenu}>
                   <BellIcon className="h-6 w-6 lg:h-7 lg:w-7 text-white hover:text-orange-400 transition-colors duration-300" />
@@ -116,7 +136,7 @@ export default function Navbar({ searchTerm, setSearchTerm }: NavbarProps) {
               </motion.div>
 
               {/* Account Dropdown */}
-              <div className="relative">
+              <div className="relative" ref={dropdownRef}>
                 <motion.div whileHover={{ scale: 1.05 }} transition={{ duration: 0.2 }}>
                   <button
                     onClick={toggleDropdown}
@@ -183,8 +203,8 @@ export default function Navbar({ searchTerm, setSearchTerm }: NavbarProps) {
               </motion.div>
               <motion.div whileHover={{ scale: 1.05 }} transition={{ duration: 0.2 }}>
                 <Link href="/declutter/login" onClick={closeMenu}>
-                  <div className="px-4 py-2 lg:px-6 lg:py-2.5 text-white hover:text-orange-400 transition-colors duration-300 font-medium">
-                    Sign In
+                  <div className="inline-flex items-center px-4 py-2 lg:px-6 lg:py-2.5 bg-gradient-to-r from-orange-600 to-orange-500 text-white rounded-xl hover:from-orange-700 hover:to-orange-600 transition-all duration-300 shadow-md hover:shadow-lg">
+                    Login
                   </div>
                 </Link>
               </motion.div>
@@ -195,10 +215,20 @@ export default function Navbar({ searchTerm, setSearchTerm }: NavbarProps) {
 
         {/* Mobile Toggle */}
         <div className="md:hidden flex items-center space-x-4">
-          <Greeting />
+          {token ? (
+            <Greeting />
+          ) : (
+            <motion.div whileHover={{ scale: 1.05 }} transition={{ duration: 0.2 }}>
+              <Link href="/declutter/login" onClick={closeMenu}>
+                <div className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-orange-600 to-orange-500 text-white rounded-xl hover:from-orange-700 hover:to-orange-600 transition-all duration-300 shadow-md hover:shadow-lg">
+                  Login
+                </div>
+              </Link>
+            </motion.div>
+          )}
           <motion.button
             onClick={toggleMenu}
-            className="text-white hover:text-orange-400 focus:outline-none p-2 rounded-full"
+            className="text-white hover:text-orange-400 dark:text-black focus:outline-none p-2 rounded-full"
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.95 }}
             transition={{ duration: 0.2 }}
@@ -212,6 +242,7 @@ export default function Navbar({ searchTerm, setSearchTerm }: NavbarProps) {
       <AnimatePresence>
         {isMenuOpen && (
           <motion.div
+            ref={menuRef} // Attach ref to mobile menu
             className="md:hidden bg-gradient-to-b from-white to-gray-100 dark:from-gray-800 dark:to-gray-900 shadow-2xl border-t border-gray-200/20 dark:border-gray-700/20"
             variants={menuVariants}
             initial="hidden"
@@ -262,6 +293,12 @@ export default function Navbar({ searchTerm, setSearchTerm }: NavbarProps) {
                     </Link>
                   </motion.div>
                   <motion.div variants={itemVariants}>
+                    <div className="flex items-center space-x-3 py-3 text-gray-800 dark:text-gray-200">
+                      <ThemeToggle />
+                      <span className="font-medium">Toggle Theme</span>
+                    </div>
+                  </motion.div>
+                  <motion.div variants={itemVariants}>
                     <hr className="my-2 border-gray-200 dark:border-gray-700/50" />
                   </motion.div>
                   <motion.div variants={itemVariants}>
@@ -278,13 +315,29 @@ export default function Navbar({ searchTerm, setSearchTerm }: NavbarProps) {
                   </motion.div>
                 </>
               ) : (
-                <motion.div variants={itemVariants}>
-                  <Link href="/declutter/login" onClick={closeMenu}>
-                    <div className="flex items-center space-x-3 py-3 text-gray-800 dark:text-gray-200 hover:text-orange-500 transition-colors duration-200">
-                      <span className="font-medium">Sign In</span>
+                <>
+                  <motion.div variants={itemVariants}>
+                    <Link href="/declutter/upload" onClick={closeMenu}>
+                      <div className="flex items-center space-x-3 py-3 text-gray-800 dark:text-gray-200 hover:text-orange-500 transition-colors duration-200">
+                        <ShoppingCartIcon className="h-6 w-6" />
+                        <span className="font-medium">Sell Item</span>
+                      </div>
+                    </Link>
+                  </motion.div>
+                  <motion.div variants={itemVariants}>
+                    <Link href="/declutter/login" onClick={closeMenu}>
+                      <div className="flex items-center space-x-3 py-3 text-gray-800 dark:text-gray-200 hover:text-orange-500 transition-colors duration-200">
+                        <span className="font-medium">Sign In</span>
+                      </div>
+                    </Link>
+                  </motion.div>
+                  <motion.div variants={itemVariants}>
+                    <div className="flex items-center space-x-3 py-3 text-gray-800 dark:text-gray-200">
+                      <ThemeToggle />
+                      <span className="font-medium">Toggle Theme</span>
                     </div>
-                  </Link>
-                </motion.div>
+                  </motion.div>
+                </>
               )}
             </div>
           </motion.div>
