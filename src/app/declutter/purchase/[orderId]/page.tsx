@@ -517,7 +517,7 @@ export default function OrderDetails() {
     <div className="min-h-screen bg-gradient-to-br from-black/95 to-gray-900/95 font-sans text-white">
       <nav className="shadow-sm sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center">
-          <Link href="/purchases" className="text-gray-300 hover:text-orange-600 transition">
+          <Link href="/declutter/purchases" className="text-gray-300 hover:text-orange-600 transition">
             <ArrowLeftIcon className="h-6 w-6" />
           </Link>
           <h1 className="text-2xl font-semibold ml-4">{order.item.title}</h1>
