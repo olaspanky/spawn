@@ -1,49 +1,26 @@
+// LoginPage.tsx
 "use client";
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
-import { useAuth } from '@/app/context/AuthContext';
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { useAuth } from "@/app/context/AuthContext";
 
 export default function LoginPage() {
   const router = useRouter();
-  const [formData, setFormData] = useState({ email: '', password: '' });
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-  const { login } = useAuth();
+  const [formData, setFormData] = useState({ email: "", password: "" });
+  const [error, setError] = useState("");
+  const { login, isLoggingIn } = useAuth(); // Use isLoggingIn from context
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setLoading(true);
     setError("");
 
     try {
-      const response = await fetch("https://spawnback.onrender.com/api/users/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || "Login failed");
-      }
-
-      // Ensure localStorage is available before accessing it
-      if (typeof window !== "undefined") {
-        localStorage.setItem("authToken", data.token);
-        localStorage.setItem("authUser", JSON.stringify(data.user));
-      }
-
-      // Call the login function from useAuth
-      login(data.token, data.user);
-
-      // Redirect to home page
-      router.push("/");
+      await login(formData); // Call login from AuthContext
+      router.push("/"); // Redirect on success
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong");
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -75,14 +52,14 @@ export default function LoginPage() {
           {error && <p className="text-red-600 text-sm">{error}</p>}
           <button
             type="submit"
-            disabled={loading}
-            className="w-full bg-orange-600  text-white py-3 px-4 rounded-lg font-medium hover:bg-orange-700 transition-colors disabled:opacity-50"
+            disabled={isLoggingIn} // Use context loading state
+            className="w-full bg-orange-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-orange-700 transition-colors disabled:opacity-50"
           >
-            {loading ? 'Logging In...' : 'Log In'}
+            {isLoggingIn ? "Logging In..." : "Log In"}
           </button>
         </form>
         <p className="mt-6 text-center text-sm text-gray-600">
-          Don't have an account?{' '}
+          Don’t have an account?{" "}
           <Link href="/declutter/signup" className="text-orange-600 hover:underline">
             Sign up
           </Link>
