@@ -3,11 +3,16 @@ import StoreCard from './StoreCard';
 
 interface Store {
   id: string;
+  _id: string;
   name: string;
   description: string;
   storeImage?: string;
   location: string;
   itemCount: number;
+  owner: { name: string };
+  items: any[];
+  packageDeals: any[];
+  createdAt: string;
 }
 
 interface StoreListProps {

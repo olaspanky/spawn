@@ -5,7 +5,7 @@ import { useParams } from 'next/navigation';
 import StoreDetails from '../../../components/store/StoreDetails';
 import { useAuth } from '@/app/context/AuthContext';
 import toast from 'react-hot-toast';
-import { Store } from '../../../types/store'; // Adjust path
+import { Store } from '../../../types/store'; // Adjusted Store type
 
 export default function StoreDetailPage() {
   const params = useParams();
@@ -75,5 +75,5 @@ export default function StoreDetailPage() {
     return <div className="text-center py-10">Store not found</div>;
   }
 
-  // return <StoreDetails store={store} />;
+  return <StoreDetails store={store} />;
 }

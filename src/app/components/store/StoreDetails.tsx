@@ -4,33 +4,7 @@ import React from 'react';
 import Image from 'next/image';
 import { useAuth } from '../../context/AuthContext';
 import AddStoreItemForm from './AddStoreItemForm';
-
-interface StoreItem {
-  name: string; // Changed from id/title to name
-  price: number;
-  quantity: number;
-  // Add more fields if needed (e.g., image)
-}
-
-interface PackageDeal {
-  id: string;
-  name: string;
-  price: number;
-  discountPercentage?: number;
-  active: boolean;
-  items: { item: string; quantity: number }[]; // item is now the name
-}
-
-interface Store {
-  id: string;
-  name: string;
-  description: string;
-  storeImage?: string;
-  location: string;
-  owner: string;
-  items: StoreItem[];
-  packageDeals: PackageDeal[];
-}
+import { Store } from '../../types/store'; // Import the Store type
 
 interface StoreDetailsProps {
   store: Store;
@@ -38,6 +12,9 @@ interface StoreDetailsProps {
 
 const StoreDetails: React.FC<StoreDetailsProps> = ({ store }) => {
   const { user } = useAuth();
+
+  // Check if the current user is the store owner
+  const isOwner = user && store.owner && user.id === store.owner.id;
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-8">
@@ -54,6 +31,9 @@ const StoreDetails: React.FC<StoreDetailsProps> = ({ store }) => {
           <h1 className="text-3xl font-bold text-gray-800">{store.name}</h1>
           <p className="text-gray-600 mt-2">{store.description}</p>
           <p className="text-sm text-gray-500 mt-1">{store.location}</p>
+          <p className="text-sm text-gray-500 mt-1">
+            Owner: {store.owner.name} ({store.owner.email})
+          </p>
         </div>
 
         <div className="p-6 border-t">
@@ -74,11 +54,12 @@ const StoreDetails: React.FC<StoreDetailsProps> = ({ store }) => {
           </div>
         </div>
 
-      
+        {/* Show AddStoreItemForm only if the user is the store owner */}
+        {isOwner && (
           <div className="p-6 border-t">
             <AddStoreItemForm storeId={store.id} onItemAdded={() => window.location.reload()} />
           </div>
-
+        )}
 
         <div className="p-6 border-t">
           <h2 className="text-xl font-semibold text-gray-800 mb-4">Package Deals</h2>

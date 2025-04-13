@@ -21,13 +21,57 @@ export interface Owner {
     items: { item: string; quantity: number }[]; // `item` is the item name for embedded items
   }
   
-  export interface Store {
+// types/store.ts
+export interface Store {
+  id: string;
+  name: string;
+  description: string;
+  storeImage?: string;
+  location: string;
+  owner: {
     id: string;
     name: string;
-    description: string;
-    storeImage?: string;
-    location: string;
-    owner: Owner;
-    items: StoreItem[];
-    packageDeals: PackageDeal[];
-  }v
+    email: string;
+  };
+  items: {
+    name: string;
+    price: number;
+    quantity: number;
+  }[];
+  packageDeals: {
+    id: string;
+    name: string;
+    price: number;
+    discountPercentage?: number;
+    active: boolean;
+    items: { item: string; quantity: number }[];
+  }[];
+}
+
+  export interface StoreDetailsProps {
+    store: {
+      id: string;
+      name: string;
+      description: string;
+      storeImage: string;
+      location: string;
+      owner: {
+        id: string;
+        name: string;
+        email: string;
+      };
+      items: {
+        name: string;
+        price: number;
+        quantity: number;
+      }[];
+      packageDeals: {
+        id: string;
+        name: string;
+        price: number;
+        discountPercentage: number;
+        active: boolean;
+        items: any[];
+      }[];
+    };
+  }
