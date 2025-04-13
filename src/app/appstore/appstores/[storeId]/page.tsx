@@ -22,7 +22,7 @@ export default function StoreDetailPage() {
 
     const fetchStore = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/api/store/${storeId}`, {
+        const response = await fetch(`https://spawnback.onrender.com/api/store/${storeId}`, {
           headers: token ? { 'x-auth-token': token } : {},
         });
         if (!response.ok) throw new Error('Failed to fetch store');

@@ -44,7 +44,7 @@ export default function Navbar({ searchTerm, setSearchTerm }: NavbarProps) {
     }
     const fetchUserStores = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/api/store/user/${user.id}`, {
+        const response = await fetch(`https://spawnback.onrender.com/api/store/user/${user.id}`, {
           headers: {
             "x-auth-token": token,
           },

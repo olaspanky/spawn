@@ -114,7 +114,7 @@ const AddStoreItemForm: React.FC<AddStoreItemFormProps> = ({ storeId, onItemAdde
     setError(null);
 
     try {
-      const response = await fetch("http://localhost:5000/api/store/item", {
+      const response = await fetch("https://spawnback.onrender.com/api/store/item", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -44,7 +44,7 @@ const ManageStorePage: React.FC = () => {
     const fetchStoreData = async () => {
       setLoading(true);
       try {
-        const storeResponse = await fetch(`http://localhost:5000/api/store/${storeId}`, {
+        const storeResponse = await fetch(`https://spawnback.onrender.com/api/store/${storeId}`, {
           headers: {
             "x-auth-token": token,
           },
@@ -90,7 +90,7 @@ const ManageStorePage: React.FC = () => {
   // Handle item added (refresh items list)
   const handleItemAdded = async () => {
     try {
-      const response = await fetch(`http://localhost:5000/api/store/${storeId}`, {
+      const response = await fetch(`https://spawnback.onrender.com/api/store/${storeId}`, {
         headers: {
           "x-auth-token": token!,
         },
@@ -112,7 +112,7 @@ const ManageStorePage: React.FC = () => {
   const handleDeleteItem = async (itemId: string) => {
     try {
       // TODO: Confirm correct delete endpoint
-      const response = await fetch(`http://localhost:5000/api/stores/item/${itemId}`, {
+      const response = await fetch(`https://spawnback.onrender.com/api/stores/item/${itemId}`, {
         method: "DELETE",
         headers: {
           "x-auth-token": token!,
