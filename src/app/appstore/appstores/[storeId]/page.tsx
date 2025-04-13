@@ -75,5 +75,5 @@ export default function StoreDetailPage() {
     return <div className="text-center py-10">Store not found</div>;
   }
 
-  return <StoreDetails store={store} />;
+  // return <StoreDetails store={store} />;
 }
