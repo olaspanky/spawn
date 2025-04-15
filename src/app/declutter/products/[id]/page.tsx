@@ -209,13 +209,13 @@ export default function ProductPage() {
     );
 
   return (
-    <div className="min-h-screen font-sans bg-gradient-to-br from-slate-900 to-slate-800 text-gray-100 dark:bg-gradient-to-br dark:from-gray-50 dark:to-white dark:text-gray-800">
-      <nav className="sticky top-0 z-10 backdrop-blur-lg bg-slate-900/80 dark:bg-white/80">
+    <div className="min-h-screen font-sans bg-white text-gray-100 dark:bg-gradient-to-br dark:from-gray-50 dark:to-white dark:text-gray-800">
+      <nav className="sticky top-0 z-10 backdrop-blur-lg bg-white dark:bg-white/80">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center">
           <Link href="/" className="transition-colors duration-300 text-black hover:text-gray-500">
             <ArrowLeftIcon className="h-6 w-6" />
           </Link>
-          <h1 className="text-xl lg:text-2xl font-semibold ml-4 truncate text-white dark:text-gray-800">
+          <h1 className="text-xl lg:text-2xl font-semibold ml-4 truncate text-black dark:text-gray-800">
             {product.title}
           </h1>
         </div>

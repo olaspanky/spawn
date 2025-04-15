@@ -126,10 +126,7 @@ export default function Home() {
   return (
     <div className="min-h-screen font-sans antialiased relative">
       {/* Background Layers */}
-      <div className="fixed inset-0 dark:bg-white bg-gradient-to-br from-gray-950 via-gray-900 to-black z-0"></div>
-      <div className="fixed inset-0 dark:bg-white bg-[url('/noise-texture.png')] opacity-5 z-0"></div>
-      <div className="fixed inset-0 dark:bg-white bg-[radial-gradient(circle_at_30%_20%,rgba(249,115,22,0.05)_0%,transparent_600px)] z-0"></div>
-
+    
       {/* Main Content */}
       <div className="relative z-10">
         {/* Featured Items Slider */}
