@@ -8,7 +8,6 @@ import { Montserrat } from "next/font/google";
 import { Roboto_Slab } from "next/font/google";
 import ClientAuthProvider from "./components/ClientAuthProvider";
 import Theme from "./components/Theme";
-import ThemeToggle from "./components/ThemeToggle";
 import { Toaster } from "react-hot-toast"; // Import Toaster
 
 const geistSans = Geist({

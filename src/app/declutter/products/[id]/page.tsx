@@ -209,20 +209,20 @@ export default function ProductPage() {
     );
 
   return (
-    <div className="min-h-screen font-sans bg-white text-gray-100 dark:bg-gradient-to-br dark:from-gray-50 dark:to-white dark:text-gray-800">
-      <nav className="sticky top-0 z-10 backdrop-blur-lg bg-white dark:bg-white/80">
+    <div className="min-h-screen font-sans bg-white text-black ">
+      <nav className="sticky top-0 z-10 backdrop-blur-lg bg-white ">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center">
           <Link href="/" className="transition-colors duration-300 text-black hover:text-gray-500">
             <ArrowLeftIcon className="h-6 w-6" />
           </Link>
-          <h1 className="text-xl lg:text-2xl font-semibold ml-4 truncate text-black dark:text-gray-800">
+          <h1 className="text-xl lg:text-2xl font-semibold ml-4 truncate text-black ">
             {product.title}
           </h1>
         </div>
       </nav>
 
-      <main className="max-w-7xl mx-auto  lg:my-8 px-4 sm:px-3 lg:px-8">
-        <div className="bg-white overflow-hidden border border-slate-700/50 dark:border-slate-200/30">
+      <main className="max-w-7xl mx-auto  lg:my-8 px-2 sm:px-3 lg:px-8">
+        <div className="bg-white overflow-hidden ">
           <div className="flex flex-col lg:flex-row">
             <div className="lg:w-1/2 p-4 lg:p-8">
               <div className="rounded-xl overflow-hidden shadow-lg">
@@ -249,7 +249,7 @@ export default function ProductPage() {
                 </p>
               </div>
 
-              <div className="bg-black text-md lg:text-lg dark:bg-black p-2 lg:p-6 rounded-xl shadow-inner">
+              <div className="bg-black text-md lg:text-lg  p-2 lg:p-6 rounded-xl shadow-inner">
                 <h3 className="font-semibold flex items-center text-white  text-lg mb-4">
                   Seller Information
                 </h3>
@@ -282,7 +282,7 @@ export default function ProductPage() {
             </div>
           </div>
 
-          <div className="border-t border-slate-700/50 dark:border-slate-200/50 lg:px-6 lg:py-8 p-3 space-y-3 lg:space-y-6 bg-slate-900/30 dark:bg-slate-50/50">
+          <div className="  lg:px-6 lg:py-8 p-3 space-y-3 lg:space-y-6  bg-white">
             {!paymentSuccessful && !isSeller && (
               <div className="max-w-lg mx-auto">
                 <button
@@ -318,7 +318,7 @@ export default function ProductPage() {
                     "Pay Now with Paystack"
                   )}
                 </button>
-                <p className="text-xs lg:text-sm text-slate-400 dark:text-slate-500 mt-3 text-center">
+                <p className="text-xs lg:text-sm text-black mt-3 text-center">
                   Payments made outside this platform are not covered by our Terms of Service, and we
                   cannot guarantee buyer protection or dispute resolution.
                 </p>
@@ -328,7 +328,7 @@ export default function ProductPage() {
             <div className="flex justify-center m-2 lg:mt-6">
               {isSeller ? (
                 <Link href="/declutter/manage-items" passHref>
-                  <div className="flex items-center p-3 gap-3 rounded-xl bg-black hover:from-gray-600/30 hover:to-gray-900 dark:bg-black dark:hover:bg-gray-900 transition-all duration-300 cursor-pointer transform hover:scale-[1.02]">
+                  <div className="flex items-center p-3 gap-3 rounded-xl bg-[#36454F] hover:from-gray-600/30 hover:to-gray-900  transition-all duration-300 cursor-pointer transform hover:scale-[1.02]">
                     <div className="lg:w-12 lg:h-12 w-5 h-5 p-3 rounded-xl bg-white shadow-lg flex items-center justify-center">
                       <PencilIcon className="w-5 h-5 text-white" />
                     </div>
@@ -340,10 +340,10 @@ export default function ProductPage() {
               ) : (
                 <Link href={user ? `/pages/chat?sellerId=${sellerId}` : "#"} passHref>
                   <div
-                    className="flex items-center p-3 gap-3 rounded-xl bg-black hover:from-gray-600/30 hover:to-gray-500/30 dark:bg-gray-100 dark:hover:bg-gray-200 transition-all duration-300 cursor-pointer transform hover:scale-[1.02]"
+                    className="flex items-center p-3 gap-3 rounded-xl bg-[#36454F] hover:from-gray-600/30 hover:to-gray-500/30  transition-all duration-300 cursor-pointer transform hover:scale-[1.02]"
                     onClick={handleClick}
                   >
-                    <div className="lg:w-12 lg:h-12 w-5 h-5 p-3 rounded-xl bg-black shadow-lg flex items-center justify-center">
+                    <div className="lg:w-12 lg:h-12 w-5 h-5 p-3 rounded-xl bg-white shadow-lg flex items-center justify-center">
                       <MessageSquare className="lg:w-5 lg:h-5 w-3 h-3 text-white" />
                     </div>
                     <span className="text-white  text-sm lg:text-lg font-medium">
@@ -359,15 +359,15 @@ export default function ProductPage() {
 
       {showPopup && (
         <div className="fixed inset-0 flex items-center justify-center bg-slate-900/80 backdrop-blur-sm z-50 animate-fadeIn">
-          <div className="bg-slate-800 dark:bg-white rounded-2xl shadow-2xl p-8 max-w-sm w-full text-center border border-slate-700/50 dark:border-slate-200/50 transform transition-all duration-300 animate-scaleIn">
-            <h2 className="text-2xl font-bold text-white dark:text-slate-800 mb-4">Login Required</h2>
-            <p className="text-slate-300 dark:text-slate-600 mb-6">
+          <div className="bg-slate-800  rounded-2xl shadow-2xl p-8 max-w-sm w-full text-center border border-slate-700/50  transform transition-all duration-300 animate-scaleIn">
+            <h2 className="text-2xl font-bold text-white  mb-4">Login Required</h2>
+            <p className="text-slate-300  mb-6">
               You need to be logged in to chat with the seller. Would you like to login now?
             </p>
             <div className="flex justify-center space-x-4">
               <button
                 onClick={handleCancel}
-                className="bg-slate-700 dark:bg-slate-200 text-slate-300 dark:text-slate-700 px-5 py-3 rounded-xl hover:bg-slate-600 dark:hover:bg-slate-300 transition-colors duration-300"
+                className="bg-slate-700  text-slate-300  px-5 py-3 rounded-xl hover:bg-slate-600  transition-colors duration-300"
               >
                 Cancel
               </button>

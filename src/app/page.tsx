@@ -137,7 +137,7 @@ export default function Home() {
             onMouseEnter={pauseSlider}
             onMouseLeave={pauseSlider}
           >
-            <div className="relative h-[380px] sm:h-[420px] md:h-[520px] w-full overflow-hidden rounded-2xl border dark:border- border-white/10 shadow-xl shadow-black/50">
+            <div className="relative h-[380px] sm:h-[420px] md:h-[520px] w-full overflow-hidden rounded-2xl border shadow-xl shadow-black/50">
               {featuredItems.map((item, index) => (
                 <div
                   key={item._id}
@@ -147,19 +147,19 @@ export default function Home() {
                 >
                   <div className="w-full md:w-1/2 p-4 md:p-10 text-white z-10 order-2 md:order-1">
                     <div className="mb-2 md:mb-3">
-                      <span className="text-[10px] sm:text-xs md:text-xs uppercase tracking-widest dark:text-black  bg-gray-900/20 px-2 py-1 md:px-3 md:py-1 rounded-full">
+                      <span className="text-[10px] sm:text-xs md:text-xs uppercase tracking-widest text-black  bg-gray-900/20 px-2 py-1 md:px-3 md:py-1 rounded-full">
                         {item.category}
                       </span>
                     </div>
-                    <h1 className="text-lg sm:text-xl md:text-5xl font-extrabold leading-tight bg-clip-text text-transparent dark:text-black bg-gradient-to-r from-white to-gray-200 mb-2 md:mb-4 truncate w-full">
+                    <h1 className="text-lg sm:text-xl md:text-5xl font-extrabold leading-tight bg-clip-text  text-black bg-gradient-to-r from-white to-gray-200 mb-2 md:mb-4 truncate w-full">
                       {item.title}
                     </h1>
-                    <p className="text-base sm:text-lg md:text-2xl font-medium dark:text-black text-gray-200 mb-3 md:mb-6">
+                    <p className="text-base sm:text-lg md:text-2xl font-medium text-[#36454F]  mb-3 md:mb-6">
                       ₦{item.price.toLocaleString()}
                     </p>
                     <div className="flex items-center mb-4 md:mb-8">
                       <MapPinIcon className="h-4 w-4 md:h-5 md:w-5 text-black mr-1.5 md:mr-2" />
-                      <span className="text-gray-300 text-xs sm:text-sm md:text-base dark:text-black truncate">
+                      <span className=" text-xs sm:text-sm md:text-base text-black truncate">
                         {item.location}
                       </span>
                     </div>
@@ -210,7 +210,7 @@ export default function Home() {
                   className={`transition-all duration-300 ease-in-out rounded-full ${
                     index === currentFeaturedIndex
                       ? "h-2 w-6 md:h-2 md:w-8  bg-black"
-                      : "h-2 w-2 dark:bg-black bg-white/30 hover:bg-white/50"
+                      : "h-2 w-2  bg-white hover:bg-white/50"
                   }`}
                   aria-label={`Go to slide ${index + 1}`}
                 />
@@ -220,7 +220,7 @@ export default function Home() {
         </div>
 
         {/* Sticky Filter Section */}
-        <div className=" z-30 dark:bg-white bg-black/90 backdrop-blur-md border-b border-white/10 shadow-md">
+        <div className=" z-30 bg-white backdrop-blur-md border-b border-white/10 shadow-md">
           <div className="mx-auto px-4 lg:px-5 py-2 md:py-6 max-w-7xl">
             {/* <div className="flex justify-between items-center mb-1 lg:mb-4">
               <h3 className="text-lg md:text-xl font-semibold text-white">Filter Categories</h3>
@@ -247,7 +247,7 @@ export default function Home() {
                       className={`px-4 py-2 rounded-full text-xs md:text-sm transition-all duration-300 whitespace-nowrap ${
                         selectedCategory === category
                           ? "bg-[#36454F] text-white  scale-105 shadow-lg shadow-gray-600/20"
-                          : "bg-white/5 text-gray-300 hover:bg-white/10 border dark:text-black border-white/10 hover:border-white/20"
+                          : "bg-white/5  hover:bg-white/10 border text-black border-white/10 hover:border-white/20"
                       }`}
                     >
                       {category}
@@ -329,16 +329,16 @@ export default function Home() {
         </div>
 
         {/* Footer */}
-        <footer className="relative z-10 dark:border-t dark:border-black  border-t border-white/10 dark:bg-white bg-black/40 backdrop-blur-md">
+        <footer className="relative z-10   border-t  bg-white backdrop-blur-md">
           <div className="container mx-auto px-4 py-6">
             <div className="flex flex-col md:flex-row justify-between items-center">
               <div className="mb-4 md:mb-0">
-                <h2 className="text-xl font-bold text-white dark:text-black">
+                <h2 className="text-xl font-bold text-black">
                   TRADE<span className="text-orange-500">HUB</span>
                 </h2>
-                <p className="text-gray-400 dark:text-black text-sm mt-1">The marketplace for all your needs</p>
+                <p className="text-black text-sm mt-1">The marketplace for all your needs</p>
               </div>
-              <div className="flex space-x-4 text-sm text-gray-400 dark:text-black">
+              <div className="flex space-x-4 text-sm text-black">
                 <Link href="/terms">
                   <span className="hover:text-white transition-colors">Terms</span>
                 </Link>
@@ -405,8 +405,8 @@ const ListingCard = ({
           )}
         </button>
       </div>
-      <div className="p-3 md:p-4 text-white">
-        <h4 className="font-semibold mb-1 truncate text-sm dark:text-black md:text-base">{item.title}</h4>
+      <div className="p-3 md:p-4 text-black">
+        <h4 className="font-semibold mb-1 truncate text-sm text-black md:text-base">{item.title}</h4>
         <div className="flex justify-between items-center mt-2">
           <span className="text-[#36454F] font-bold text-sm md:text-base">
             ₦{item.price.toLocaleString()}
@@ -422,7 +422,7 @@ const ListingCard = ({
 };
 
 const LoadingState = () => (
-  <div className="flex items-center justify-center min-h-screen dark:bg-gradient-to-br dark:from-white dark:via-white dark:to-white bg-gradient-to-br from-gray-950 via-gray-900 to-black">
+  <div className="flex items-center justify-center min-h-screen  bg-white">
     <div className="text-center">
       <div className="relative w-16 h-16 mx-auto mb-4">
         <div className="absolute inset-0 rounded-full border-t-2 border-black animate-spin"></div>

@@ -15,7 +15,6 @@ import {
 } from "@heroicons/react/24/outline";
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import ThemeToggle from "./ThemeToggle";
 import { usePathname } from "next/navigation";
 
 interface NavbarProps {
@@ -252,7 +251,7 @@ export default function Navbar({ searchTerm, setSearchTerm }: NavbarProps) {
   return (
     <nav className="font-sans">
       {/* Top Navbar (Desktop) */}
-      <div className="backdrop-blur-lg bg-gradient-to-r from-black/80 via-black/70 to-black/80 dark:from-white dark:via-white dark:to-white border-b border-white/10 dark:border-gray-200/20 shadow-2xl sticky top-0 z-50">
+      <div className="backdrop-blur-lg bg-white  shadow-2xl sticky top-0 z-50">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
         {/* Logo */}
         <motion.div
@@ -262,7 +261,7 @@ export default function Navbar({ searchTerm, setSearchTerm }: NavbarProps) {
         >
           <h2 className="text-xl sm:text-2xl font-extrabold text-white dark:text-gray-800">
             <Link href="/">
-              <div className="inline-flex items-center hover:text-orange-400 transition-colors duration-300">
+              <div className="inline-flex items-center text-black hover:text-orange-400 transition-colors duration-300">
                 TRADE<span className="text-orange-500">HUB</span>
               </div>
             </Link>
@@ -305,29 +304,29 @@ export default function Navbar({ searchTerm, setSearchTerm }: NavbarProps) {
                       initial="hidden"
                       animate="visible"
                       exit="exit"
-                      className="absolute right-0 mt-2 w-56 bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200/20 dark:border-gray-700/20 overflow-hidden"
+                      className="absolute right-0 mt-2 w-56 bg-black overflow-hidden rounded-xl"
                     >
                       <Link href="/pages/chat" onClick={closeDropdown}>
-                        <div className="px-4 py-2 text-gray-800 dark:text-gray-200 hover:bg-orange-100 dark:hover:bg-orange-900/20 transition-colors duration-200 flex items-center">
+                        <div className="px-4 py-2 text-white  hover:bg-gray-100 hover:text-black  transition-colors duration-200 flex items-center">
                           <ChatBubbleLeftIcon className="h-5 w-5 mr-2" />
                           View Messages
                         </div>
                       </Link>
                       <Link href="/declutter/purchases" onClick={closeDropdown}>
-                        <div className="px-4 py-2 text-gray-800 dark:text-gray-200 hover:bg-orange-100 dark:hover:bg-orange-900/20 transition-colors duration-200 flex items-center">
+                        <div className="px-4 py-2 text-white  hover:bg-gray-100 hover:text-black transition-colors duration-200 flex items-center">
                           <CreditCardIcon className="h-5 w-5 mr-2" />
                           Transactions
                         </div>
                       </Link>
                       <Link href="/declutter/manage-items" onClick={closeDropdown}>
-                        <div className="px-4 py-2 text-gray-800 dark:text-gray-200 hover:bg-orange-100 dark:hover:bg-orange-900/20 transition-colors duration-200 flex items-center">
+                        <div className="px-4 py-2 text-white  hover:bg-gray-100 hover:text-black  transition-colors duration-200 flex items-center">
                           <Cog6ToothIcon className="h-5 w-5 mr-2" />
                           Manage Products
                         </div>
                       </Link>
                       {storeId && (
                         <Link href={`/appstore/managestore/${storeId}`} onClick={closeDropdown}>
-                          <div className="px-4 py-2 text-gray-800 dark:text-gray-200 hover:bg-orange-100 dark:hover:bg-orange-900/20 transition-colors duration-200 flex items-center">
+                          <div className="px-4 py-2 text-white  hover:bg-gray-100 hover:text-black  transition-colors duration-200 flex items-center">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
                               fill="none"
@@ -351,7 +350,7 @@ export default function Navbar({ searchTerm, setSearchTerm }: NavbarProps) {
                           logout();
                           closeDropdown();
                         }}
-                        className="w-full text-left px-4 py-2 text-gray-800 dark:text-gray-200 hover:bg-orange-100 dark:hover:bg-orange-900/20 transition-colors duration-200 flex items-center"
+                        className="w-full text-left px-4 py-2 text-white hover:bg-gray-100 hover:text-black transition-colors duration-200 flex items-center"
                       >
                         <ArrowRightOnRectangleIcon className="h-5 w-5 mr-2" />
                         Logout
@@ -379,7 +378,6 @@ export default function Navbar({ searchTerm, setSearchTerm }: NavbarProps) {
                   </div>
                 </Link>
               </motion.div>
-              <ThemeToggle />
             </div>
           )}
         </div>
@@ -391,13 +389,13 @@ export default function Navbar({ searchTerm, setSearchTerm }: NavbarProps) {
       </div>
 
       {/* Mobile Tabs */}
-      <div className="md:hidden flex justify-between items-center px-4 py-2 border-t border-white/10 dark:border-gray-200/20">
+      <div className="md:hidden flex justify-between items-center px-4 py-2 border-t border-white/10 ">
         <div className="relative flex w-full">
           <Link href="/" className="flex-1">
             <button
               onClick={() => setActiveTab('Hub')}
-              className={`w-full py-2 text-center text-white dark:text-gray-800 font-medium ${
-                activeTab === 'Hub' ? 'text-orange-500' : 'text-white/70 dark:text-gray-400'
+              className={`w-full py-2 text-center text-black font-medium ${
+                activeTab === 'Hub' ? 'text-black' : 'text-black'
               }`}
             >
               Hub
@@ -406,8 +404,8 @@ export default function Navbar({ searchTerm, setSearchTerm }: NavbarProps) {
           <Link href="/appstore/stores" className="flex-1">
             <button
               onClick={() => setActiveTab('Market')}
-              className={`w-full py-2 text-center text-white dark:text-gray-800 font-medium ${
-                activeTab === 'Market' ? 'text-orange-500' : 'text-white/70 dark:text-gray-400'
+              className={`w-full py-2 text-center text-black font-medium ${
+                activeTab === 'Market' ? 'text-black' : 'text-black'
               }`}
             >
               Market
@@ -415,7 +413,7 @@ export default function Navbar({ searchTerm, setSearchTerm }: NavbarProps) {
           </Link>
           {/* Sliding Underline */}
           <motion.div
-            className="absolute bottom-0 h-1 bg-black rounded-full"
+            className="absolute bottom-0 h-1 bg-[#36454F] rounded-full"
             initial={false}
             animate={{
               x: activeTab === 'Hub' ? '0%' : '100%',
