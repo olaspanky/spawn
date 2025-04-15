@@ -31,6 +31,8 @@ export default function Navbar({ searchTerm, setSearchTerm }: NavbarProps) {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const mobileAccountRef = useRef<HTMLDivElement>(null); // Ref for mobile popup
   const pathname = usePathname();
+  const [activeTab, setActiveTab] = useState('Hub'); // State to track active tab
+
 
   const now = new Date();
   const hour = now.getHours();
@@ -251,147 +253,183 @@ export default function Navbar({ searchTerm, setSearchTerm }: NavbarProps) {
     <nav className="font-sans">
       {/* Top Navbar (Desktop) */}
       <div className="backdrop-blur-lg bg-gradient-to-r from-black/80 via-black/70 to-black/80 dark:from-white dark:via-white dark:to-white border-b border-white/10 dark:border-gray-200/20 shadow-2xl sticky top-0 z-50">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-          {/* Logo */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, ease: "easeOut" }}
-          >
-            <h2 className="text-xl sm:text-2xl font-extrabold text-white dark:text-gray-800">
-              <Link href="/">
-                <div className="inline-flex items-center hover:text-orange-400 transition-colors duration-300">
-                  TRADE<span className="text-orange-500">HUB</span>
-                </div>
-              </Link>
-            </h2>
-          </motion.div>
-
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-6 lg:space-x-8">
-            {token ? (
-              <>
-                <Greeting />
-                <motion.div whileHover={{ scale: 1.1 }} transition={{ duration: 0.2 }}>
-                  <Link href="/">
-                    <BellIcon className="h-6 w-6 lg:h-7 lg:w-7 text-white hover:text-orange-400 transition-colors duration-300" />
-                  </Link>
-                </motion.div>
-                <MarketDeclutterButton />
-                <motion.div whileHover={{ scale: 1.05 }} transition={{ duration: 0.2 }}>
-                  <Link href="/declutter/manage-items">
-                    <div className="inline-flex items-center px-4 py-2 lg:px-6 lg:py-2.5 bg-gradient-to-r from-orange-600 to-orange-500 text-white rounded-xl hover:from-orange-700 hover:to-orange-600 transition-all duration-300 shadow-md hover:shadow-lg">
-                      Sell Item
-                      <ShoppingCartIcon className="ml-2 h-5 w-5 lg:h-6 lg:w-6" />
-                    </div>
-                  </Link>
-                </motion.div>
-                <div className="relative" ref={dropdownRef}>
-                  <motion.div whileHover={{ scale: 1.05 }} transition={{ duration: 0.2 }}>
-                    <button
-                      onClick={toggleDropdown}
-                      className="inline-flex items-center px-4 py-2 lg:px-6 lg:py-2.5 bg-gradient-to-r from-orange-600 to-orange-500 text-white rounded-xl hover:from-orange-700 hover:to-orange-600 transition-all duration-300 shadow-md hover:shadow-lg"
-                    >
-                      Account
-                      <ChevronDownIcon className="ml-2 h-5 w-5 lg:h-6 lg:w-6" />
-                    </button>
-                  </motion.div>
-                  <AnimatePresence>
-                    {isDropdownOpen && (
-                      <motion.div
-                        variants={dropdownVariants}
-                        initial="hidden"
-                        animate="visible"
-                        exit="exit"
-                        className="absolute right-0 mt-2 w-56 bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200/20 dark:border-gray-700/20 overflow-hidden"
-                      >
-                        <Link href="/pages/chat" onClick={closeDropdown}>
-                          <div className="px-4 py-2 text-gray-800 dark:text-gray-200 hover:bg-orange-100 dark:hover:bg-orange-900/20 transition-colors duration-200 flex items-center">
-                            <ChatBubbleLeftIcon className="h-5 w-5 mr-2" />
-                            View Messages
-                          </div>
-                        </Link>
-                        <Link href="/declutter/purchases" onClick={closeDropdown}>
-                          <div className="px-4 py-2 text-gray-800 dark:text-gray-200 hover:bg-orange-100 dark:hover:bg-orange-900/20 transition-colors duration-200 flex items-center">
-                            <CreditCardIcon className="h-5 w-5 mr-2" />
-                            Transactions
-                          </div>
-                        </Link>
-                        <Link href="/declutter/manage-items" onClick={closeDropdown}>
-                          <div className="px-4 py-2 text-gray-800 dark:text-gray-200 hover:bg-orange-100 dark:hover:bg-orange-900/20 transition-colors duration-200 flex items-center">
-                            <Cog6ToothIcon className="h-5 w-5 mr-2" />
-                            Manage Products
-                          </div>
-                        </Link>
-                        {storeId && (
-                          <Link href={`/appstore/managestore/${storeId}`} onClick={closeDropdown}>
-                            <div className="px-4 py-2 text-gray-800 dark:text-gray-200 hover:bg-orange-100 dark:hover:bg-orange-900/20 transition-colors duration-200 flex items-center">
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                strokeWidth={1.5}
-                                stroke="currentColor"
-                                className="size-6"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  d="m20.25 7.5-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5m6 4.125 2.25 2.25m0 0 2.25 2.25M12 13.875l2.25-2.25M12 13.875l-2.25 2.25M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z"
-                                />
-                              </svg>
-                              Manage Store
-                            </div>
-                          </Link>
-                        )}
-                        <button
-                          onClick={() => {
-                            logout();
-                            closeDropdown();
-                          }}
-                          className="w-full text-left px-4 py-2 text-gray-800 dark:text-gray-200 hover:bg-orange-100 dark:hover:bg-orange-900/20 transition-colors duration-200 flex items-center"
-                        >
-                          <ArrowRightOnRectangleIcon className="h-5 w-5 mr-2" />
-                          Logout
-                        </button>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-                <ThemeToggle />
-              </>
-            ) : (
-              <div className="flex items-center space-x-6 lg:space-x-8">
-                <MarketDeclutterButton />
-                <motion.div whileHover={{ scale: 1.05 }} transition={{ duration: 0.2 }}>
-                  <Link href="/declutter/upload">
-                    <div className="inline-flex items-center px-4 py-2 lg:px-6 lg:py-2.5 bg-gradient-to-r from-orange-600 to-orange-500 text-white rounded-xl hover:from-orange-700 hover:to-orange-600 transition-all duration-300 shadow-md hover:shadow-lg">
-                      Sell Item
-                      <ShoppingCartIcon className="ml-2 h-5 w-5 lg:h-6 lg:w-6" />
-                    </div>
-                  </Link>
-                </motion.div>
-                <motion.div whileHover={{ scale: 1.05 }} transition={{ duration: 0.2 }}>
-                  <Link href="/declutter/login">
-                    <div className="inline-flex items-center px-4 py-2 lg:px-6 lg:py-2.5 bg-gradient-to-r from-orange-600 to-orange-500 text-white rounded-xl hover:from-orange-700 hover:to-orange-600 transition-all duration-300 shadow-md hover:shadow-lg">
-                      Login
-                    </div>
-                  </Link>
-                </motion.div>
-                <ThemeToggle />
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
+        {/* Logo */}
+        <motion.div
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5, ease: 'easeOut' }}
+        >
+          <h2 className="text-xl sm:text-2xl font-extrabold text-white dark:text-gray-800">
+            <Link href="/">
+              <div className="inline-flex items-center hover:text-orange-400 transition-colors duration-300">
+                TRADE<span className="text-orange-500">HUB</span>
               </div>
-            )}
-          </div>
+            </Link>
+          </h2>
+        </motion.div>
 
-          {/* Mobile Placeholder (Remove Toggle) */}
-          <div className="md:hidden flex items-center space-x-2">
-            {token && <Greeting />}
-          </div>
+        {/* Desktop Navigation */}
+        <div className="hidden md:flex items-center space-x-6 lg:space-x-8">
+          {token ? (
+            <>
+              <Greeting />
+              <motion.div whileHover={{ scale: 1.1 }} transition={{ duration: 0.2 }}>
+                <Link href="/">
+                  <BellIcon className="h-6 w-6 lg:h-7 lg:w-7 text-white hover:text-orange-400 transition-colors duration-300" />
+                </Link>
+              </motion.div>
+              <MarketDeclutterButton />
+              <motion.div whileHover={{ scale: 1.05 }} transition={{ duration: 0.2 }}>
+                <Link href="/declutter/manage-items">
+                  <div className="inline-flex items-center px-4 py-2 lg:px-6 lg:py-2.5 bg-gradient-to-r from-orange-600 to-orange-500 text-white rounded-xl hover:from-orange-700 hover:to-orange-600 transition-all duration-300 shadow-md hover:shadow-lg">
+                    Sell Item
+                    <ShoppingCartIcon className="ml-2 h-5 w-5 lg:h-6 lg:w-6" />
+                  </div>
+                </Link>
+              </motion.div>
+              <div className="relative" ref={dropdownRef}>
+                <motion.div whileHover={{ scale: 1.05 }} transition={{ duration: 0.2 }}>
+                  <button
+                    onClick={toggleDropdown}
+                    className="inline-flex items-center px-4 py-2 lg:px-6 lg:py-2.5 bg-gradient-to-r from-orange-600 to-orange-500 text-white rounded-xl hover:from-orange-700 hover:to-orange-600 transition-all duration-300 shadow-md hover:shadow-lg"
+                  >
+                    Account
+                    <ChevronDownIcon className="ml-2 h-5 w-5 lg:h-6 lg:w-6" />
+                  </button>
+                </motion.div>
+                <AnimatePresence>
+                  {isDropdownOpen && (
+                    <motion.div
+                      variants={dropdownVariants}
+                      initial="hidden"
+                      animate="visible"
+                      exit="exit"
+                      className="absolute right-0 mt-2 w-56 bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200/20 dark:border-gray-700/20 overflow-hidden"
+                    >
+                      <Link href="/pages/chat" onClick={closeDropdown}>
+                        <div className="px-4 py-2 text-gray-800 dark:text-gray-200 hover:bg-orange-100 dark:hover:bg-orange-900/20 transition-colors duration-200 flex items-center">
+                          <ChatBubbleLeftIcon className="h-5 w-5 mr-2" />
+                          View Messages
+                        </div>
+                      </Link>
+                      <Link href="/declutter/purchases" onClick={closeDropdown}>
+                        <div className="px-4 py-2 text-gray-800 dark:text-gray-200 hover:bg-orange-100 dark:hover:bg-orange-900/20 transition-colors duration-200 flex items-center">
+                          <CreditCardIcon className="h-5 w-5 mr-2" />
+                          Transactions
+                        </div>
+                      </Link>
+                      <Link href="/declutter/manage-items" onClick={closeDropdown}>
+                        <div className="px-4 py-2 text-gray-800 dark:text-gray-200 hover:bg-orange-100 dark:hover:bg-orange-900/20 transition-colors duration-200 flex items-center">
+                          <Cog6ToothIcon className="h-5 w-5 mr-2" />
+                          Manage Products
+                        </div>
+                      </Link>
+                      {storeId && (
+                        <Link href={`/appstore/managestore/${storeId}`} onClick={closeDropdown}>
+                          <div className="px-4 py-2 text-gray-800 dark:text-gray-200 hover:bg-orange-100 dark:hover:bg-orange-900/20 transition-colors duration-200 flex items-center">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="size-6"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="m20.25 7.5-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5m6 4.125 2.25 2.25m0 0 2.25 2.25M12 13.875l2.25-2.25M12 13.875l-2.25 2.25M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0 1.125.504 1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z"
+                              />
+                            </svg>
+                            Manage Store
+                          </div>
+                        </Link>
+                      )}
+                      <button
+                        onClick={() => {
+                          logout();
+                          closeDropdown();
+                        }}
+                        className="w-full text-left px-4 py-2 text-gray-800 dark:text-gray-200 hover:bg-orange-100 dark:hover:bg-orange-900/20 transition-colors duration-200 flex items-center"
+                      >
+                        <ArrowRightOnRectangleIcon className="h-5 w-5 mr-2" />
+                        Logout
+                      </button>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+              <ThemeToggle />
+            </>
+          ) : (
+            <div className="flex items-center space-x-6 lg:space-x-8">
+              <MarketDeclutterButton />
+              <motion.div whileHover={{ scale: 1.05 }} transition={{ duration: 0.2 }}>
+                <Link href="/declutter/upload">
+                  <div className="inline-flex items-center px-4 py-2 lg:px-6 lg:py-2.5 bg-gradient-to-r from-orange-600 to-orange-500 text-white rounded-xl hover:from-orange-700 hover:to-orange-600 transition-all duration-300 shadow-md hover:shadow-lg">
+                    Sell Item
+                    <ShoppingCartIcon className="ml-2 h-5 w-5 lg:h-6 lg:w-6" />
+                  </div>
+                </Link>
+              </motion.div>
+              <motion.div whileHover={{ scale: 1.05 }} transition={{ duration: 0.2 }}>
+                <Link href="/declutter/login">
+                  <div className="inline-flex items-center px-4 py-2 lg:px-6 lg:py-2.5 bg-gradient-to-r from-orange-600 to-orange-500 text-white rounded-xl hover:from-orange-700 hover:to-orange-600 transition-all duration-300 shadow-md hover:shadow-lg">
+                    Login
+                  </div>
+                </Link>
+              </motion.div>
+              <ThemeToggle />
+            </div>
+          )}
+        </div>
+
+        {/* Mobile Placeholder */}
+        <div className="md:hidden flex items-center space-x-2">
+          {token && <Greeting />}
         </div>
       </div>
 
+      {/* Mobile Tabs */}
+      <div className="md:hidden flex justify-between items-center px-4 py-2 border-t border-white/10 dark:border-gray-200/20">
+        <div className="relative flex w-full">
+          <Link href="/" className="flex-1">
+            <button
+              onClick={() => setActiveTab('Hub')}
+              className={`w-full py-2 text-center text-white dark:text-gray-800 font-medium ${
+                activeTab === 'Hub' ? 'text-orange-500' : 'text-white/70 dark:text-gray-400'
+              }`}
+            >
+              Hub
+            </button>
+          </Link>
+          <Link href="/appstore/stores" className="flex-1">
+            <button
+              onClick={() => setActiveTab('Market')}
+              className={`w-full py-2 text-center text-white dark:text-gray-800 font-medium ${
+                activeTab === 'Market' ? 'text-orange-500' : 'text-white/70 dark:text-gray-400'
+              }`}
+            >
+              Market
+            </button>
+          </Link>
+          {/* Sliding Underline */}
+          <motion.div
+            className="absolute bottom-0 h-1 bg-orange-500 rounded-full"
+            initial={false}
+            animate={{
+              x: activeTab === 'Hub' ? '0%' : '100%',
+              width: '50%',
+            }}
+            transition={{ duration: 0.3, ease: 'easeInOut' }}
+          />
+        </div>
+      </div>
+    </div>
+
       {/* Bottom Navbar (Mobile Only) */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-gradient-to-r from-orange-600 to-orange-500 z-50 rounded-t-2xl shadow-lg">
+      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-gradient-to-r from-orange-600 to-orange-500 z-50 py-1 opacity-85 rounded-t-2xl shadow-lg">
         <div className="flex justify-around items-center py-3">
           {/* Home */}
           <motion.div whileHover={{ scale: 1.1 }} transition={{ duration: 0.2 }}>
@@ -401,11 +439,11 @@ export default function Navbar({ searchTerm, setSearchTerm }: NavbarProps) {
           </motion.div>
 
           {/* Market/Declutter */}
-          <MarketDeclutterButton isMobile />
+          {/* <MarketDeclutterButton isMobile /> */}
 
           {/* Sell Item */}
           <motion.div whileHover={{ scale: 1.1 }} transition={{ duration: 0.2 }}>
-            <Link href="/declutter/manage-items">
+            <Link href="/declutter/purchases">
               <ShoppingCartIcon className="size-6 text-white hover:text-orange-300 transition-colors duration-300" />
             </Link>
           </motion.div>
