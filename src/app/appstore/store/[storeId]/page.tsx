@@ -323,10 +323,10 @@ const StoreDetail: React.FC = () => {
       {/* Cart Drawer */}
       <div className={`fixed inset-0 bg-black bg-opacity-50 z-20 transition-opacity duration-300 ${showCart ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
         <div 
-          className={`absolute bottom-0 left-0 right-0 bg-white rounded-t-3xl shadow-xl transform transition-transform duration-300 ${showCart ? 'translate-y-0' : 'translate-y-full'}`}
+          className={`absolute bottom-[40%] left-0 right-0 bg-white rounded-t-3xl shadow-xl transform transition-transform duration-300 ${showCart ? 'translate-y-0' : 'translate-y-full'}`}
           style={{ maxHeight: '80vh' }}
         >
-          <div className="p-4">
+          <div className="p-4 ">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-bold text-gray-800">Your Cart</h2>
               <button 
