@@ -223,7 +223,7 @@ export default function Home() {
         </div>
 
         {/* Sticky Filter Section */}
-        <div className="sticky top-0 z-30 dark:bg-white bg-black/90 backdrop-blur-md border-b border-white/10 shadow-md">
+        <div className=" z-30 dark:bg-white bg-black/90 backdrop-blur-md border-b border-white/10 shadow-md">
           <div className="mx-auto px-4 lg:px-5 py-2 md:py-6 max-w-7xl">
             {/* <div className="flex justify-between items-center mb-1 lg:mb-4">
               <h3 className="text-lg md:text-xl font-semibold text-white">Filter Categories</h3>
