@@ -81,8 +81,8 @@ export default function Navbar({ searchTerm, setSearchTerm }: NavbarProps) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <span>{greeting},</span>
-      <span className="text-orange-400 font-medium">{user?.name || "User"}</span>
+      <span>{greeting}</span>
+      <span className=" font-medium">{user?.name || "User"}</span>
     </motion.div>
   );
 
@@ -176,7 +176,7 @@ export default function Navbar({ searchTerm, setSearchTerm }: NavbarProps) {
                 />
               </svg>
             ) : (
-              <div className="inline-flex items-center px-4 py-2 lg:px-6 lg:py-2.5 bg-gradient-to-r from-orange-600 to-orange-500 text-white rounded-xl hover:from-orange-700 hover:to-orange-600 transition-all duration-300 shadow-md hover:shadow-lg">
+              <div className="inline-flex items-center px-4 py-2 lg:px-6 lg:py-2.5 bg-black text-white rounded-xl hover:bg-gray-900 transition-all duration-300 shadow-md hover:shadow-lg">
                 Market
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -282,8 +282,8 @@ export default function Navbar({ searchTerm, setSearchTerm }: NavbarProps) {
               <MarketDeclutterButton />
               <motion.div whileHover={{ scale: 1.05 }} transition={{ duration: 0.2 }}>
                 <Link href="/declutter/manage-items">
-                  <div className="inline-flex items-center px-4 py-2 lg:px-6 lg:py-2.5 bg-gradient-to-r from-orange-600 to-orange-500 text-white rounded-xl hover:from-orange-700 hover:to-orange-600 transition-all duration-300 shadow-md hover:shadow-lg">
-                    Sell Item
+                <div className="inline-flex items-center px-4 py-2 lg:px-6 lg:py-2.5 bg-black text-white rounded-xl hover:bg-gray-900 transition-all duration-300 shadow-md hover:shadow-lg">
+                Sell Item
                     <ShoppingCartIcon className="ml-2 h-5 w-5 lg:h-6 lg:w-6" />
                   </div>
                 </Link>
@@ -292,7 +292,7 @@ export default function Navbar({ searchTerm, setSearchTerm }: NavbarProps) {
                 <motion.div whileHover={{ scale: 1.05 }} transition={{ duration: 0.2 }}>
                   <button
                     onClick={toggleDropdown}
-                    className="inline-flex items-center px-4 py-2 lg:px-6 lg:py-2.5 bg-gradient-to-r from-orange-600 to-orange-500 text-white rounded-xl hover:from-orange-700 hover:to-orange-600 transition-all duration-300 shadow-md hover:shadow-lg"
+                    className="inline-flex items-center px-4 py-2 lg:px-6 lg:py-2.5 bg-black text-white rounded-xl hover:bg-gray-900 transition-all duration-300 shadow-md hover:shadow-lg"
                   >
                     Account
                     <ChevronDownIcon className="ml-2 h-5 w-5 lg:h-6 lg:w-6" />
@@ -360,7 +360,6 @@ export default function Navbar({ searchTerm, setSearchTerm }: NavbarProps) {
                   )}
                 </AnimatePresence>
               </div>
-              <ThemeToggle />
             </>
           ) : (
             <div className="flex items-center space-x-6 lg:space-x-8">
@@ -416,7 +415,7 @@ export default function Navbar({ searchTerm, setSearchTerm }: NavbarProps) {
           </Link>
           {/* Sliding Underline */}
           <motion.div
-            className="absolute bottom-0 h-1 bg-orange-500 rounded-full"
+            className="absolute bottom-0 h-1 bg-black rounded-full"
             initial={false}
             animate={{
               x: activeTab === 'Hub' ? '0%' : '100%',
@@ -429,7 +428,7 @@ export default function Navbar({ searchTerm, setSearchTerm }: NavbarProps) {
     </div>
 
       {/* Bottom Navbar (Mobile Only) */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-gradient-to-r from-orange-600 to-orange-500 z-50 py-1 opacity-85 rounded-t-2xl shadow-lg">
+      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-black z-50 py-1  rounded-t-2xl shadow-lg">
         <div className="flex justify-around items-center py-3">
           {/* Home */}
           <motion.div whileHover={{ scale: 1.1 }} transition={{ duration: 0.2 }}>

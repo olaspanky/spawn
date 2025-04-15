@@ -140,7 +140,7 @@ export default function Home() {
             onMouseEnter={pauseSlider}
             onMouseLeave={pauseSlider}
           >
-            <div className="relative h-[380px] sm:h-[420px] md:h-[520px] w-full overflow-hidden rounded-2xl border dark:border-orange-500 border-white/10 shadow-xl shadow-black/50">
+            <div className="relative h-[380px] sm:h-[420px] md:h-[520px] w-full overflow-hidden rounded-2xl border dark:border- border-white/10 shadow-xl shadow-black/50">
               {featuredItems.map((item, index) => (
                 <div
                   key={item._id}
@@ -150,7 +150,7 @@ export default function Home() {
                 >
                   <div className="w-full md:w-1/2 p-4 md:p-10 text-white z-10 order-2 md:order-1">
                     <div className="mb-2 md:mb-3">
-                      <span className="text-[10px] sm:text-xs md:text-xs uppercase tracking-widest dark:text-black text-orange-300 bg-orange-900/20 px-2 py-1 md:px-3 md:py-1 rounded-full">
+                      <span className="text-[10px] sm:text-xs md:text-xs uppercase tracking-widest dark:text-black  bg-gray-900/20 px-2 py-1 md:px-3 md:py-1 rounded-full">
                         {item.category}
                       </span>
                     </div>
@@ -161,13 +161,13 @@ export default function Home() {
                       ₦{item.price.toLocaleString()}
                     </p>
                     <div className="flex items-center mb-4 md:mb-8">
-                      <MapPinIcon className="h-4 w-4 md:h-5 md:w-5 text-orange-400 mr-1.5 md:mr-2" />
+                      <MapPinIcon className="h-4 w-4 md:h-5 md:w-5 text-black mr-1.5 md:mr-2" />
                       <span className="text-gray-300 text-xs sm:text-sm md:text-base dark:text-black truncate">
                         {item.location}
                       </span>
                     </div>
                     <Link href={`/declutter/products/${item._id}`}>
-                      <button className="bg-gradient-to-r dark:text-rwhite from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white px-4 py-2 sm:px-6 sm:py-2.5 md:px-6 md:py-3 rounded-xl text-xs sm:text-sm md:text-sm font-semibold tracking-wide transition-all duration-300 shadow-md md:shadow-lg hover:shadow-orange-600/40 hover:scale-105">
+                      <button className="bg-black text-white px-4 py-2 sm:px-6 sm:py-2.5 md:px-6 md:py-3 rounded-xl text-xs sm:text-sm md:text-sm font-semibold tracking-wide transition-all duration-300 shadow-md md:shadow-lg hover:shadow-orange-600/40 hover:scale-105">
                         View Details
                       </button>
                     </Link>
@@ -212,7 +212,7 @@ export default function Home() {
                   onClick={() => setCurrentFeaturedIndex(index)}
                   className={`transition-all duration-300 ease-in-out rounded-full ${
                     index === currentFeaturedIndex
-                      ? "h-2 w-6 md:h-2 md:w-8  bg-orange-500"
+                      ? "h-2 w-6 md:h-2 md:w-8  bg-black"
                       : "h-2 w-2 dark:bg-black bg-white/30 hover:bg-white/50"
                   }`}
                   aria-label={`Go to slide ${index + 1}`}
@@ -249,7 +249,7 @@ export default function Home() {
                       onClick={() => setSelectedCategory(category)}
                       className={`px-4 py-2 rounded-full text-xs md:text-sm transition-all duration-300 whitespace-nowrap ${
                         selectedCategory === category
-                          ? "bg-gradient-to-r from-orange-600 to-orange-500 text-white  scale-105 shadow-lg shadow-orange-600/20"
+                          ? "bg-black text-white  scale-105 shadow-lg shadow-gray-600/20"
                           : "bg-white/5 text-gray-300 hover:bg-white/10 border dark:text-black border-white/10 hover:border-white/20"
                       }`}
                     >
@@ -411,11 +411,11 @@ const ListingCard = ({
       <div className="p-3 md:p-4 text-white">
         <h4 className="font-semibold mb-1 truncate text-sm dark:text-black md:text-base">{item.title}</h4>
         <div className="flex justify-between items-center mt-2">
-          <span className="text-orange-500 font-bold text-sm md:text-base">
+          <span className="text-[#36454F] font-bold text-sm md:text-base">
             ₦{item.price.toLocaleString()}
           </span>
           <div className="flex items-center text-gray-400">
-            <MapPinIcon className="h-3 w-3 mr-1 text-orange-400" />
+            <MapPinIcon className="h-3 w-3 mr-1 text-black" />
             <span className="text-[10px] md:text-xs truncate max-w-[80px]">{item.location}</span>
           </div>
         </div>

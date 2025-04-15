@@ -4,7 +4,6 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import Nav from "./Nav";
 import Navbar from "./Navbar";
-import InstallPrompt from "./InstallPrompt"; // Import the new component
 
 
 const LayoutWrapper = ({ children }: { children: React.ReactNode }) => {
@@ -17,7 +16,6 @@ const LayoutWrapper = ({ children }: { children: React.ReactNode }) => {
     <div className="min-h-screen flex flex-col">
       { !isLoginOrSignup && (isDeclutterRoute ? <Navbar /> : <Nav searchTerm={searchTerm} setSearchTerm={setSearchTerm} />)}
       <main className="flex-1 ">{children}
-      <InstallPrompt/>
 
       </main>
     </div>

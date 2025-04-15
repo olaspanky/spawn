@@ -212,7 +212,7 @@ export default function ProductPage() {
     <div className="min-h-screen font-sans bg-gradient-to-br from-slate-900 to-slate-800 text-gray-100 dark:bg-gradient-to-br dark:from-gray-50 dark:to-white dark:text-gray-800">
       <nav className="sticky top-0 z-10 backdrop-blur-lg bg-slate-900/80 dark:bg-white/80">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center">
-          <Link href="/" className="transition-colors duration-300 text-slate-400 hover:text-orange-500">
+          <Link href="/" className="transition-colors duration-300 text-black hover:text-gray-500">
             <ArrowLeftIcon className="h-6 w-6" />
           </Link>
           <h1 className="text-xl lg:text-2xl font-semibold ml-4 truncate text-white dark:text-gray-800">
@@ -222,7 +222,7 @@ export default function ProductPage() {
       </nav>
 
       <main className="max-w-7xl mx-auto  lg:my-8 px-4 sm:px-3 lg:px-8">
-        <div className="bg-slate-800/50 dark:bg-white rounded-2xl overflow-hidden shadow-xl border border-slate-700/50 dark:border-slate-200/30">
+        <div className="bg-white overflow-hidden border border-slate-700/50 dark:border-slate-200/30">
           <div className="flex flex-col lg:flex-row">
             <div className="lg:w-1/2 p-4 lg:p-8">
               <div className="rounded-xl overflow-hidden shadow-lg">
@@ -233,41 +233,41 @@ export default function ProductPage() {
             <div className="lg:w-1/2 p-2 lg:p-8 space-y-2 lg:space-y-6">
               <div className="space-y-3">
                 <div className="flex items-center">
-                  <TagIcon className="h-6 w-6 text-orange-500 mr-2" />
-                  <span className="text-lg lg:text-3xl font-semibold text-orange-500">
+                  <TagIcon className="h-6 w-6 text-black mr-2" />
+                  <span className="text-lg lg:text-3xl font-semibold text-black">
                     ₦{product.price.toLocaleString()}
                   </span>
                 </div>
               </div>
 
-              <div className="bg-slate-700/50 dark:bg-orange-50 p-2 lg:p-6 rounded-xl shadow-inner">
-                <h3 className="font-semibold mb-3 text-md lg:text-lg text-white dark:text-gray-800 flex items-center">
+              <div className="bg-black  p-2 lg:p-6 rounded-xl shadow-inner">
+                <h3 className="font-semibold mb-3 text-md lg:text-lg text-white  flex items-center">
                   Product Details
                 </h3>
-                <p className="text-slate-300 dark:text-gray-700 whitespace-pre-line text-xs lg:text-md leading-relaxed">
+                <p className="text-slate-300  whitespace-pre-line text-xs lg:text-md leading-relaxed">
                   {product.description}
                 </p>
               </div>
 
-              <div className="bg-slate-700/50 text-md lg:text-lg dark:bg-green-50 p-2 lg:p-6 rounded-xl shadow-inner">
-                <h3 className="font-semibold flex items-center text-white dark:text-gray-800 text-lg mb-4">
+              <div className="bg-black text-md lg:text-lg dark:bg-black p-2 lg:p-6 rounded-xl shadow-inner">
+                <h3 className="font-semibold flex items-center text-white  text-lg mb-4">
                   Seller Information
                 </h3>
                 <div className="flex flex-col space-y-3 text-xs lg:text-md">
                   <div className="flex items-center">
-                    <span className="text-slate-200 flex items-center dark:text-gray-700 font-medium">
-                    <UserIcon className="lg:h-5 lg:w-5 h-3 w-3 mr-2 text-green-500" />
+                    <span className="text-slate-200 flex items-center  font-medium">
+                    <UserIcon className="lg:h-5 lg:w-5 h-3 w-3 mr-2 text-white" />
                        {product.seller.username}
                     </span>
                     {product.seller.verified && (
-                      <div className="ml-2 bg-green-900/30 dark:bg-green-100 text-green-400 dark:text-green-700 text-sm px-3 py-1 rounded-full flex items-center">
+                      <div className="ml-2 bg-black  text-white  text-sm px-3 py-1 rounded-full flex items-center">
                         <ShieldCheckIcon className="lg:h-5 lg:w-5 h-3 w-3 mr-1" />
                         Verified
                       </div>
                     )}
                   </div>
-                  <div className="flex items-center text-xs lg:text-md text-slate-300 dark:text-slate-600">
-                <MapPinIcon className="lg:h-5 lg:w-5 h-3 w-3 mr-2 text-xs text-slate-400 dark:text-slate-500" />
+                  <div className="flex items-center text-xs lg:text-md text-white ">
+                <MapPinIcon className="lg:h-5 lg:w-5 h-3 w-3 mr-2 text-xs text-white " />
                 <span>{product.location}</span>
               </div>
                   {/* <a
@@ -328,11 +328,11 @@ export default function ProductPage() {
             <div className="flex justify-center m-2 lg:mt-6">
               {isSeller ? (
                 <Link href="/declutter/manage-items" passHref>
-                  <div className="flex items-center p-3 gap-3 rounded-xl bg-gradient-to-r from-orange-600/20 to-orange-500/20 hover:from-orange-600/30 hover:to-orange-500/30 dark:bg-orange-100 dark:hover:bg-orange-200 transition-all duration-300 cursor-pointer transform hover:scale-[1.02]">
-                    <div className="lg:w-12 lg:h-12 w-5 h-5 p-3 rounded-xl bg-gradient-to-br from-orange-600 to-orange-500 shadow-lg flex items-center justify-center">
+                  <div className="flex items-center p-3 gap-3 rounded-xl bg-black hover:from-gray-600/30 hover:to-gray-900 dark:bg-black dark:hover:bg-gray-900 transition-all duration-300 cursor-pointer transform hover:scale-[1.02]">
+                    <div className="lg:w-12 lg:h-12 w-5 h-5 p-3 rounded-xl bg-white shadow-lg flex items-center justify-center">
                       <PencilIcon className="w-5 h-5 text-white" />
                     </div>
-                    <span className="text-orange-300 dark:text-orange-800 text-sm lg:text-lg font-medium">
+                    <span className="text-white  text-sm lg:text-lg font-medium">
                       Manage Item
                     </span>
                   </div>
@@ -340,13 +340,13 @@ export default function ProductPage() {
               ) : (
                 <Link href={user ? `/pages/chat?sellerId=${sellerId}` : "#"} passHref>
                   <div
-                    className="flex items-center p-3 gap-3 rounded-xl bg-gradient-to-r from-orange-600/20 to-orange-500/20 hover:from-orange-600/30 hover:to-orange-500/30 dark:bg-orange-100 dark:hover:bg-orange-200 transition-all duration-300 cursor-pointer transform hover:scale-[1.02]"
+                    className="flex items-center p-3 gap-3 rounded-xl bg-black hover:from-gray-600/30 hover:to-gray-500/30 dark:bg-gray-100 dark:hover:bg-gray-200 transition-all duration-300 cursor-pointer transform hover:scale-[1.02]"
                     onClick={handleClick}
                   >
-                    <div className="lg:w-12 lg:h-12 w-5 h-5 p-3 rounded-xl bg-gradient-to-br from-orange-600 to-orange-500 shadow-lg flex items-center justify-center">
+                    <div className="lg:w-12 lg:h-12 w-5 h-5 p-3 rounded-xl bg-black shadow-lg flex items-center justify-center">
                       <MessageSquare className="lg:w-5 lg:h-5 w-3 h-3 text-white" />
                     </div>
-                    <span className="text-orange-300 dark:text-orange-800 text-sm lg:text-lg font-medium">
+                    <span className="text-white  text-sm lg:text-lg font-medium">
                       {user ? "Chat with Seller" : "Login to Chat"}
                     </span>
                   </div>
