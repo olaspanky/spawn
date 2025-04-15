@@ -328,7 +328,7 @@ export default function ProductPage() {
             <div className="flex justify-center m-2 lg:mt-6">
               {isSeller ? (
                 <Link href="/declutter/manage-items" passHref>
-                  <div className="flex items-center p-3 gap-3 rounded-xl bg-[#36454F] hover:from-gray-600/30 hover:to-gray-900  transition-all duration-300 cursor-pointer transform hover:scale-[1.02]">
+                  <div className="flex items-center p-3 gap-3 rounded-xl bg-black hover:from-gray-600/30 hover:to-gray-900  transition-all duration-300 cursor-pointer transform hover:scale-[1.02]">
                     <div className="lg:w-12 lg:h-12 w-5 h-5 p-3 rounded-xl bg-white shadow-lg flex items-center justify-center">
                       <PencilIcon className="w-5 h-5 text-white" />
                     </div>
@@ -340,7 +340,7 @@ export default function ProductPage() {
               ) : (
                 <Link href={user ? `/pages/chat?sellerId=${sellerId}` : "#"} passHref>
                   <div
-                    className="flex items-center p-3 gap-3 rounded-xl bg-[#36454F] hover:from-gray-600/30 hover:to-gray-500/30  transition-all duration-300 cursor-pointer transform hover:scale-[1.02]"
+                    className="flex items-center p-3 gap-3 rounded-xl bg-black hover:from-gray-600/30 hover:to-gray-500/30  transition-all duration-300 cursor-pointer transform hover:scale-[1.02]"
                     onClick={handleClick}
                   >
                     <div className="lg:w-12 lg:h-12 w-5 h-5 p-3 rounded-xl bg-white shadow-lg flex items-center justify-center">
