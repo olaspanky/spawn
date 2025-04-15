@@ -154,7 +154,7 @@ export default function Home() {
                         {item.category}
                       </span>
                     </div>
-                    <h1 className="text-lg sm:text-xl md:text-5xl font-extrabold leading-tight bg-clip-text text-transparent dark:text-black bg-gradient-to-r from-white to-orange-200 mb-2 md:mb-4 truncate w-full">
+                    <h1 className="text-lg sm:text-xl md:text-5xl font-extrabold leading-tight bg-clip-text text-transparent dark:text-black bg-gradient-to-r from-white to-gray-200 mb-2 md:mb-4 truncate w-full">
                       {item.title}
                     </h1>
                     <p className="text-base sm:text-lg md:text-2xl font-medium dark:text-black text-gray-200 mb-3 md:mb-6">
@@ -167,7 +167,7 @@ export default function Home() {
                       </span>
                     </div>
                     <Link href={`/declutter/products/${item._id}`}>
-                      <button className="bg-black text-white px-4 py-2 sm:px-6 sm:py-2.5 md:px-6 md:py-3 rounded-xl text-xs sm:text-sm md:text-sm font-semibold tracking-wide transition-all duration-300 shadow-md md:shadow-lg hover:shadow-orange-600/40 hover:scale-105">
+                      <button className="bg-[#36454F] text-white px-4 py-2 sm:px-6 sm:py-2.5 md:px-6 md:py-3 rounded-xl text-xs sm:text-sm md:text-sm font-semibold tracking-wide transition-all duration-300 shadow-md md:shadow-lg hover:shadow-gray-600/40 hover:scale-105">
                         View Details
                       </button>
                     </Link>
@@ -249,7 +249,7 @@ export default function Home() {
                       onClick={() => setSelectedCategory(category)}
                       className={`px-4 py-2 rounded-full text-xs md:text-sm transition-all duration-300 whitespace-nowrap ${
                         selectedCategory === category
-                          ? "bg-black text-white  scale-105 shadow-lg shadow-gray-600/20"
+                          ? "bg-[#36454F] text-white  scale-105 shadow-lg shadow-gray-600/20"
                           : "bg-white/5 text-gray-300 hover:bg-white/10 border dark:text-black border-white/10 hover:border-white/20"
                       }`}
                     >
@@ -284,7 +284,7 @@ export default function Home() {
                   <input
                     type="text"
                     placeholder="Search for items..."
-                    className="w-full py-2 pl-10 pr-10 text-base rounded-lg bg-white/10 border border-white/20 focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all text-white"
+                    className="w-full py-2 pl-10 pr-10 text-base rounded-lg bg-white/10 border border-white/20 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-all text-white"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     autoFocus
@@ -310,10 +310,10 @@ export default function Home() {
             <EmptyState searchTerm={searchTerm} />
           ) : (
             <>
-              <h3 className="text-lg md:text-xl font-semibold text-white  mb-4 md:mb-6 flex justify-between items-center">
+              <h3 className="text-lg md:text-xl font-semibold text-black  mb-4 md:mb-6 flex justify-between items-center">
                 <span>
                   {selectedCategory !== "All" ? `${selectedCategory} Items` : "All Listings"}
-                  <span className="ml-2 text-sm text-gray-400">({filteredItems.length})</span>
+                  <span className="ml-2 text-sm text-black-400">({filteredItems.length})</span>
                 </span>
               </h3>
               <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
@@ -375,7 +375,7 @@ const ListingCard = ({
   const hasValidImage = item.images?.length > 0 && item.images[0];
 
   return (
-    <div className="rounded-xl shadow-lg hover:shadow-orange-500/20 transition-all duration-300 transform hover:-translate-y-1 overflow-hidden group h-full bg-white/5 border border-white/10 backdrop-blur-sm hover:bg-white/8 hover:border-white/15">
+    <div className="rounded-xl shadow-lg hover:shadow-gray-500/20 transition-all duration-300 transform hover:-translate-y-1 overflow-hidden group h-full bg-white/5 border border-white/10 backdrop-blur-sm hover:bg-white/8 hover:border-white/15">
       <div className="relative h-40 md:h-52 overflow-hidden">
         {hasValidImage ? (
           <div className="relative w-full h-full">
@@ -428,8 +428,8 @@ const LoadingState = () => (
   <div className="flex items-center justify-center min-h-screen dark:bg-gradient-to-br dark:from-white dark:via-white dark:to-white bg-gradient-to-br from-gray-950 via-gray-900 to-black">
     <div className="text-center">
       <div className="relative w-16 h-16 mx-auto mb-4">
-        <div className="absolute inset-0 rounded-full border-t-2 border-orange-500 animate-spin"></div>
-        <ShoppingCartIcon className="h-10 w-10 text-orange-500 absolute inset-0 m-auto" />
+        <div className="absolute inset-0 rounded-full border-t-2 border-black animate-spin"></div>
+        <ShoppingCartIcon className="h-10 w-10 text-black absolute inset-0 m-auto" />
       </div>
       <p className="text-center text-gray-300 mt-4 animate-pulse">Loading the marketplace...</p>
     </div>
@@ -458,8 +458,8 @@ const ErrorState = ({ error }: { error: string }) => (
 const EmptyState = ({ searchTerm }: { searchTerm: string }) => (
   <div className="text-center bg-white/5 backdrop-blur-md p-8 rounded-xl border border-white/10 max-w-md mx-auto">
     <div className="relative w-16 h-16 mx-auto mb-4">
-      <div className="absolute inset-0 rounded-full bg-orange-500/20"></div>
-      <ShoppingCartIcon className="h-10 w-10 text-orange-500 absolute inset-0 m-auto" />
+      <div className="absolute inset-0 rounded-full bg-gray-500/20"></div>
+      <ShoppingCartIcon className="h-10 w-10 text-gray-500 absolute inset-0 m-auto" />
     </div>
     <h3 className="text-xl font-semibold text-white mb-2">No items found</h3>
     {searchTerm && (
