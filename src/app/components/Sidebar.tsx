@@ -37,7 +37,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onChatSelect }) => {
   if (isUsersLoading) return <SidebarSkeleton />;
 
   return (
-    <aside className="h-full w-20 lg:w-72 border-r border-base-300 flex flex-col transition-all duration-200">
+    <aside className="h-full w-full lg:w-72 border-r border-base-300 flex flex-col transition-all duration-200">
       <div className="border-b border-base-300 w-full p-5">
         <div className="flex items-center gap-2">
           <Users className="size-6" />
@@ -67,12 +67,12 @@ const Sidebar: React.FC<SidebarProps> = ({ onChatSelect }) => {
                 onChatSelect(); // Trigger chat open on mobile
               }}
               className={`
-                w-full p-3 flex items-center gap-3
+                w-full p-3 flex items-left lg:items-center gap-3
                 hover:bg-base-300 transition-colors
                 ${selectedUser?._id === user._id ? "bg-base-300 ring-1 ring-base-300" : ""}
               `}
             >
-              <div className="relative mx-auto lg:mx-0">
+              <div className="relative lg:mx-auto lg:mx-0">
                 <img
                   src={user.profilePic || "/avatar.png"}
                   alt={user.username}
@@ -82,7 +82,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onChatSelect }) => {
                   <span className="absolute bottom-0 right-0 size-3 bg-green-500 rounded-full ring-2 ring-zinc-900" />
                 )}
               </div>
-              <div className="hidden lg:block text-left min-w-0">
+              <div className="block text-left min-w-0">
                 <div className="font-medium truncate">{user.username}</div>
                 <div className="text-sm text-zinc-400">
                   {onlineUsers.includes(user._id.toString()) ? "Online" : "Offline"}

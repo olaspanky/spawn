@@ -63,9 +63,11 @@ const ChatPageContent: React.FC = () => {
               </div>
             )
           ) : (
-            <div className="flex h-full rounded-lg overflow-hidden">
+            <div className="flex h-full rounded-lg overflow-hidden w-full">
               <Sidebar onChatSelect={() => {}} />
+                <div className="hidden lg:flex w-full">
               {!selectedUser ? <NoChatSelected /> : <ChatContainer />}
+              </div>
             </div>
           )}
         </div>
