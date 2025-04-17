@@ -7,7 +7,7 @@
 // import io from "socket.io-client"; // Import Socket.IO client
 
 // const BASE_URL =
-//   process.env.NEXT_PUBLIC_API_URL || (process.env.NODE_ENV === "development" ? "https://chatapp-r2c3.onrender.com" : "https://452dcdfb-45d4-413e-a5e8-39706dd532ac.us-east-1.cloud.genez.io/");
+//   process.env.NEXT_PUBLIC_API_URL || (process.env.NODE_ENV === "development" ? "https://chatapp-jwtsecret.up.railway.app" : "https://452dcdfb-45d4-413e-a5e8-39706dd532ac.us-east-1.cloud.genez.io/");
 
 // export const useAuthStore = create<AuthStore>((set, get) => {
 //   let storedToken: string | null = null;
@@ -160,9 +160,9 @@ import axiosInstance from "../lib/axios";
 import io from "socket.io-client"; // Import Socket.IO client
 
 const BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL || (process.env.NODE_ENV === "development" ? "https://chatapp-r2c3.onrender.com/api" : "https://chatapp-r2c3.onrender.com/api");
+  process.env.NEXT_PUBLIC_API_URL || (process.env.NODE_ENV === "development" ? "https://chatapp-jwtsecret.up.railway.app/api" : "https://chatapp-jwtsecret.up.railway.app/api");
 
-  const SOCKET_URL = "https://chatapp-r2c3.onrender.com"; // FIXED URL
+  const SOCKET_URL = "https://chatapp-jwtsecret.up.railway.app"; // FIXED URL
 
 
 export const useAuthStore = create<AuthStore>((set, get) => {

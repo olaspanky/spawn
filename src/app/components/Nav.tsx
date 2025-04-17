@@ -252,7 +252,7 @@ export default function Navbar({ searchTerm, setSearchTerm }: NavbarProps) {
     <nav className="font-sans">
       {/* Top Navbar (Desktop) */}
       <div className="backdrop-blur-lg bg-white  shadow-2xl sticky top-0 z-50">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
+      <div className="container mx-auto px-4  lg:px-8 py-1 flex items-center justify-between">
         {/* Logo */}
         <motion.div
           initial={{ opacity: 0, x: -20 }}
@@ -389,7 +389,7 @@ export default function Navbar({ searchTerm, setSearchTerm }: NavbarProps) {
       </div>
 
       {/* Mobile Tabs */}
-      <div className="md:hidden flex justify-between items-center px-4 py-2 border-t border-white/10 ">
+      <div className="md:hidden flex justify-between items-center px-4 py-1 border-t border-white/10 ">
         <div className="relative flex w-full">
           <Link href="/" className="flex-1">
             <button

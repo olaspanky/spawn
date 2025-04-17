@@ -34,7 +34,7 @@ const ChatContainer: React.FC<ChatContainerProps> = ({ className, onBack }) => {
     if (!selectedUser?._id) return;
 
     // Initialize Socket.IO connection
-    socketRef.current = io("https://chatapp-r2c3.onrender.com", {
+    socketRef.current = io("https://chatapp-jwtsecret.up.railway.app", {
       reconnection: true,
       reconnectionAttempts: 5,
       reconnectionDelay: 1000,
