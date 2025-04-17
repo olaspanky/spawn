@@ -3,7 +3,7 @@ import { Order } from '@/app/types/chat';
 
 
 const api = axios.create({
-  baseURL: 'https://spawnback.onrender.com/api', // Adjust to your backend URL
+  baseURL: 'https://spawnback.vercel.app/api', // Adjust to your backend URL
 });
 
 export const getUserPurchases = (token: string) =>

@@ -30,7 +30,7 @@ const CreateStoreForm: React.FC = () => {
     setError(null);
 
     try {
-      const response = await fetch('https://spawnback.onrender.com/api/store', {
+      const response = await fetch('https://spawnback.vercel.app/api/store', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

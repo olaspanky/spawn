@@ -129,7 +129,7 @@ export default function UploadPage() {
       const imageUrls = await handleImageUpload(images);
       setUploadingImages(false);
 
-      const response = await fetch('https://spawnback.onrender.com/api/items', {
+      const response = await fetch('https://spawnback.vercel.app/api/items', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

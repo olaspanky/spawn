@@ -13,7 +13,7 @@ const ChatList: React.FC<ChatListProps> = ({ onSelectChat }) => {
   useEffect(() => {
     const fetchChatRooms = async () => {
       try {
-        const response = await fetch(`https://spawnback.onrender.com/api/chat-rooms/${user?.id}`);
+        const response = await fetch(`https://spawnback.vercel.app/api/chat-rooms/${user?.id}`);
         if (response.ok) {
           const data = await response.json();
           setChatRooms(data);

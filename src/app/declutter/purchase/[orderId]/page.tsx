@@ -63,7 +63,7 @@
 //       try {
 //         if (!orderId || !token) throw new Error("Missing order ID or authentication token");
 //         setLoading(true);
-//         const response = await fetch(`https://spawnback.onrender.com/api/purchases/${orderId}`, {
+//         const response = await fetch(`https://spawnback.vercel.app/api/purchases/${orderId}`, {
 //           headers: { 
 //             "Content-Type": "application/json", 
 //             ...(token && { "x-auth-token": token }) 
@@ -109,7 +109,7 @@
 //       return;
 //     }
 //     try {
-//       const response = await fetch(`https://spawnback.onrender.com/api/purchases/${orderId}/retract-funds`, {
+//       const response = await fetch(`https://spawnback.vercel.app/api/purchases/${orderId}/retract-funds`, {
 //         method: "POST",
 //         headers: { 
 //           "Content-Type": "application/json", 
@@ -157,7 +157,7 @@
 //       return;
 //     }
 //     try {
-//       const response = await fetch(`https://spawnback.onrender.com/api/purchases/${orderId}/rate-seller`, {
+//       const response = await fetch(`https://spawnback.vercel.app/api/purchases/${orderId}/rate-seller`, {
 //         method: "POST",
 //         headers: { 
 //           "Content-Type": "application/json", 

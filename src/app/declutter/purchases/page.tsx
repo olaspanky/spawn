@@ -48,7 +48,7 @@
 //         }
 
 //         setLoading(true);
-//         const response = await fetch("https://spawnback.onrender.com/api/purchases/purchases", {
+//         const response = await fetch("https://spawnback.vercel.app/api/purchases/purchases", {
 //           headers: {
 //             "Content-Type": "application/json",
 //             "x-auth-token": token,

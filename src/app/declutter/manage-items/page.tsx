@@ -37,7 +37,7 @@ const ManageItems = () => {
       }
 
       try {
-        const response = await fetch(`https://spawnback.onrender.com/api/items/user/${user.id}`, {
+        const response = await fetch(`https://spawnback.vercel.app/api/items/user/${user.id}`, {
           headers: token ? { "x-auth-token": token } : undefined,
         });
         if (!response.ok) {
@@ -63,7 +63,7 @@ const ManageItems = () => {
     }
 
     try {
-      const response = await fetch(`https://spawnback.onrender.com/api/items/${id}`, {
+      const response = await fetch(`https://spawnback.vercel.app/api/items/${id}`, {
         method: "DELETE",
         headers: {
           "x-auth-token": token, // Token is guaranteed to be string here due to check

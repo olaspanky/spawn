@@ -52,7 +52,7 @@ const StoreDetail: React.FC = () => {
   useEffect(() => {
     const fetchStore = async () => {
       try {
-        const response = await fetch(`https://spawnback.onrender.com/api/store/${storeId}`);
+        const response = await fetch(`https://spawnback.vercel.app/api/store/${storeId}`);
         if (!response.ok) {
           throw new Error('Failed to fetch store');
         }
@@ -141,7 +141,7 @@ const StoreDetail: React.FC = () => {
     }
 
     try {
-      const response = await fetch('https://spawnback.onrender.com/api/purchases', {
+      const response = await fetch('https://spawnback.vercel.app/api/purchases', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

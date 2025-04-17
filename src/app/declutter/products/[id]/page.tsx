@@ -44,7 +44,7 @@ export default function ProductPage() {
     const fetchProduct = async () => {
       try {
         if (!id) throw new Error("Product ID is missing");
-        const response = await fetch(`https://spawnback.onrender.com/api/items/${id}`);
+        const response = await fetch(`https://spawnback.vercel.app/api/items/${id}`);
         if (!response.ok) throw new Error("Product not found");
         const data = await response.json();
 
@@ -93,7 +93,7 @@ export default function ProductPage() {
     setPaymentStatus("processing");
     setIsVerifying(true);
     try {
-      const verificationResponse = await fetch("https://spawnback.onrender.com/api/purchases/verify-payment", {
+      const verificationResponse = await fetch("https://spawnback.vercel.app/api/purchases/verify-payment", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

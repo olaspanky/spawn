@@ -36,7 +36,7 @@ const EditItem = () => {
       if (!id || !token) return;
 
       try {
-        const response = await fetch(`https://spawnback.onrender.com/api/items/${id}`, {
+        const response = await fetch(`https://spawnback.vercel.app/api/items/${id}`, {
           headers: {
             "x-auth-token": token || "", // Fallback to empty string if token is null/undefined
           },
@@ -156,7 +156,7 @@ const EditItem = () => {
         images: updatedImageUrls,
       };
 
-      const response = await fetch(`https://spawnback.onrender.com/api/items/${id}`, {
+      const response = await fetch(`https://spawnback.vercel.app/api/items/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

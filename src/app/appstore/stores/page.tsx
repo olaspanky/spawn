@@ -36,7 +36,7 @@ const Stores: React.FC = () => {
   useEffect(() => {
     const fetchStores = async () => {
       try {
-        const response = await fetch('https://spawnback.onrender.com/api/store/store'); // Corrected endpoint
+        const response = await fetch('https://spawnback.vercel.app/api/store/store'); // Corrected endpoint
         if (!response.ok) {
           throw new Error('Failed to fetch stores');
         }
