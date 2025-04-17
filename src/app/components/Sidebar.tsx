@@ -60,8 +60,9 @@ const Sidebar: React.FC<SidebarProps> = ({ onChatSelect }) => {
       <div className="overflow-y-auto w-full py-3">
         {filteredUsers.length > 0 ? (
           filteredUsers.map((user) => (
+            <div  key={user._id}>
             <button
-              key={user._id}
+             
               onClick={() => {
                 setSelectedUser(user);
                 onChatSelect(); // Trigger chat open on mobile
@@ -89,6 +90,9 @@ const Sidebar: React.FC<SidebarProps> = ({ onChatSelect }) => {
                 </div>
               </div>
             </button>
+
+            <div className="h-[0.25px] bg-gray-50 m-1"></div>
+            </div>
           ))
         ) : (
           <div className="text-center text-zinc-500 py-4">No users available</div>
