@@ -26,9 +26,9 @@ export default function ImageGallery({ images, title }: ImageGalleryProps) {
   };
 
   return (
-    <div className="lg:space-y-3 lg:max-w-4xl mx-auto p-1 lg:p-4 ">
+    <div className="lg:space-y-3 lg:max-w-4xl mx-auto lg:p-4 ">
       {/* Main Slider */}
-      <div className="relative h-[20vh] lg:w-96 w-full lg:h-[450px]  rounded-3xl overflow-hidden group">
+      <div className="relative bg-black h-[50vh] lg:w-96 w-full lg:h-[450px]   overflow-hidden group">
         <Swiper
           modules={[Navigation, Thumbs, EffectFade, Autoplay]}
           effect="fade"
@@ -49,7 +49,7 @@ export default function ImageGallery({ images, title }: ImageGalleryProps) {
           {images.map((image, index) => (
             <SwiperSlide key={index}>
               <div
-                className="relative h-[20vh] lg:h-[450px] lg:w-96 w-full cursor-zoom-in"
+                className="relative h-[50vh] lg:h-[450px] px-2 lg:w-96 w-full cursor-zoom-in"
                 onClick={() => setSelectedImage(images[activeIndex])}
               >
                 <div className="absolute inset-0  opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10" />
@@ -57,7 +57,7 @@ export default function ImageGallery({ images, title }: ImageGalleryProps) {
                   src={image}
                   alt={`${title} - Image ${index + 1}`}
                   fill
-                  className="object-contain transform transition-transform duration-500 group-hover:scale-105"
+                  className=" transform transition-transform duration-500 group-hover:scale-105"
                   priority={index === 0}
                   sizes="(max-width: 768px) 100vw, 50vw"
                 />
@@ -78,7 +78,7 @@ export default function ImageGallery({ images, title }: ImageGalleryProps) {
       </div>
 
       {/* Thumbnails */}
-      <div className="mt-3">
+      <div className="m-3 ">
         <Swiper
           modules={[Thumbs]}
           onSwiper={setThumbsSwiper}
@@ -90,7 +90,7 @@ export default function ImageGallery({ images, title }: ImageGalleryProps) {
           {images.map((image, index) => (
             <SwiperSlide key={index}>
               <motion.div
-                className="relative lg:h-20 h-12 rounded-md lg:rounded-xl overflow-hidden cursor-pointer"
+                className="relative lg:h-20 h-12  rounded-md lg:rounded-xl overflow-hidden cursor-pointer"
                 whileHover={{ scale: 1.05 }}
                 transition={{ duration: 0.2 }}
               >
@@ -129,7 +129,7 @@ export default function ImageGallery({ images, title }: ImageGalleryProps) {
               <X size={24} />
             </motion.button>
             <motion.div
-              className="relative max-w-5xl max-h-[85vh] w-full mx-4"
+              className="relative max-w-5xl max-h-[85vh] w-full "
               onClick={(e) => e.stopPropagation()}
               initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
