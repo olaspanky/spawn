@@ -76,7 +76,7 @@ const ChatPageContent: React.FC = () => {
 
 const ChatPage: React.FC = () => {
   return (
-    <Suspense fallback={<div>Loading chat...</div>}>
+    <Suspense fallback={<div>Loading chats...</div>}>
       <ChatPageContent />
     </Suspense>
   );
