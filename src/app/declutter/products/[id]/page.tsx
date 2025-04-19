@@ -372,7 +372,7 @@ initializePayment({ onSuccess, onClose });
 ) : isSeller ? (
   <Link
     href="/declutter/manage-items"
-    className="w-36 py-2 px-4 bg-gray-800 text-white font-semibold rounded-xl hover:bg-gray-700 transition-all duration-300 flex items-center justify-center text-sm"
+    className="w-auto py-2 px-4 bg-gray-800 text-white font-semibold rounded-xl hover:bg-gray-700 transition-all duration-300 flex items-center justify-center text-sm"
   >
     <PencilIcon className="mr-2 h-5 w-5" />
     Manage Item
