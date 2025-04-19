@@ -16,6 +16,8 @@ StarIcon} from "@heroicons/react/24/outline";
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { usePathname } from "next/navigation";
+import logo from "../../../public/splogo1.png";
+import Image from "next/image";
 
 interface NavbarProps {
   searchTerm: string;
@@ -184,9 +186,8 @@ export default function Navbar({ searchTerm, setSearchTerm }: NavbarProps) {
           >
             <h2 className="text-2xl font-extrabold">
               <Link href="/">
-                <div className="inline-flex items-center text-white hover:text-orange-400 transition-colors duration-300">
-                  TRADE<span className="text-orange-500">HUB</span>
-                </div>
+                <div className=" items-center text-white hover:text-orange-400 transition-colors duration-300">
+<Image src={logo} alt="logo" className="h-auto lg:w-32 w-20 " />                </div>
               </Link>
             </h2>
           </motion.div>
