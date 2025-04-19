@@ -2,7 +2,7 @@
 // import axios from "axios";
 
 // const axiosInstance = axios.create({
-//   // baseURL: process.env.NODE_ENV === "development" ? "https://chatapp-jwtsecret.up.railway.app/api" : "https://452dcdfb-45d4-413e-a5e8-39706dd532ac.us-east-1.cloud.genez.io/api",});
+//   // baseURL: process.env.NODE_ENV === "development" ? "http://localhost:5001/api" : "https://452dcdfb-45d4-413e-a5e8-39706dd532ac.us-east-1.cloud.genez.io/api",});
 //   baseURL: process.env.NODE_ENV === "development" ? "api" : "http://localhost:5173/api",});
 
 // // Add a request interceptor to include the token
@@ -24,8 +24,8 @@ import axios from "axios";
 const axiosInstance = axios.create({
   baseURL:
     process.env.NODE_ENV === "development"
-      ? "https://chatapp-jwtsecret.up.railway.app/api" // Express backend
-      : "https://chatapp-jwtsecret.up.railway.app/api",
+      ? "http://localhost:5001/api" // Express backend
+      : "http://localhost:5001/api",
   headers: { "Content-Type": "application/json" },
   withCredentials: true, // For cookies if needed
 });

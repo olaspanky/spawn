@@ -1,12 +1,11 @@
-import { useChatStore } from "../store/useChatStore";
 import { useEffect, useRef } from "react";
+import { useChatStore } from "../store/useChatStore";
+import { useAuthStore } from "../store/useAuthStore";
 import ChatHeader from "./ChatHeader";
 import MessageInput from "./MessageInput";
 import MessageSkeleton from "./skeletons/MessageSkeleton";
-import { useAuthStore } from "../store/useAuthStore";
 import { formatMessageTime } from "../lib/utils";
 import { ChatStore, AuthStore, Message } from "../types/chat";
-import io, { Socket } from "socket.io-client";
 
 interface ChatContainerProps {
   className?: string;
@@ -17,7 +16,6 @@ const ChatContainer: React.FC<ChatContainerProps> = ({ className, onBack }) => {
   const {
     messages,
     getMessages,
-    setMessages,
     isMessagesLoading,
     selectedUser,
     subscribeToMessages,
@@ -26,45 +24,21 @@ const ChatContainer: React.FC<ChatContainerProps> = ({ className, onBack }) => {
 
   const { authUser } = useAuthStore() as AuthStore;
   const messageEndRef = useRef<HTMLDivElement | null>(null);
-  const socketRef = useRef<any>(null);
-
-  
 
   useEffect(() => {
     if (!selectedUser?._id) return;
 
-    // Initialize Socket.IO connection
-    socketRef.current = io("https://chatapp-jwtsecret.up.railway.app", {
-      reconnection: true,
-      reconnectionAttempts: 5,
-      reconnectionDelay: 1000,
-    });
+    // Subscribe to real-time messages
+    const unsubscribe = subscribeToMessages;
 
-    socketRef.current.on("connect", () => {
-      console.log("Connected to socket:", socketRef.current.id);
-      socketRef.current.emit("joinChat", selectedUser._id);
-    });
-
-    socketRef.current.on("newMessage", (newMessage: any) => {
-      setMessages((prevMessages: Message[]) => [...prevMessages, newMessage as Message]); // Use functional update
-      console.log("Received new message:", newMessage);
-    });
-
-    socketRef.current.on("connect_error", (error: Error) => {
-      console.error("Socket connection error:", error.message);
-    });
-
-    socketRef.current.on("disconnect", (reason: string) => {
-      console.log("Socket disconnected:", reason);
-    });
-
-    getMessages(selectedUser._id); // Initial fetch
+    // Fetch initial messages
+    getMessages(selectedUser._id);
 
     return () => {
-      socketRef.current.disconnect();
+      unsubscribe && unsubscribe();
       unsubscribeFromMessages();
     };
-  }, [selectedUser?._id, getMessages, setMessages, unsubscribeFromMessages]);
+  }, [selectedUser?._id, getMessages, subscribeToMessages, unsubscribeFromMessages]);
 
   useEffect(() => {
     if (messageEndRef.current && messages.length > 0) {

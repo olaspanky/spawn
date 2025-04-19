@@ -34,15 +34,18 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       if (usersList.length === 0) {
         await get().getUsers();
         usersList = get().users;
+        if (usersList.length === 0) {
+          toast.error("No users available");
+          return;
+        }
       }
-
+  
       const user = usersList.find((u) => u._id === sellerId);
-
       if (!user) {
         toast.error("User not found");
         return;
       }
-
+  
       get().setSelectedUser(user);
       await get().getMessages(sellerId);
     } catch (error) {
@@ -73,45 +76,52 @@ export const useChatStore = create<ChatStore>((set, get) => ({
 
     try {
       const res = await axiosInstance.post(`/messages/send/${selectedUser._id}`, messageData);
+      
+      // Optimistically update UI
       set({ messages: [...messages, res.data] });
+      
+      // No need to manually handle socket here - backend will emit the event
     } catch (error) {
       if (axios.isAxiosError(error)) {
         toast.error(error.response?.data.message || "Failed to send message");
       } else {
         toast.error("An unexpected error occurred");
       }
+      // Optionally: Revert optimistic update if needed
     }
   },
 
   subscribeToMessages: () => {
     const { selectedUser } = get();
-    if (!selectedUser) {
-      console.error("No user selected for chat.");
+    const { socket, authUser } = useAuthStore.getState();
+  
+    if (!selectedUser || !socket || !authUser) {
+      console.error("Missing required data for message subscription");
       return;
     }
-
-    let socket = useAuthStore.getState().socket;
-    if (!socket) {
-      console.error("Socket is not available. Attempting to reconnect...");
-      useAuthStore.getState().connectSocket();
-
-      setTimeout(() => {
-        socket = useAuthStore.getState().socket;
-        if (!socket) {
-          console.error("Socket is still not available after reconnecting.");
-          return;
-        }
-        socket.on("newMessage", (newMessage: Message) => {
-          if (newMessage.senderId !== selectedUser._id) return;
-          set((state) => ({ messages: [...state.messages, newMessage] }));
+  
+    socket.off("newMessage");
+  
+    socket.on("newMessage", (newMessage: Message) => {
+      console.log("Received new message:", newMessage);
+  
+      const isRelevant =
+        (newMessage.senderId === selectedUser._id && newMessage.receiverId === authUser._id) ||
+        (newMessage.receiverId === selectedUser._id && newMessage.senderId === authUser._id);
+  
+      if (isRelevant) {
+        set((state) => {
+          if (!state.messages.some((msg) => msg._id === newMessage._id)) {
+            return { messages: [...state.messages, newMessage] };
+          }
+          return state;
         });
-      }, 2000); // Delay to allow socket reconnection
-    } else {
-      socket.on("newMessage", (newMessage: Message) => {
-        if (newMessage.senderId !== selectedUser._id) return;
-        set((state) => ({ messages: [...state.messages, newMessage] }));
-      });
-    }
+      }
+    });
+  
+    return () => {
+      socket.off("newMessage");
+    };
   },
 
   unsubscribeFromMessages: () => {

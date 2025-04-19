@@ -22,6 +22,8 @@ export interface Message {
   text?: string;
   image?: string;
   createdAt: string;
+  receiverId: string; // Added receiverId property
+
 }
 
 export interface AuthStore {
@@ -32,7 +34,7 @@ export interface AuthStore {
   isUpdatingProfile: boolean;
   isCheckingAuth: boolean;
   onlineUsers: string[];
-  socket: any; // Temporarily use `any` to bypass the error
+  socket: any | null;
   checkAuth: () => Promise<void>;
   signup: (data: { fullName: string; email: string; password: string }) => Promise<void>;
   login: (data: { email: string; password: string } | string) => Promise<void>;

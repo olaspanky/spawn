@@ -60,39 +60,40 @@ const Sidebar: React.FC<SidebarProps> = ({ onChatSelect }) => {
       <div className="overflow-y-auto w-full py-3">
         {filteredUsers.length > 0 ? (
           filteredUsers.map((user) => (
-            <div  key={user._id}>
+            <div key={user._id} className="px-2">
             <button
-             
               onClick={() => {
                 setSelectedUser(user);
-                onChatSelect(); // Trigger chat open on mobile
+                onChatSelect();
               }}
               className={`
-                w-full p-3 flex items-left lg:items-center gap-3
-                hover:bg-base-300 transition-colors
-                ${selectedUser?._id === user._id ? "bg-base-300 ring-1 ring-base-300" : ""}
+                w-full p-3 flex items-center gap-3 rounded-lg
+                hover:bg-base-200 transition-colors duration-200
+                focus:outline-none focus:ring-2 focus:ring-primary
+                ${selectedUser?._id === user._id ? "bg-base-200 ring-1 ring-base-300" : ""}
               `}
+              aria-label={`Chat with ${user.username}`}
             >
-              <div className="relative lg:mx-auto lg:mx-0">
+              <div className="relative flex-shrink-0">
                 <img
                   src={user.profilePic || "/avatar.png"}
-                  alt={user.username}
-                  className="size-12 object-cover rounded-full"
+                  alt={`${user.username}'s profile`}
+                  className="size-10 sm:size-12 object-cover rounded-full"
+                  loading="lazy"
                 />
                 {onlineUsers.includes(user._id.toString()) && (
-                  <span className="absolute bottom-0 right-0 size-3 bg-green-500 rounded-full ring-2 ring-zinc-900" />
+                  <span className="absolute bottom-0 right-0 size-3 bg-green-500 rounded-full ring-2 ring-base-100" />
                 )}
               </div>
-              <div className="block text-left min-w-0">
-                <div className="font-medium truncate">{user.username}</div>
-                <div className="text-sm text-zinc-400">
+              <div className="flex-1 min-w-0 text-left">
+                <div className="font-medium text-sm sm:text-base truncate">{user.username}</div>
+                <div className="text-xs sm:text-sm text-base-content/70">
                   {onlineUsers.includes(user._id.toString()) ? "Online" : "Offline"}
                 </div>
               </div>
             </button>
-
-            <div className="h-[0.25px] bg-gray-50 m-1"></div>
-            </div>
+            <div className="h-px bg-base-200 my-1 mx-3" />
+          </div>
           ))
         ) : (
           <div className="text-center text-zinc-500 py-4">No users available</div>

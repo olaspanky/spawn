@@ -1,15 +1,8 @@
 "use client";
 
-import { useState } from "react";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Thumbs, EffectFade, Autoplay } from "swiper/modules";
-import Image from "next/image";
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/thumbs";
-import "swiper/css/effect-fade";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, ChevronLeft, ChevronRight, ZoomIn } from "lucide-react";
+import { ChevronLeftIcon, ChevronRightIcon, XMarkIcon } from "@heroicons/react/24/outline";
 
 interface ImageGalleryProps {
   images: string[];
@@ -17,132 +10,219 @@ interface ImageGalleryProps {
 }
 
 export default function ImageGallery({ images, title }: ImageGalleryProps) {
-  const [thumbsSwiper, setThumbsSwiper] = useState<any>(null);
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+  const [isZooming, setIsZooming] = useState(false);
+  const mainImageRef = useRef<HTMLDivElement>(null);
 
-  const handleSlideChange = (swiper: any) => {
-    setActiveIndex(swiper.realIndex);
+  // Handle image navigation
+  const handleNext = () => {
+    setSelectedImageIndex((prev) => (prev + 1) % images.length);
   };
 
+  const handlePrev = () => {
+    setSelectedImageIndex((prev) => (prev - 1 + images.length) % images.length);
+  };
+
+  // Open/close lightbox
+  const toggleLightbox = (e?: React.MouseEvent) => {
+    if (e) e.stopPropagation(); // Prevent parent click from interfering
+    setIsZooming(false); // Reset zoom state before opening lightbox
+    setIsLightboxOpen(!isLightboxOpen);
+  };
+
+  // Handle thumbnail click
+  const handleThumbnailClick = (index: number) => {
+    setSelectedImageIndex(index);
+  };
+
+  // Zoom effect on hover (desktop only)
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!mainImageRef.current) return;
+    const { left, top, width, height } = mainImageRef.current.getBoundingClientRect();
+    const x = ((e.clientX - left) / width) * 100;
+    const y = ((e.clientY - top) / height) * 100;
+    mainImageRef.current.style.transformOrigin = `${x}% ${y}%`;
+    setIsZooming(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsZooming(false);
+  };
+
+  // Keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (isLightboxOpen) {
+        if (e.key === "ArrowRight") handleNext();
+        if (e.key === "ArrowLeft") handlePrev();
+        if (e.key === "Escape") setIsLightboxOpen(false);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isLightboxOpen]);
+
+  // Ensure valid images
+  const validImages = images.filter((img) => img && typeof img === "string");
+  if (validImages.length === 0) {
+    return (
+      <div className="w-full h-64 flex items-center justify-center bg-gray-200 rounded-lg">
+        <p className="text-gray-500">No images available</p>
+      </div>
+    );
+  }
+
   return (
-    <div className="lg:space-y-3 lg:max-w-4xl mx-auto lg:p-4 ">
-      {/* Main Slider */}
-      <div className="relative bg-black h-[50vh] lg:w-96 w-full lg:h-[450px]   overflow-hidden group">
-        <Swiper
-          modules={[Navigation, Thumbs, EffectFade, Autoplay]}
-          effect="fade"
-          fadeEffect={{ crossFade: true }} // Ensures full fade-out before fade-in
-          speed={800}
-          autoplay={{ delay: 5000, disableOnInteraction: false }}
-          spaceBetween={0}
-          slidesPerView={1}
-          loop={images.length > 1}
-          navigation={{
-            nextEl: ".swiper-button-next",
-            prevEl: ".swiper-button-prev",
+    <div className="w-full">
+      {/* Main Image */}
+      <div className="relative w-full aspect-[4/3] bg-gray-100 rounded-lg overflow-hidden shadow-md">
+        <div
+          className="absolute inset-0 bg-center bg-cover bg-no-repeat opacity-80"
+          style={{
+            backgroundImage: `url(${validImages[selectedImageIndex]})`,
+            filter: "blur(10px)",
           }}
-          thumbs={{ swiper: thumbsSwiper }}
-          onSlideChange={handleSlideChange}
-          className="h-full"
+        />
+        <motion.div
+          ref={mainImageRef}
+          className={`relative w-full h-full transition-transform duration-300 ${
+            isZooming ? "scale-150 cursor-zoom-in" : "scale-100 cursor-pointer"
+          }`}
+          onMouseMove={handleMouseMove}
+          onMouseLeave={handleMouseLeave}
+          onClick={toggleLightbox}
+          role="button"
+          tabIndex={0}
+          aria-label={`View ${title} image ${selectedImageIndex + 1} of ${validImages.length}`}
         >
-          {images.map((image, index) => (
-            <SwiperSlide key={index}>
-              <div
-                className="relative h-[50vh] lg:h-[450px] px-2 lg:w-96 w-full cursor-zoom-in"
-                onClick={() => setSelectedImage(images[activeIndex])}
-              >
-                <div className="absolute inset-0  opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10" />
-                <Image
-                  src={image}
-                  alt={`${title} - Image ${index + 1}`}
-                  fill
-                  className=" transform transition-transform duration-500 group-hover:scale-105"
-                  priority={index === 0}
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                />
-                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20">
-                  <ZoomIn className="w-12 h-12 text-white drop-shadow-lg" />
-                </div>
-              </div>
-            </SwiperSlide>
-          ))}
-        </Swiper>
-
-        <button className="swiper-button-prev absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm transition-all z-20 group-hover:opacity-100 opacity-0">
-          <ChevronLeft className="w-6 h-6 text-white" />
-        </button>
-        <button className="swiper-button-next absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm transition-all z-20 group-hover:opacity-100 opacity-0">
-          <ChevronRight className="w-6 h-6 text-white" />
-        </button>
+          <motion.img
+            key={validImages[selectedImageIndex]}
+            src={validImages[selectedImageIndex]}
+            alt={`${title} - Image ${selectedImageIndex + 1}`}
+            className="w-full h-full object-contain relative z-10"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.3 }}
+            onError={(e) => {
+              e.currentTarget.src = "/fallback-image.jpg"; // Replace with your fallback image
+            }}
+          />
+        </motion.div>
+        {/* Navigation Arrows (Visible on Desktop) */}
+        {validImages.length > 1 && (
+          <div className="hidden lg:flex absolute inset-y-0 left-0 items-center">
+            <button
+              onClick={handlePrev}
+              className="p-2 bg-gray-900/50 text-white rounded-full hover:bg-gray-900 transition-colors"
+              aria-label="Previous image"
+            >
+              <ChevronLeftIcon className="h-6 w-6" />
+            </button>
+          </div>
+        )}
+        {validImages.length > 1 && (
+          <div className="hidden lg:flex absolute inset-y-0 right-0 items-center">
+            <button
+              onClick={handleNext}
+              className="p-2 bg-gray-900/50 text-white rounded-full hover:bg-gray-900 transition-colors"
+              aria-label="Next image"
+            >
+              <ChevronRightIcon className="h-6 w-6" />
+            </button>
+          </div>
+        )}
       </div>
 
-      {/* Thumbnails */}
-      <div className="m-3 ">
-        <Swiper
-          modules={[Thumbs]}
-          onSwiper={setThumbsSwiper}
-          spaceBetween={12}
-          slidesPerView={5}
-          className="!h-20"
-          watchSlidesProgress
-        >
-          {images.map((image, index) => (
-            <SwiperSlide key={index}>
-              <motion.div
-                className="relative lg:h-20 h-12  rounded-md lg:rounded-xl overflow-hidden cursor-pointer"
-                whileHover={{ scale: 1.05 }}
-                transition={{ duration: 0.2 }}
-              >
-                <Image
-                  src={image}
-                  alt={`Thumbnail ${index + 1}`}
-                  fill
-                  className={`object-cover bg-gray-700 transition-opacity duration-300 ${
-                    activeIndex === index ? "opacity-100" : "opacity-60"
-                  }`}
-                  sizes="(max-width: 768px) 20vw, 10vw"
-                />
-                <div className="absolute inset-0  hover:bg-black/0 transition-colors" />
-              </motion.div>
-            </SwiperSlide>
+      {/* Thumbnail Navigation */}
+      {validImages.length > 1 && (
+        <div className="flex  justify-center mt-4 lg:mt-0 lg:ml-4 gap-2 overflow-x-auto lg:overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
+          {validImages.map((img, index) => (
+            <motion.button
+              key={img}
+              className={`flex-shrink-0 w-20 h-20 rounded-md overflow-hidden border-2 ${
+                selectedImageIndex === index ? "border-orange-500" : "border-transparent"
+              } hover:border-orange-400 transition-colors`}
+              onClick={() => handleThumbnailClick(index)}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              aria-label={`Select image ${index + 1}`}
+            >
+              <img
+                src={img}
+                alt={`${title} - Thumbnail ${index + 1}`}
+                className="w-full h-full object-contain"
+                loading="lazy"
+                onError={(e) => {
+                  e.currentTarget.src = "/fallback-image.jpg"; // Replace with your fallback image
+                }}
+              />
+            </motion.button>
           ))}
-        </Swiper>
-      </div>
+        </div>
+      )}
 
-      {/* Modal */}
-      <AnimatePresence mode="wait">
-        {selectedImage && (
+      {/* Lightbox */}
+      <AnimatePresence>
+        {isLightboxOpen && (
           <motion.div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 backdrop-blur-md"
+            className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={() => setSelectedImage(null)}
+            onClick={toggleLightbox}
           >
-            <motion.button
-              onClick={() => setSelectedImage(null)}
-              className="absolute top-6 right-6 text-white/80 hover:text-white bg-white/10 hover:bg-white/20 rounded-full p-2 backdrop-blur-sm transition-all"
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-            >
-              <X size={24} />
-            </motion.button>
             <motion.div
-              className="relative max-w-5xl max-h-[85vh] w-full "
+              className="relative max-w-4xl w-full h-[90vh]"
               onClick={(e) => e.stopPropagation()}
-              initial={{ scale: 0.95, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.95, opacity: 0 }}
-              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              initial={{ scale: 0.8 }}
+              animate={{ scale: 1 }}
+              exit={{ scale: 0.8 }}
             >
-              <Image
-                src={selectedImage}
-                alt="Enlarged view"
-                width={1200}
-                height={800}
-                className="rounded-2xl object-contain w-full h-full "
+              <div
+                className="absolute inset-0 bg-center bg-cover bg-no-repeat opacity-80"
+                style={{
+                  backgroundImage: `url(${validImages[selectedImageIndex]})`,
+                  filter: "blur(20px)",
+                }}
               />
+              <button
+                onClick={(e) => toggleLightbox(e)}
+                className="absolute top-4 right-4 p-2 bg-gray-900/50 text-white rounded-full hover:bg-gray-900 transition-colors z-20"
+                aria-label="Close lightbox"
+              >
+                <XMarkIcon className="h-6 w-6" />
+              </button>
+              <motion.img
+                key={validImages[selectedImageIndex]}
+                src={validImages[selectedImageIndex]}
+                alt={`${title} - Image ${selectedImageIndex + 1}`}
+                className="w-full h-full object-contain relative z-10"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.3 }}
+                onError={(e) => {
+                  e.currentTarget.src = "/fallback-image.jpg"; // Replace with your fallback image
+                }}
+              />
+              {validImages.length > 1 && (
+                <>
+                  <button
+                    onClick={handlePrev}
+                    className="absolute top-1/2 left-4 p-2 bg-gray-900/50 text-white rounded-full hover:bg-gray-900 transition-colors z-20"
+                    aria-label="Previous image"
+                  >
+                    <ChevronLeftIcon className="h-8 w-8" />
+                  </button>
+                  <button
+                    onClick={handleNext}
+                    className="absolute top-1/2 right-4 p-2 bg-gray-900/50 text-white rounded-full hover:bg-gray-900 transition-colors z-20"
+                    aria-label="Next image"
+                  >
+                    <ChevronRightIcon className="h-8 w-8" />
+                  </button>
+                </>
+              )}
             </motion.div>
           </motion.div>
         )}
