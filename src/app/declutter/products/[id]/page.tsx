@@ -154,12 +154,16 @@ setShowPaymentModal(true);
 setPaymentStatus("idle");
 initializePayment({ onSuccess, onClose });
 
-  };  const handleChatClick = (e: React.MouseEvent) => {
+  };  
+  
+  const handleChatClick = (e: React.MouseEvent) => {
     if (!user) {
       e.preventDefault();
       setShowPopup(true);
     }
-  };  const handleLogin = () => {
+  };
+  
+  const handleLogin = () => {
     setShowPopup(false);
     router.push("/declutter/login");
   };  const handleCancel = () => {
@@ -167,8 +171,11 @@ initializePayment({ onSuccess, onClose });
   };  const handleModalClose = () => {
     setShowPaymentModal(false);
     setPaymentStatus("idle");
-  };  const sellerId = product?.seller._id;
-  const isSeller = user && sellerId === user.id;  if (loading)
+  };  
+  const sellerId = product?.seller._id;
+  const isSeller = user && sellerId === user.id;
+  
+  if (loading)
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="animate-pulse text-center">
@@ -273,16 +280,16 @@ initializePayment({ onSuccess, onClose });
                     Pay Now
                   </button>
                   {!isSeller && (
-                    <Link href={user ? `/pages/chat?sellerId=${sellerId}` : "#"} passHref>
-                      <button
-                        onClick={handleChatClick}
-                        className="flex-1 py-3 px-6 bg-gray-100 text-gray-900 font-semibold rounded-lg hover:bg-gray-200 transition-all duration-300 flex items-center justify-center"
-                      >
-                        <MessageSquare className="h-5 w-5 mr-2" />
-                        Chat Now
-                      </button>
-                    </Link>
-                  )}
+            <Link href={user ? `/pages/chat?sellerId=${sellerId}` : "#"} passHref>
+              <button
+                onClick={handleChatClick}
+                className="p-2 rounded-full hover:bg-gray-100 transition-colors"
+                aria-label={user ? "Chat with seller" : "Login to chat"}
+              >
+                <MessageSquare className="h-6 w-6 text-black" />
+              </button>
+            </Link>
+          )}
                 </div>
               ) : isSeller ? (
                 <Link href="/declutter/manage-items" className="block">

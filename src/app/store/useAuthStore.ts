@@ -11,10 +11,10 @@ import { AuthStore } from "../types/chat";
 const BASE_URL =
   process.env.NEXT_PUBLIC_API_URL ||
   (process.env.NODE_ENV === "development"
-    ? "http://localhost:5001/api"
-    : "http://localhost:5001/api");
+    ? "https://chatapp-jwtsecret.up.railway.app/api"
+    : "https://chatapp-jwtsecret.up.railway.app/api");
 
-const SOCKET_URL = "http://localhost:5001";
+const SOCKET_URL = "https://chatapp-jwtsecret.up.railway.app";
 
 export const useAuthStore = create<AuthStore>((set, get) => {
   // Load from localStorage (if in browser)
