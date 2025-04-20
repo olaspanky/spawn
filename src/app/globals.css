@@ -53,3 +53,56 @@ background-color: white;
 .animate-slideDown {
   animation: slideDown 0.3s ease-out forwards;
 }
+
+/* Fix Paystack iframe styling */
+.paystack-form {
+  background: transparent !important;
+}
+
+.paystack-modal {
+  background: rgba(0, 0, 0, 0.5) !important;
+  backdrop-filter: blur(5px) !important;
+}
+
+.paystack-close {
+  color: white !important;
+  z-index: 10000 !important;
+  background: rgba(0, 0, 0, 0.5) !important;
+  border-radius: 50% !important;
+  width: 30px !important;
+  height: 30px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* Ensure Paystack form is properly positioned */
+.paystack-dialog {
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  width: auto !important;
+  max-width: 500px !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+/* Style the Paystack form elements */
+.paystack-form .form-group {
+  margin-bottom: 15px !important;
+}
+
+.paystack-form .form-control {
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 8px !important;
+  padding: 12px 15px !important;
+  font-size: 16px !important;
+}
+
+.paystack-form .btn-paystack {
+  background-color: #00ba70 !important;
+  border-radius: 8px !important;
+  padding: 12px !important;
+  font-weight: 600 !important;
+  text-transform: none !important;
+}

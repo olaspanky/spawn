@@ -19,7 +19,7 @@ const LayoutWrapper = ({ children }: { children: React.ReactNode }) => {
       {!isLoginOrSignupOrProduct && (
         <Navbar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
       )}
-      <main className="flex-1 pt-[88px] pb-[80px] md:pb-0">
+      <main className="flex-1 lg:pt-[88px] pb-[80px] md:pb-0">
         {children}
       </main>
     </div>

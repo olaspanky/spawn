@@ -336,41 +336,41 @@ export default function Navbar({ searchTerm, setSearchTerm }: NavbarProps) {
         </div>
 
         {/* Mobile Tabs (Only on Homepage) */}
-        {pathname === "/" && (
-          <div className="md:hidden flex justify-between items-center px-4 py-2 border-t border-gray-700">
-            <div className="relative flex w-full">
-              <Link href="/" className="flex-1">
-                <button
-                  onClick={() => setActiveTab("Hub")}
-                  className={`w-full py-2 text-center font-medium text-sm transition-colors duration-300 ${
-                    activeTab === "Hub" ? "text-orange-400" : "text-gray-300"
-                  }`}
-                >
-                  Hub
-                </button>
-              </Link>
-              <Link href="/appstore/stores" className="flex-1">
-                <button
-                  onClick={() => setActiveTab("Market")}
-                  className={`w-full py-2 text-center font-medium text-sm transition-colors duration-300 ${
-                    activeTab === "Market" ? "text-orange-400" : "text-gray-300"
-                  }`}
-                >
-                  Market
-                </button>
-              </Link>
-              <motion.div
-                className="absolute bottom-0 h-1 bg-orange-400 rounded-full"
-                initial={false}
-                animate={{
-                  x: activeTab === "Hub" ? "0%" : "100%",
-                  width: "50%",
-                }}
-                transition={{ duration: 0.3, ease: "easeInOut" }}
-              />
-            </div>
-          </div>
-        )}
+        {(pathname === "/" || pathname === "/appstore/stores") && (
+  <div className="md:hidden flex justify-between items-center px-4 lg:py-2 border-t border-gray-700">
+    <div className="relative flex w-full">
+      <Link href="/" className="flex-1">
+        <button
+          onClick={() => setActiveTab("Hub")}
+          className={`w-full py-2 text-center font-medium text-sm transition-colors duration-300 ${
+            activeTab === "Hub" ? "text-orange-400" : "text-gray-300"
+          }`}
+        >
+          Hub
+        </button>
+      </Link>
+      <Link href="/appstore/stores" className="flex-1">
+        <button
+          onClick={() => setActiveTab("Market")}
+          className={`w-full py-2 text-center font-medium text-sm transition-colors duration-300 ${
+            activeTab === "Market" ? "text-orange-400" : "text-gray-300"
+          }`}
+        >
+          Market
+        </button>
+      </Link>
+      <motion.div
+        className="absolute bottom-0 h-1 bg-orange-400 rounded-full"
+        initial={false}
+        animate={{
+          x: activeTab === "Hub" ? "0%" : "100%",
+          width: "50%",
+        }}
+        transition={{ duration: 0.3, ease: "easeInOut" }}
+      />
+    </div>
+  </div>
+)}
       </div>
 
       {/* Bottom Navbar (Mobile Only, Hidden on Dynamic Product Routes) */}

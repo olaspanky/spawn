@@ -130,7 +130,7 @@ export default function Home() {
       {/* Main Content */}
       <div className="relative z-10">
         {/* Featured Items Slider */}
-        <div className="relative overflow-hidden bg-white backdrop-blur-md  border-b border-white/5 shadow-md font-semibold">
+        <div className="relative overflow-hidden mt-[88px] lg:mt-0 bg-white backdrop-blur-md  border-b border-white/5 shadow-md font-semibold">
           <div
             ref={featuredItemsRef}
             className="container mx-auto px-4 py-8 md:py-16"

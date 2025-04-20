@@ -31,7 +31,7 @@ const font2 = Roboto_Slab({
 });
 
 export const metadata: Metadata = {
- title: "DeclutterNG",
+ title: "SpawnHub",
  description: "Sell your clutter easily",
 };
 
