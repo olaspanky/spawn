@@ -12,7 +12,8 @@ import {
   ChevronDownIcon,
   HomeIcon,
   UserIcon,
-StarIcon} from "@heroicons/react/24/outline";
+  StarIcon,
+} from "@heroicons/react/24/outline";
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { usePathname } from "next/navigation";
@@ -29,6 +30,8 @@ export default function Navbar({ searchTerm, setSearchTerm }: NavbarProps) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isMobileAccountOpen, setIsMobileAccountOpen] = useState(false);
   const [storeId, setStoreId] = useState<string | null>(null);
+  const [isNavVisible, setIsNavVisible] = useState(true); // Track navbar visibility
+  const [lastScrollY, setLastScrollY] = useState(0); // Track last scroll position
   const dropdownRef = useRef<HTMLDivElement>(null);
   const mobileAccountRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
@@ -37,6 +40,26 @@ export default function Navbar({ searchTerm, setSearchTerm }: NavbarProps) {
   const now = new Date();
   const hour = now.getHours();
   const greeting = hour < 12 ? "Good Morning" : hour < 18 ? "Good Afternoon" : "Good Evening";
+
+  // Scroll handling for hiding/showing navbar
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+
+      if (currentScrollY > lastScrollY && currentScrollY > 100) {
+        // Scrolling down and past 100px, hide navbar
+        setIsNavVisible(false);
+      } else if (currentScrollY < lastScrollY || currentScrollY < 100) {
+        // Scrolling up or near top, show navbar
+        setIsNavVisible(true);
+      }
+
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [lastScrollY]);
 
   // Fetch user's stores
   useEffect(() => {
@@ -159,7 +182,9 @@ export default function Navbar({ searchTerm, setSearchTerm }: NavbarProps) {
             {isMobile ? (
               <StarIcon className="size-6 text-white hover:text-orange-400 transition-colors duration-300" />
             ) : (
-              <div className="inline-flex items-center px-4 py-2 lg:px-6 lg:py-2.5 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-xl hover:from-orange-600 hover:to-orange-700 transition-all duration-300 shadow-md hover:shadow-lg">
+              <div className="inline-flex items-center px-4 py-2 lg:px-6 lg:py-2.5 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-xl hover:from-orange-600 hover:to-orange-700 transition-all duration-300 shadow обратно
+
+-md hover:shadow-lg">
                 Declutter
                 <StarIcon className="ml-2 size-5" />
               </div>
@@ -174,9 +199,13 @@ export default function Navbar({ searchTerm, setSearchTerm }: NavbarProps) {
   const hideBottomNavbar = pathname.startsWith("/declutter/products/");
 
   return (
-    <nav className="font-sans">
+    <nav className="font-sans h-full w-full">
       {/* Top Navbar (Desktop) */}
-      <div className="sticky top-0 z-50 bg-gray-900/95 backdrop-blur-lg shadow-lg">
+      <div
+        className={`fixed top-0 left-0 right-0 z-50 bg-gray-900/95 backdrop-blur-lg shadow-lg transition-transform duration-300 ${
+          isNavVisible ? "translate-y-0" : "-translate-y-full"
+        }`}
+      >
         <div className="container mx-auto px-4 lg:px-8 py-4 lg:py-5 flex items-center justify-between">
           {/* Logo */}
           <motion.div
@@ -186,8 +215,9 @@ export default function Navbar({ searchTerm, setSearchTerm }: NavbarProps) {
           >
             <h2 className="text-2xl font-extrabold">
               <Link href="/">
-                <div className=" items-center text-white hover:text-orange-400 transition-colors duration-300">
-<Image src={logo} alt="logo" className="h-auto lg:w-32 w-20 " />                </div>
+                <div className="items-center text-white hover:text-orange-400 transition-colors duration-300">
+                  <Image src={logo} alt="logo" className="h-auto lg:w-32 w-20" />
+                </div>
               </Link>
             </h2>
           </motion.div>
