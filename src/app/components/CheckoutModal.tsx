@@ -8,7 +8,6 @@ import {
   CreditCard,
   ShieldCheck,
   XCircle,
-  RotateCw,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -40,7 +39,6 @@ export default function CheckoutModal({
   const [isVerifying, setIsVerifying] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState<"paystack" | "bank-transfer">("paystack");
   const [isPaystackModalOpen, setIsPaystackModalOpen] = useState(false);
-  const [showGoBack, setShowGoBack] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
 
   // Detect click outside modal to close
@@ -59,23 +57,6 @@ export default function CheckoutModal({
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isOpen, onClose]);
-
-  // Timeout to show Go Back fallback after 15 seconds
-  useEffect(() => {
-    let timeout: NodeJS.Timeout;
-
-    if (paymentStatus === "processing" && isPaystackModalOpen) {
-      timeout = setTimeout(() => {
-        setShowGoBack(true);
-      }, 15000); // 15 seconds
-    } else {
-      setShowGoBack(false);
-    }
-
-    return () => {
-      clearTimeout(timeout);
-    };
-  }, [paymentStatus, isPaystackModalOpen]);
 
   const config = {
     reference: new Date().getTime().toString(),
@@ -148,8 +129,13 @@ export default function CheckoutModal({
   return (
     <AnimatePresence>
       {isOpen && (
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-40 overflow-y-auto flex items-center justify-center min-h-screen">
-          <div className=" lg:mt-[88px] px-4 py-8 text-center sm:block sm:p-0">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 z-40 overflow-y-auto flex items-center justify-center min-h-screen"
+        >
+          <div className="lg:mt-[88px] px-4 py-8 text-center sm:block sm:p-0">
             {/* Backdrop */}
             <motion.div
               initial={{ opacity: 0 }}
@@ -167,10 +153,13 @@ export default function CheckoutModal({
               exit={{ scale: 0.95, y: 20 }}
               className="inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-xl transform transition-all sm:align-middle sm:max-w-lg w-full relative z-50"
             >
-              <div className="bg-white px-6 py-4">
+              <div className="bg-white px-6 py-4 relative">
                 <div className="flex justify-between items-center mb-4">
                   <h3 className="text-xl font-bold text-gray-900">Complete Your Purchase</h3>
-                  <button onClick={onClose} className="p-1 rounded-full hover:bg-gray-100 transition-colors">
+                  <button
+                    onClick={onClose}
+                    className="p-1 rounded-full hover:bg-gray-100 transition-colors"
+                  >
                     <X className="h-5 w-5 text-gray-500" />
                   </button>
                 </div>
@@ -242,21 +231,20 @@ export default function CheckoutModal({
 
                 {paymentStatus === "processing" && isPaystackModalOpen && (
                   <div className="flex flex-col items-center justify-center py-8 relative">
+                    {/* Cancel Button */}
+                    <button
+                      onClick={handleCancelPaystack}
+                      className="absolute top-[-10px] right-[-10px] flex items-center gap-2 px-4 py-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors z-[1000] shadow-lg"
+                      aria-label="Cancel Payment"
+                    >
+                      <XCircle className="h-5 w-5" />
+                      <span className="text-sm font-medium">Cancel</span>
+                    </button>
                     <Loader2 className="h-12 w-12 text-orange-500 animate-spin mb-4" />
                     <h4 className="text-lg font-semibold text-gray-900 mb-2">Paystack Payment</h4>
                     <p className="text-gray-600 text-center max-w-sm">
                       Please complete your payment in the Paystack popup window.
                     </p>
-
-                    {showGoBack && (
-                      <button
-                        onClick={handleCancelPaystack}
-                        className="mt-6 px-4 py-2 bg-gray-800 text-white rounded-lg flex items-center gap-2 hover:bg-gray-700"
-                      >
-                        <RotateCw className="h-4 w-4" />
-                        Go Back
-                      </button>
-                    )}
                   </div>
                 )}
 
