@@ -4,21 +4,33 @@ import React, { useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import toast from "react-hot-toast";
 
-interface AddStoreItemFormProps {
+interface EditStoreItemFormProps {
   storeId: string;
-  onItemAdded: () => void;
+  item: {
+    _id: string;
+    name: string;
+    measurement: {
+      unit: string;
+      value: number;
+      customUnit?: string;
+    };
+    price: number;
+    image?: string;
+  };
+  onItemUpdated: () => void;
+  onCancel: () => void;
 }
 
-const AddStoreItemForm: React.FC<AddStoreItemFormProps> = ({ storeId, onItemAdded }) => {
+const EditStoreItemForm: React.FC<EditStoreItemFormProps> = ({ storeId, item, onItemUpdated, onCancel }) => {
   const { token } = useAuth();
   const [formData, setFormData] = useState({
-    name: "",
+    name: item?.name,
     measurement: {
-      unit: "bag",
-      value: "",
-      customUnit: "",
+      unit: item?.measurement?.unit,
+      value: item?.measurement?.value?.toString(),
+      customUnit: item?.measurement?.customUnit || "",
     },
-    price: "",
+    price: item.price.toString(),
   });
   const [image, setImage] = useState<File | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -70,8 +82,8 @@ const AddStoreItemForm: React.FC<AddStoreItemFormProps> = ({ storeId, onItemAdde
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!token) {
-      setError("Please log in to add items");
-      toast.error("Please log in to add items");
+      setError("Please log in to edit items");
+      toast.error("Please log in to edit items");
       return;
     }
 
@@ -105,6 +117,7 @@ const AddStoreItemForm: React.FC<AddStoreItemFormProps> = ({ storeId, onItemAdde
     try {
       const payload = new FormData();
       payload.append("storeId", storeId);
+      payload.append("itemId", item._id);
       payload.append("itemName", name);
       payload.append("measurement", JSON.stringify({
         unit: measurement.unit,
@@ -116,8 +129,8 @@ const AddStoreItemForm: React.FC<AddStoreItemFormProps> = ({ storeId, onItemAdde
         payload.append("image", image);
       }
 
-      const response = await fetch("https://spawnback.vercel.app/api/store/item", {
-        method: "POST",
+      const response = await fetch(`https://spawnback.vercel.app/api/store/item/${item._id}`, {
+        method: "PUT",
         headers: {
           "x-auth-token": token,
         },
@@ -126,21 +139,15 @@ const AddStoreItemForm: React.FC<AddStoreItemFormProps> = ({ storeId, onItemAdde
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to add item");
+        throw new Error(errorData.message || "Failed to update item");
       }
 
       const data = await response.json();
-      console.log("Add item response:", data);
-      toast.success("Item added successfully!");
-      onItemAdded();
-      setFormData({
-        name: "",
-        measurement: { unit: "bag", value: "", customUnit: "" },
-        price: "",
-      });
-      setImage(null);
+      console.log("Update item response:", data);
+      toast.success("Item updated successfully!");
+      onItemUpdated();
     } catch (err: any) {
-      console.error("Add item error:", err);
+      console.error("Edit item error:", err);
       setError(err.message);
       toast.error(err.message);
     } finally {
@@ -150,7 +157,7 @@ const AddStoreItemForm: React.FC<AddStoreItemFormProps> = ({ storeId, onItemAdde
 
   return (
     <div className="p-4 bg-white rounded-lg shadow-md">
-      <h3 className="text-lg font-semibold text-gray-800 mb-4">Add Item to Store</h3>
+      <h3 className="text-lg font-semibold text-gray-800 mb-4">Edit Item</h3>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label htmlFor="name" className="block text-sm font-medium text-gray-700">
@@ -233,6 +240,9 @@ const AddStoreItemForm: React.FC<AddStoreItemFormProps> = ({ storeId, onItemAdde
           <label htmlFor="image" className="block text-sm font-medium text-gray-700">
             Item Image
           </label>
+          {item.image && (
+            <img src={item?.image} alt={item?.name} className="w-32 h-32 object-cover mb-2 rounded" />
+          )}
           <input
             type="file"
             id="image"
@@ -242,18 +252,27 @@ const AddStoreItemForm: React.FC<AddStoreItemFormProps> = ({ storeId, onItemAdde
           />
         </div>
         {error && <p className="text-red-500 text-sm">{error}</p>}
-        <button
-          type="submit"
-          disabled={loading || !token}
-          className={`w-full py-2 px-4 bg-orange-600 text-white rounded-md ${
-            loading || !token ? "opacity-50 cursor-not-allowed" : "hover:bg-orange-700"
-          }`}
-        >
-          {loading ? "Adding..." : "Add Item"}
-        </button>
+        <div className="flex space-x-4">
+          <button
+            type="submit"
+            disabled={loading || !token}
+            className={`py-2 px-4 bg-orange-600 text-white rounded-md ${
+              loading || !token ? "opacity-50 cursor-not-allowed" : "hover:bg-orange-700"
+            }`}
+          >
+            {loading ? "Updating..." : "Update Item"}
+          </button>
+          <button
+            type="button"
+            onClick={onCancel}
+            className="py-2 px-4 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400"
+          >
+            Cancel
+          </button>
+        </div>
       </form>
     </div>
   );
 };
 
-export default AddStoreItemForm;
+export default EditStoreItemForm;

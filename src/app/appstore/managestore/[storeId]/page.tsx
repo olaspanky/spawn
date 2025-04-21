@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { useAuth } from "../../../context/AuthContext";
 import AddStoreItemForm from "../../../components/store/AddStoreItemForm";
+import EditStoreItemForm from "../../../components/store/EditStoreItemForm";
 import toast from "react-hot-toast";
 
 interface StoreItem {
@@ -15,6 +16,7 @@ interface StoreItem {
     customUnit?: string;
   };
   price: number;
+  image?: string;
 }
 
 interface Store {
@@ -31,11 +33,10 @@ const ManageStorePage: React.FC = () => {
   const [items, setItems] = useState<StoreItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [editingItem, setEditingItem] = useState<StoreItem | null>(null);
 
-  // Fetch store details and items
   useEffect(() => {
     if (!storeId || !token) {
-      console.log("Missing storeId or token", { storeId, token });
       setError("Please log in to manage a store");
       setLoading(false);
       return;
@@ -53,12 +54,9 @@ const ManageStorePage: React.FC = () => {
           throw new Error(`Failed to fetch store: ${storeResponse.status}`);
         }
         const storeData = await storeResponse.json();
-        console.log("Store API response:", storeData);
-        console.log("Store items:", storeData.items);
         setStore(storeData);
         setItems(storeData.items || []);
       } catch (err: any) {
-        console.error("Fetch error:", err);
         setError(err.message);
         toast.error(err.message);
       } finally {
@@ -69,25 +67,16 @@ const ManageStorePage: React.FC = () => {
     fetchStoreData();
   }, [storeId, token]);
 
-  // Check if user owns the store
   useEffect(() => {
     if (!user || !store) return;
 
     const ownerId = store.owner?._id;
-    console.log(
-      `Checking ownership: store.owner: ${JSON.stringify(
-        store.owner
-      )}, ownerId: ${ownerId}, user.id: ${user.id}, match: ${ownerId === user.id}`
-    );
-
     if (!ownerId || ownerId !== user.id) {
-      console.log("Ownership check failed, redirecting...");
       toast.error("You do not have access to manage this store");
       router.push("/");
     }
   }, [user, store, router]);
 
-  // Handle item added (refresh items list)
   const handleItemAdded = async () => {
     try {
       const response = await fetch(`https://spawnback.vercel.app/api/store/${storeId}`, {
@@ -99,32 +88,49 @@ const ManageStorePage: React.FC = () => {
         throw new Error("Failed to refresh store data");
       }
       const storeData = await response.json();
-      console.log("Refreshed items:", storeData.items);
       setItems(storeData.items || []);
       toast.success("Item added successfully");
     } catch (err: any) {
-      console.error("Item add error:", err);
       toast.error(err.message);
     }
   };
 
-  // Handle item deletion (mocked endpoint)
-  const handleDeleteItem = async (itemId: string) => {
+  const handleItemUpdated = async () => {
     try {
-      // TODO: Confirm correct delete endpoint
-      const response = await fetch(`https://spawnback.vercel.app/api/stores/item/${itemId}`, {
-        method: "DELETE",
+      const response = await fetch(`https://spawnback.vercel.app/api/store/${storeId}`, {
         headers: {
           "x-auth-token": token!,
         },
       });
       if (!response.ok) {
-        throw new Error("Failed to delete item");
+        throw new Error("Failed to refresh store data");
+      }
+      const storeData = await response.json();
+      setItems(storeData.items || []);
+      setEditingItem(null);
+      toast.success("Item updated successfully");
+    } catch (err: any) {
+      toast.error(err.message);
+    }
+  };
+
+  const handleDeleteItem = async (itemId: string) => {
+    try {
+      const response = await fetch(`https://spawnback.vercel.app/api/store/item/${itemId}`, {
+        method: "DELETE",
+        headers: {
+          "x-auth-token": token!,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ storeId }), // Include storeId in body for authorization
+      });
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to delete item");
       }
       setItems(items.filter((item) => item._id !== itemId));
       toast.success("Item deleted successfully");
     } catch (err: any) {
-      console.error("Delete error:", err);
       toast.error(err.message);
     }
   };
@@ -157,9 +163,18 @@ const ManageStorePage: React.FC = () => {
     <div className="container mx-auto p-6">
       <h1 className="text-2xl font-bold text-gray-800 mb-6">Manage Store: {store.name}</h1>
 
-      {/* Add Item Form */}
+      {/* Add or Edit Item Form */}
       <div className="mb-8">
-        <AddStoreItemForm storeId={store._id} onItemAdded={handleItemAdded} />
+        {editingItem ? (
+          <EditStoreItemForm
+            storeId={store._id}
+            item={editingItem}
+            onItemUpdated={handleItemUpdated}
+            onCancel={() => setEditingItem(null)}
+          />
+        ) : (
+          <AddStoreItemForm storeId={store._id} onItemAdded={handleItemAdded} />
+        )}
       </div>
 
       {/* Store Items List */}
@@ -172,22 +187,37 @@ const ManageStorePage: React.FC = () => {
             {items.map((item) => (
               <div
                 key={item._id}
-                className="p-4 bg-white rounded-lg shadow-md flex justify-between items-center"
+                className="p-4 bg-white rounded-lg shadow-md flex items-center space-x-4"
               >
-                <div>
+                {item.image && (
+                  <img
+                    src={item.image}
+                    alt={item.name}
+                    className="w-16 h-16 object-cover rounded"
+                  />
+                )}
+                <div className="flex-1">
                   <h3 className="text-lg font-medium text-gray-800">{item.name}</h3>
                   <p className="text-gray-600">
-                    Measurement: {item.measurement.value}{" "}
-                    {item.measurement.unit === "custom" ? item.measurement.customUnit : item.measurement.unit}
+                    Measurement: {item?.measurement?.value}{" "}
+                    {item?.measurement?.unit === "custom" ? item?.measurement?.customUnit : item?.measurement?.unit}
                   </p>
                   <p className="text-gray-600">Price: ₦{item.price.toFixed(2)}</p>
                 </div>
-                <button
-                  onClick={() => handleDeleteItem(item._id)}
-                  className="py-1 px-3 bg-red-600 text-white rounded-md hover:bg-red-700"
-                >
-                  Delete
-                </button>
+                <div className="flex space-x-2">
+                  <button
+                    onClick={() => setEditingItem(item)}
+                    className="py-1 px-3 bg-yellow-600 text-white rounded-md hover:bg-yellow-700"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    onClick={() => handleDeleteItem(item._id)}
+                    className="py-1 px-3 bg-red-600 text-white rounded-md hover:bg-red-700"
+                  >
+                    Delete
+                  </button>
+                </div>
               </div>
             ))}
           </div>

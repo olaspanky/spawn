@@ -11,7 +11,19 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
+// interface CheckoutModalProps {
+//     cart: CartItem[];
+//     storeId: string;
+//     totalPrice: number;
+//     onClose: () => void;
+//     onSuccess: (orderId: string) => void;
+//   }
+
 interface CheckoutModalProps {
+    cart: any;
+    storeId: string;
+    store: any
+    totalPrice: number;
   isOpen: boolean;
   onClose: () => void;
   product: {

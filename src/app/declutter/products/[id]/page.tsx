@@ -316,6 +316,10 @@ export default function ProductPage() {
           }}
           user={user}
           token={token}
+          cart={[]} // Provide an empty cart or appropriate cart data
+          storeId="default-store-id" // Replace with the actual store ID
+          store={{ name: "Default Store", location: "Default Location" }} // Replace with actual store details
+          totalPrice={product.price} // Use the product price as the total price
           onSuccess={(orderId) => {
             router.push(`/declutter/purchase/${orderId}`);
           }}

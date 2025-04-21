@@ -87,7 +87,7 @@
 //   // Handlers (unchanged except for handleScheduleMeeting URL)
 //   const handleReleaseFunds = async () => {
 //     try {
-//       const response = await fetch(`http://localhost:5000/api/purchases/${orderId}/release-funds`, {
+//       const response = await fetch(`https://spawnback.vercel.app/api/purchases/${orderId}/release-funds`, {
 //         method: "POST",
 //         headers: { 
 //           "Content-Type": "application/json", 
@@ -134,7 +134,7 @@
 //       return;
 //     }
 //     try {
-//       const response = await fetch(`http://localhost:5000/api/purchases/${orderId}/schedule-meeting`, {
+//       const response = await fetch(`https://spawnback.vercel.app/api/purchases/${orderId}/schedule-meeting`, {
 //         method: "POST",
 //         headers: { 
 //           "Content-Type": "application/json", 

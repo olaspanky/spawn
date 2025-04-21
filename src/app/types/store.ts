@@ -9,6 +9,14 @@ export interface Owner {
     name: string;
     price: number;
     quantity: number;
+    image?: string; // Add image field
+    measurement?: {
+      unit: string;
+      value: number;
+      customUnit?: string;
+    };
+    available: boolean;
+    description?: string; // Add description field  
     // Add image or other fields if needed later
   }
   
