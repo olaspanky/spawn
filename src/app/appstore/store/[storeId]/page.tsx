@@ -18,6 +18,7 @@ import {
   FiInfo
 } from "react-icons/fi";
 import CheckoutModal from "../../../components/CheckoutModal";
+import Navbar from "../../../components/Nav"; // Import Navbar component
 
 interface StoreItem {
   _id: string;
@@ -303,13 +304,17 @@ const StoreDetail: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50 font-sans">
       {/* Hero Header with Parallax */}
+       <div className="hidden lg:flex items-center"> 
+            <Navbar searchTerm="" setSearchTerm={() => {}} />
+      
+            </div>
       <motion.div 
         ref={headerRef}
         style={{
           opacity: headerOpacity,
           scale: headerScale
         }}
-        className="relative h-[40vh] overflow-hidden lg:mt-[88px]"
+        className="relative h-[40vh] overflow-hidden "
       >
         <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/70 z-10" />
         <Image
@@ -454,14 +459,14 @@ const StoreDetail: React.FC = () => {
                   </div>
                   
                   <p className="text-gray-500 text-sm mb-3">
-                    {item.measurement.value}{" "}
-                    {item.measurement.unit === "custom"
-                      ? item.measurement.customUnit
-                      : item.measurement.unit}
+                    {item?.measurement?.value}{" "}
+                    {item?.measurement?.unit === "custom"
+                      ? item?.measurement?.customUnit
+                      : item?.measurement?.unit}
                   </p>
                   
                   <p className="text-gray-600 text-sm line-clamp-2 mb-4">
-                    {item.description}
+                    {item?.description}
                   </p>
                   
                   <div className="mt-4">
@@ -602,16 +607,16 @@ const StoreDetail: React.FC = () => {
                                 <span>₦{item.price.toLocaleString()}</span>
                                 <span className="mx-2">•</span>
                                 <span>
-                                  {item.measurement.value}{" "}
-                                  {item.measurement.unit === "custom"
-                                    ? item.measurement.customUnit
-                                    : item.measurement.unit}
+                                  {item?.measurement?.value}{" "}
+                                  {item?.measurement?.unit === "custom"
+                                    ? item?.measurement?.customUnit
+                                    : item?.measurement?.unit}
                                 </span>
                               </div>
                             </div>
                             <div className="flex flex-col items-end">
                               <span className="font-semibold text-indigo-700">
-                                ₦{(item.price * item.quantity).toLocaleString()}
+                                ₦{(item?.price * item?.quantity).toLocaleString()}
                               </span>
                               
                               <div className="flex items-center mt-2">
@@ -619,7 +624,7 @@ const StoreDetail: React.FC = () => {
                                   whileHover={{ scale: 1.1 }}
                                   whileTap={{ scale: 0.9 }}
                                   onClick={() =>
-                                    removeFromCart(item.itemId)
+                                    removeFromCart(item?.itemId)
                                   }
                                   className="p-1.5 rounded-full text-red-500 hover:bg-red-50"
                                 >
@@ -632,7 +637,7 @@ const StoreDetail: React.FC = () => {
                                     whileTap={{ scale: 0.9 }}
                                     onClick={() =>
                                       handleQuantityChange(
-                                        store.items.find((i) => i._id === item.itemId)!,
+                                        store.items.find((i) => i._id === item?.itemId)!,
                                         -1
                                       )
                                     }
@@ -646,7 +651,7 @@ const StoreDetail: React.FC = () => {
                                     whileTap={{ scale: 0.9 }}
                                     onClick={() =>
                                       handleQuantityChange(
-                                        store.items.find((i) => i._id === item.itemId)!,
+                                        store.items.find((i) => i._id === item?.itemId)!,
                                         1
                                       )
                                     }
