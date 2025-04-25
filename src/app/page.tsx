@@ -42,6 +42,8 @@ export default function Home() {
   const [favorites, setFavorites] = useState<string[]>([]);
   const [filterOpen, setFilterOpen] = useState(true);
   const featuredItemsRef = useRef<HTMLDivElement>(null);
+  // Add reference for the listings section
+  const listingsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const fetchItems = async () => {
@@ -120,123 +122,148 @@ export default function Home() {
     );
   };
 
+  // Handler for smooth scrolling to the listings section
+  const handleShopMagicClick = () => {
+    listingsRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
   if (loading) return <LoadingState />;
   if (error) return <ErrorState error={error} />;
 
   return (
     <div className="min-h-screen font-sans antialiased relative">
-      {/* Background Layers */}
-    
       {/* Main Content */}
       <div className="relative z-10">
         {/* Featured Items Slider */}
-        <div className="relative overflow-hidden mt-[88px] lg:mt-0 bg-white backdrop-blur-md  border-b border-white/5 shadow-md font-semibold">
-          <div
-            ref={featuredItemsRef}
-            className="container mx-auto px-4 py-8 md:py-16"
-            onMouseEnter={pauseSlider}
-            onMouseLeave={pauseSlider}
-          >
-            <div className="relative h-[380px] sm:h-[420px] md:h-[520px] w-full overflow-hidden rounded-2xl border shadow-xl shadow-black/50">
-              {featuredItems.map((item, index) => (
-                <div
-                  key={item._id}
-                  className={`absolute inset-0 transition-all duration-700 ease-in-out flex flex-col md:flex-row items-center ${
-                    index === currentFeaturedIndex ? "opacity-100 z-10 scale-100" : "opacity-0 z-0 scale-95"
-                  }`}
-                >
-                  <div className="w-full md:w-1/2 p-4 md:p-10 text-white z-10 order-2 md:order-1">
-                    <div className="mb-2 md:mb-3">
-                      <span className="text-[10px] sm:text-xs md:text-xs uppercase tracking-widest text-black  bg-gray-900/20 px-2 py-1 md:px-3 md:py-1 rounded-full">
-                        {item.category}
-                      </span>
-                    </div>
-                    <h1 className="text-lg sm:text-xl md:text-5xl font-extrabold leading-tight bg-clip-text  text-black bg-gradient-to-r from-white to-gray-200 mb-2 md:mb-4 truncate w-full">
-                      {item.title}
-                    </h1>
-                    <p className="text-base sm:text-lg md:text-2xl font-medium text-[#36454F]  mb-3 md:mb-6">
-                      ₦{item.price.toLocaleString()}
-                    </p>
-                    <div className="flex items-center mb-4 md:mb-8">
-                      <MapPinIcon className="h-4 w-4 md:h-5 md:w-5 text-black mr-1.5 md:mr-2" />
-                      <span className=" text-xs sm:text-sm md:text-base text-black truncate">
-                        {item.location}
-                      </span>
-                    </div>
-                    <Link href={`/declutter/products/${item._id}`}>
-                      <button className="bg-[#36454F] text-white px-4 py-2 sm:px-6 sm:py-2.5 md:px-6 md:py-3 rounded-xl text-xs sm:text-sm md:text-sm font-semibold tracking-wide transition-all duration-300 shadow-md md:shadow-lg hover:shadow-gray-600/40 hover:scale-105">
-                        View Details
-                      </button>
-                    </Link>
-                  </div>
-                  <div className="w-full md:w-1/2 relative h-[220px] sm:h-[260px] md:h-[400px] overflow-hidden rounded-t-2xl md:rounded-lg mt-0 md:mt-0 md:mx-6 order-1 md:order-2">
-                    {item.images && item.images.length > 0 ? (
-                      <div className="relative w-full h-full group">
-                        <Image
-                          src={item.images[0]}
-                          alt={item.title}
-                          fill
-                          className="object-cover transition-transform duration-1000 ease-out group-hover:scale-115"
-                          sizes="(max-width: 640px) 100vw, (max-width: 768px) 80vw, 50vw"
-                          priority={index === 0}
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-300"></div>
-                        <button
-                          className="absolute bottom-3 right-3 bg-black/80 backdrop-blur-md rounded-full p-2 hover:bg-black/95 transition-all duration-200"
-                          onClick={(e) => toggleFavorite(e, item._id)}
-                          aria-label={favorites.includes(item._id) ? "Remove from favorites" : "Add to favorites"}
-                        >
-                          {favorites.includes(item._id) ? (
-                            <HeartIconSolid className="h-5 w-5 text-red-500" />
-                          ) : (
-                            <HeartIcon className="h-5 w-5 text-white" />
-                          )}
-                        </button>
-                      </div>
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center bg-gray-900/50 backdrop-blur-md">
-                        <ShoppingCartIcon className="h-12 w-12 md:h-16 md:w-16 text-gray-500" />
-                      </div>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-            <div className="flex justify-center mt-4 md:mt-6 space-x-2 md:space-x-3">
-              {featuredItems.map((_, index) => (
+        <div className="relative overflow-hidden mt-[44px] lg:mt-0 backdrop-blur-md border-b border-white/5 shadow-md font-semibold">
+          <div className="container mx-auto px-4 py-4 md:py-3 flex flex-col md:flex-row items-start">
+            {/* Left Section: Creative Slogan with White Background */}
+            <div className="w-full md:w-1/2 lg:p-4 md:p-6 flex flex-col justify-center h-[190px] sm:h-[210px] md:h-[260px] relative overflow-hidden">
+              {/* Subtle Background Pattern */}
+              <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=%2220%22 height=%2220%22 viewBox=%220 0 20 20%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cpath d=%22M10 10a2 2 0 100-4 2 2 0 000 4z%22 fill=%22%23000000%22 fill-opacity=%220.05%22/%3E%3C/svg%3E')] opacity-20"></div>
+              
+              {/* Glowing Decorative Element */}
+              <div className="absolute top-0 left-0 w-32 h-32 bg-gradient-to-r from-blue-500/30 to-purple-500/30 rounded-full filter blur-3xl animate-pulse"></div>
+              
+              <div className="relative z-10">
+                <h2 className="text-xl sm:text-2xl md:text-4xl font-extrabold bg-clip-text text-transparent W bg-gradient-to-r from-cyan-400 via-fuchsia-500 to-rose-500 mb-2 md:mb-4 animate-slideIn">
+                  Unleash Epic Finds
+                </h2>
+                <p className="text-sm sm:text-base md:text-lg text-gray-700 font-medium mb-4 md:mb-6 animate-slideInDelay drop-shadow-md">
+                  Dive into a world of unique treasures, sustainable shopping, and stories waiting to be told.
+                </p>
                 <button
-                  key={index}
-                  onClick={() => setCurrentFeaturedIndex(index)}
-                  className={`transition-all duration-300 ease-in-out rounded-full ${
-                    index === currentFeaturedIndex
-                      ? "h-2 w-6 md:h-2 md:w-8  bg-black"
-                      : "h-2 w-2  bg-white hover:bg-white/50"
-                  }`}
-                  aria-label={`Go to slide ${index + 1}`}
-                />
-              ))}
+                  onClick={handleShopMagicClick}
+                  className="relative bg-gradient-to-r from-cyan-600 to-fuchsia-600 text-white px-4 py-2 sm:px-5 sm:py-2.5 md:px-6 md:py-3 rounded-xl text-xs sm:text-sm md:text-base font-semibold tracking-wide transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 w-fit overflow-hidden group"
+                >
+                  <span className="relative z-10">Shop the Magic</span>
+                  <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 to-fuchsia-400 opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
+                </button>
+              </div>
+            </div>
+
+            {/* Right Section: Featured Container with Drop Transition */}
+            <div
+              ref={featuredItemsRef}
+              className="w-full md:w-1/2 flex flex-col items-end mt-4 md:mt-0"
+              onMouseEnter={pauseSlider}
+              onMouseLeave={pauseSlider}
+            >
+              <div className="relative h-[45vh] md:h-[260px] w-full overflow-hidden rounded-xl border shadow-md bg-white">
+                {featuredItems.map((item, index) => (
+                  <div
+                    key={item._id}
+                    className={`absolute inset-0 transition-all duration-700 ease-in-out flex flex-col md:flex-row items-center ${
+                      index === currentFeaturedIndex
+                        ? "opacity-100 z-10 translate-y-0"
+                        : "opacity-0 z-0 translate-y-[-100%]"
+                    }`}
+                  >
+                    <div className="w-full md:w-1/2 p-2 md:p-5 z-10 order-2 md:order-1">
+                      <div className="mb-1 md:mb-2">
+                        <span className="text-[8px] sm:text-[10px] md:text-xs uppercase tracking-widest text-black bg-gray-200/30 px-1.5 py-0.5 md:px-2 md:py-1 rounded-full backdrop-blur-sm">
+                          {item.category}
+                        </span>
+                      </div>
+                      <h1 className="text-sm sm:text-base md:text-3xl font-extrabold leading-tight bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-cyan-600 mb-1 md:mb-2 truncate w-full drop-shadow">
+                        {item.title}
+                      </h1>
+                      <p className="text-sm sm:text-base md:text-xl font-medium text-gray-700 mb-2 md:mb-4">
+                        ₦{item.price.toLocaleString()}
+                      </p>
+                      <div className="flex items-center mb-2 md:mb-4">
+                        <MapPinIcon className="h-3 w-3 md:h-4 md:w-4 text-cyan-600 mr-1 md:mr-1.5" />
+                        <span className="text-[10px] sm:text-xs md:text-sm text-gray-700 truncate">
+                          {item.location}
+                        </span>
+                      </div>
+                      <Link href={`/declutter/products/${item._id}`}>
+                        <button className="relative bg-gradient-to-r from-gray-800 to-gray-700 text-white px-3 py-1 sm:px-4 sm:py-1.5 md:px-5 md:py-2 rounded-xl text-[10px] sm:text-xs md:text-sm font-semibold tracking-wide transition-all duration-300 shadow-md hover:shadow-lg hover:scale-105 overflow-hidden group">
+                          <span className="relative z-10">View Details</span>
+                          <div className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-fuchsia-500 opacity-0 group-hover:opacity-30 transition-opacity duration-300"></div>
+                        </button>
+                      </Link>
+                    </div>
+                    <div className="w-full md:w-1/2 relative h-full sm:h-[130px] md:h-[200px] overflow-hidden rounded-t-2xl md:rounded-lg mt-0 md:mt-0 md:mx-3 order-1 md:order-2">
+                      {item.images && item.images.length > 0 ? (
+                        <div className="relative w-full h-full group">
+                          {/* Blurred background image */}
+                          <div
+                            className="absolute inset-0 bg-cover bg-center filter blur-lg"
+                            style={{ backgroundImage: `url(${item.images[0]})` }}
+                          ></div>
+                          {/* Main image */}
+                          <Image
+                            src={item.images[0]}
+                            alt={item.title}
+                            fill
+                            className="object-contain relative z-10 transition-transform duration-1000 ease-out group-hover:scale-110 drop-shadow-lg"
+                            sizes="(max-width: 640px) 100vw, h-[40vh] (max-width: 768px) 80vw, 50vw"
+                            priority={index === 0}
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-300 z-10"></div>
+                          <button
+                            className="absolute bottom-2 right-2 bg-black/80 backdrop-blur-md rounded-full p-1.5 hover:bg-black/95 transition-all duration-200 z-20 shadow-md hover:shadow-cyan-500/50"
+                            onClick={(e) => toggleFavorite(e, item._id)}
+                            aria-label={favorites.includes(item._id) ? "Remove from favorites" : "Add to favorites"}
+                          >
+                            {favorites.includes(item._id) ? (
+                              <HeartIconSolid className="h-4 w-4 text-rose-500" />
+                            ) : (
+                              <HeartIcon className="h-4 w-4 text-cyan-600" />
+                            )}
+                          </button>
+                        </div>
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center bg-gray-200/50 backdrop-blur-md">
+                          <ShoppingCartIcon className="h-8 w-8 md:h-12 md:w-12 text-gray-500" />
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="flex justify-center mt-2 md:mt-4 space-x-1.5 md:space-x-2">
+                {featuredItems.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setCurrentFeaturedIndex(index)}
+                    className={`transition-all duration-300 ease-in-out rounded-full ${
+                      index === currentFeaturedIndex
+                        ? "h-1.5 w-4 md:h-1.5 md:w-6 bg-cyan-600 shadow-md"
+                        : "h-1.5 w-1.5 bg-gray-400 hover:bg-gray-600"
+                    }`}
+                    aria-label={`Go to slide ${index + 1}`}
+                  />
+                ))}
+              </div>
             </div>
           </div>
         </div>
 
         {/* Sticky Filter Section */}
-        <div className=" z-30 bg-white backdrop-blur-md border-b border-white/10 shadow-md">
+        <div className="z-30 backdrop-blur-md border-b border-white/10 shadow-md">
           <div className="mx-auto px-4 lg:px-5 py-2 md:py-6 max-w-7xl">
-            {/* <div className="flex justify-between items-center mb-1 lg:mb-4">
-              <h3 className="text-lg md:text-xl font-semibold text-white">Filter Categories</h3>
-              <button
-                onClick={() => setFilterOpen(!filterOpen)}
-                className="text-gray-300 dark:text-black dark:hover:text-gray-500 hover:text-white transition-colors"
-                aria-label={filterOpen ? "Collapse filters" : "Expand filters"}
-              >
-                {filterOpen ? (
-                  <ChevronUpIcon className="h-6 w-6" />
-                ) : (
-                  <ChevronDownIcon className="h-6 w-6" />
-                )}
-              </button>
-            </div> */}
-
             {filterOpen && (
               <div className="overflow-x-auto py-2 md:py-3 scrollbar-hidden relative flex flex-col lg:flex-row justify-between gap-5 w-full animate-fadeIn">
                 <div className="flex space-x-3 md:space-x-4 min-w-min">
@@ -246,8 +273,8 @@ export default function Home() {
                       onClick={() => setSelectedCategory(category)}
                       className={`px-4 py-2 rounded-full text-xs md:text-sm transition-all duration-300 whitespace-nowrap ${
                         selectedCategory === category
-                          ? "bg-[#36454F] text-white  scale-105 shadow-lg shadow-gray-600/20"
-                          : "bg-white/5  hover:bg-white/10 border text-black border-white/10 hover:border-white/20"
+                          ? "bg-[#36454F] text-white scale-105 shadow-lg shadow-gray-600/20"
+                          : "bg-white/5 hover:bg-white/10 border text-black border-white/10 hover:border-white/20"
                       }`}
                     >
                       {category}
@@ -302,12 +329,15 @@ export default function Home() {
         </div>
 
         {/* Listings Section */}
-        <div className="relative z-10 container mx-auto px-4 py-6 md:py-8 mb-8">
+        <div
+          ref={listingsRef}
+          className="relative z-10 container mx-auto px-4 py-6 md:py-8 mb-8"
+        >
           {filteredItems.length === 0 ? (
             <EmptyState searchTerm={searchTerm} />
           ) : (
             <>
-              <h3 className="text-lg md:text-xl font-semibold text-black  mb-4 md:mb-6 flex justify-between items-center">
+              <h3 className="text-lg md:text-xl font-semibold text-black mb-4 md:mb-6 flex justify-between items-center">
                 <span>
                   {selectedCategory !== "All" ? `${selectedCategory} Items` : "All Listings"}
                   <span className="ml-2 text-sm text-black-400">({filteredItems.length})</span>
@@ -329,7 +359,7 @@ export default function Home() {
         </div>
 
         {/* Footer */}
-        <footer className="relative z-10   border-t  bg-white backdrop-blur-md">
+        <footer className="relative z-10 border-t bg-white backdrop-blur-md">
           <div className="container mx-auto px-4 py-6">
             <div className="flex flex-col md:flex-row justify-between items-center">
               <div className="mb-4 md:mb-0">
@@ -360,6 +390,7 @@ export default function Home() {
   );
 }
 
+// ... (ListingCard, LoadingState, ErrorState, EmptyState components remain unchanged)
 const ListingCard = ({
   item,
   isFavorite,

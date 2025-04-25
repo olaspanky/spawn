@@ -1,12 +1,6 @@
 "use client";
 import { useState, useRef, useEffect, useCallback } from "react";
-import {
-  CheckCircle,
-  X,
-  Loader2,
-  CreditCard,
-  ShieldCheck,
-} from "lucide-react";
+import { CheckCircle, X, Loader2, CreditCard, ShieldCheck } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface CheckoutModalProps {
@@ -25,7 +19,7 @@ interface CheckoutModalProps {
     id: string;
     email: string;
   } | null;
-  token: string | null; // Ensure token is passed as a prop
+  token: string | null;
   onSuccess: (orderId: string) => void;
 }
 
@@ -39,7 +33,6 @@ export default function CheckoutModal({
 }: CheckoutModalProps) {
   const [paymentStatus, setPaymentStatus] = useState<"idle" | "processing" | "success" | "failed">("idle");
   const [isVerifying, setIsVerifying] = useState(false);
-  const [paymentMethod, setPaymentMethod] = useState<"paystack" | "bank-transfer">("paystack");
   const modalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -67,7 +60,7 @@ export default function CheckoutModal({
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'x-auth-token': token || '', // Pass the token in the headers
+            'x-auth-token': token || '',
           },
           body: JSON.stringify({
             email: user?.email || "user@example.com",
@@ -96,20 +89,17 @@ export default function CheckoutModal({
   return (
     <AnimatePresence>
       {isOpen && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="fixed inset-0 z-40 overflow-y-auto flex items-center justify-center min-h-screen"
-        >
-          <div className="lg:mt-[88px] px-4 py-8 text-center sm:block sm:p-0">
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-black/70 backdrop-blur-sm z-40"
-              aria-hidden="true"
-            />
+        <div className="fixed inset-0 z-40 overflow-y-auto">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/70 backdrop-blur-sm z-40"
+            aria-hidden="true"
+          />
+          
+          {/* Wrapper div */}
+          <div className="flex items-center justify-center min-h-screen p-4">
             <motion.div
               ref={modalRef}
               initial={{ scale: 0.95, y: 20 }}
@@ -119,51 +109,25 @@ export default function CheckoutModal({
             >
               <div className="bg-white px-6 py-4 relative">
                 <div className="flex justify-between items-center mb-4">
-                  <h3 className="text-xl font-bold text-gray-900">Complete Your Purchase</h3>
                   <button
                     onClick={onClose}
                     className="p-1 rounded-full hover:bg-gray-100 transition-colors"
                   >
                     <X className="h-5 w-5 text-gray-500" />
                   </button>
+                  <h3 className="text-xl font-bold text-gray-900 mx-auto">Complete Your Purchase</h3>
+                  <div className="w-6"></div> {/* Spacer for alignment */}
                 </div>
+                
                 {paymentStatus === "idle" && (
                   <>
                     <div className="bg-gray-50 rounded-xl p-4 flex justify-between">
                       <h4 className="font-medium text-gray-900">{product.title}</h4>
                       <p className="font-semibold text-orange-600">₦{product.price.toLocaleString()}</p>
                     </div>
-                    <div className="mt-6">
-                      <h4 className="font-medium mb-2 text-gray-900">Payment Method</h4>
-                      <div className="grid grid-cols-2 gap-3">
-                        <button
-                          onClick={() => setPaymentMethod("paystack")}
-                          className={`p-4 border rounded-xl flex flex-col items-center ${
-                            paymentMethod === "paystack" ? "border-orange-500 bg-orange-50" : "border-gray-200"
-                          }`}
-                        >
-                          <CreditCard className="h-6 w-6 text-orange-600 mb-1" />
-                          <span className="text-sm">Card Payment</span>
-                        </button>
-                        <button
-                          onClick={() => setPaymentMethod("bank-transfer")}
-                          className={`p-4 border rounded-xl flex flex-col items-center ${
-                            paymentMethod === "bank-transfer" ? "border-orange-500 bg-orange-50" : "border-gray-200"
-                          }`}
-                        >
-                          <ShieldCheck className="h-6 w-6 text-orange-600 mb-1" />
-                          <span className="text-sm">Bank Transfer</span>
-                        </button>
-                      </div>
-                    </div>
-                    {paymentMethod === "bank-transfer" && (
-                      <div className="bg-gray-50 p-4 mt-4 rounded-xl text-sm space-y-2">
-                        <p><strong>Bank Name:</strong> Your Bank</p>
-                        <p><strong>Account Name:</strong> Your Business</p>
-                        <p><strong>Account Number:</strong> 1234567890</p>
-                        <p className="text-xs text-gray-500">Include your email as the payment reference.</p>
-                      </div>
-                    )}
+                    
+                   
+
                     <button
                       onClick={handlePaystackPayment}
                       disabled={isVerifying}
@@ -186,6 +150,7 @@ export default function CheckoutModal({
                     </div>
                   </>
                 )}
+                
                 {paymentStatus === "processing" && (
                   <div className="py-8 flex flex-col items-center justify-center">
                     <Loader2 className="h-12 w-12 text-orange-500 animate-spin mb-4" />
@@ -193,6 +158,7 @@ export default function CheckoutModal({
                     <p className="text-gray-600">Please wait while we redirect you to complete your payment...</p>
                   </div>
                 )}
+                
                 {paymentStatus === "failed" && (
                   <div className="py-8 flex flex-col items-center justify-center">
                     <div className="h-16 w-16 bg-red-100 rounded-full flex items-center justify-center mb-4">
@@ -211,7 +177,7 @@ export default function CheckoutModal({
               </div>
             </motion.div>
           </div>
-        </motion.div>
+        </div>
       )}
     </AnimatePresence>
   );

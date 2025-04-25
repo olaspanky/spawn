@@ -1,5 +1,4 @@
 "use client";
-
 import { useAuth } from "../context/AuthContext";
 import Link from "next/link";
 import {
@@ -21,278 +20,189 @@ import logo from "../../../public/splogo1.png";
 import Image from "next/image";
 
 interface NavbarProps {
-  searchTerm: string;
-  setSearchTerm: (term: string) => void;
+  searchTerm?: string;
+  setSearchTerm?: (term: string) => void;
 }
 
 export default function Navbar({ searchTerm, setSearchTerm }: NavbarProps) {
   const { token, logout, user } = useAuth();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [isMobileAccountOpen, setIsMobileAccountOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [storeId, setStoreId] = useState<string | null>(null);
-  const [isNavVisible, setIsNavVisible] = useState(true); // Track navbar visibility
-  const [lastScrollY, setLastScrollY] = useState(0); // Track last scroll position
+  const [lastScrollY, setLastScrollY] = useState(0);
+  const [isVisible, setIsVisible] = useState(true);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const mobileAccountRef = useRef<HTMLDivElement>(null);
+  const mobileMenuRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
-  const [activeTab, setActiveTab] = useState("Hub");
 
-  const now = new Date();
-  const hour = now.getHours();
-  const greeting = hour < 12 ? "Good Morning" : hour < 18 ? "Good Afternoon" : "Good Evening";
-
-  // Scroll handling for hiding/showing navbar
+  // Scroll behavior
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
-
       if (currentScrollY > lastScrollY && currentScrollY > 100) {
-        // Scrolling down and past 100px, hide navbar
-        setIsNavVisible(false);
-      } else if (currentScrollY < lastScrollY || currentScrollY < 100) {
-        // Scrolling up or near top, show navbar
-        setIsNavVisible(true);
+        setIsVisible(false);
+      } else {
+        setIsVisible(true);
       }
-
       setLastScrollY(currentScrollY);
     };
 
-    window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, [lastScrollY]);
 
-  // Fetch user's stores
+  // Fetch user stores
   useEffect(() => {
-    if (!token || !user) {
-      setStoreId(null);
-      return;
-    }
-    const fetchUserStores = async () => {
+    if (!token || !user) return;
+    
+    const fetchStores = async () => {
       try {
-        const response = await fetch(`https://spawnback.vercel.app/api/store/user/${user.id}`, {
-          headers: {
-            "x-auth-token": token,
-          },
+        const res = await fetch(`https://spawnback.vercel.app/api/store/user/${user.id}`, {
+          headers: { "x-auth-token": token }
         });
-        if (response.ok) {
-          const stores = await response.json();
-          const ownedStore = stores.find((store: { _id: string; owner: string | { _id: string } }) => {
-            const ownerId = typeof store.owner === "string" ? store.owner : store.owner?._id;
-            return ownerId === user.id;
-          });
-          setStoreId(ownedStore ? ownedStore._id : null);
-        } else {
-          setStoreId(null);
+        if (res.ok) {
+          const stores = await res.json();
+          const ownedStore = stores.find((store: any) => 
+            (typeof store.owner === "string" ? store.owner : store.owner?._id) === user.id
+          );
+          setStoreId(ownedStore?._id || null);
         }
-      } catch (err) {
-        console.error("Failed to fetch user stores:", err);
-        setStoreId(null);
+      } catch (error) {
+        console.error("Failed to fetch stores:", error);
       }
     };
-    fetchUserStores();
+
+    fetchStores();
   }, [token, user]);
 
-  const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
-  const closeDropdown = () => setIsDropdownOpen(false);
-  const toggleMobileAccount = () => setIsMobileAccountOpen(!isMobileAccountOpen);
-  const closeMobileAccount = () => setIsMobileAccountOpen(false);
-
-  const Greeting = () => (
-    <motion.div
-      className="flex items-center space-x-2 text-sm sm:text-base text-white"
-      initial={{ opacity: 0, y: -10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-    >
-      <span>{greeting}</span>
-      <span className="font-medium">{user?.name || "User"}</span>
-    </motion.div>
-  );
-
-  const dropdownVariants = {
-    hidden: { opacity: 0, y: 10, scale: 0.95 },
-    visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.2, ease: "easeOut" } },
-    exit: { opacity: 0, y: 10, scale: 0.95, transition: { duration: 0.15 } },
-  };
-
-  const mobileAccountVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.3, ease: "easeOut" } },
-    exit: { opacity: 0, y: 20, transition: { duration: 0.2, ease: "easeIn" } },
-  };
-
-  const buttonVariants = {
-    initial: { opacity: 1 },
-    hover: { scale: 1.05, transition: { duration: 0.2 } },
-  };
-
-  const isAppStore = pathname.includes("/appstore");
-  const isDeclutter = pathname.includes("/declutter") || pathname === "/";
-
+  // Close menus when clicking outside
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node) && isDropdownOpen) {
-        closeDropdown();
+    const handleClickOutside = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setIsDropdownOpen(false);
       }
-      if (
-        mobileAccountRef.current &&
-        !mobileAccountRef.current.contains(event.target as Node) &&
-        isMobileAccountOpen
-      ) {
-        closeMobileAccount();
+      if (mobileMenuRef.current && !mobileMenuRef.current.contains(e.target as Node)) {
+        setIsMobileMenuOpen(false);
       }
     };
+
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [isDropdownOpen, isMobileAccountOpen]);
+  }, []);
 
-  const MarketDeclutterButton = ({ isMobile = false }: { isMobile?: boolean }) => (
-    <AnimatePresence mode="wait">
-      {isDeclutter && (
-        <motion.div
-          key="market"
-          variants={buttonVariants}
-          initial="initial"
-          animate="initial"
-          whileHover="hover"
-          className={isMobile ? "flex" : ""}
-        >
-          <Link href="/appstore/stores">
-            {isMobile ? (
-              <StarIcon className="size-6 text-white hover:text-orange-400 transition-colors duration-300" />
-            ) : (
-              <div className="inline-flex items-center px-4 py-2 lg:px-6 lg:py-2.5 bg-gray-800 text-white rounded-xl hover:bg-gray-700 transition-all duration-300 shadow-md hover:shadow-lg">
-                Market
-                <StarIcon className="ml-2 size-5" />
-              </div>
-            )}
-          </Link>
-        </motion.div>
-      )}
-      {isAppStore && (
-        <motion.div
-          key="declutter"
-          variants={buttonVariants}
-          initial="initial"
-          animate="initial"
-          whileHover="hover"
-          className={isMobile ? "flex" : ""}
-        >
-          <Link href="/">
-            {isMobile ? (
-              <StarIcon className="size-6 text-white hover:text-orange-400 transition-colors duration-300" />
-            ) : (
-              <div className="inline-flex items-center px-4 py-2 lg:px-6 lg:py-2.5 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-xl hover:from-orange-600 hover:to-orange-700 transition-all duration-300 shadow обратно
+  const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
+  const closeAllMenus = () => {
+    setIsDropdownOpen(false);
+    setIsMobileMenuOpen(false);
+  };
 
--md hover:shadow-lg">
-                Declutter
-                <StarIcon className="ml-2 size-5" />
-              </div>
-            )}
-          </Link>
-        </motion.div>
-      )}
-    </AnimatePresence>
+  const NavButton = ({ href, children }: { href: string; children: React.ReactNode }) => (
+    <Link href={href} onClick={closeAllMenus}>
+      <motion.div 
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+        className="px-4 py-2 rounded-lg hover:bg-gray-800 transition-colors"
+      >
+        {children}
+      </motion.div>
+    </Link>
   );
 
-  // Hide bottom navbar on dynamic product routes
-  const hideBottomNavbar = pathname.startsWith("/declutter/products/");
+  const MobileNavItem = ({ href, icon: Icon, label }: { 
+    href: string; 
+    icon: React.ComponentType<{ className?: string }>;
+    label: string;
+  }) => (
+    <Link href={href} onClick={closeAllMenus}>
+      <div className="flex items-center p-4 hover:bg-gray-800 rounded-lg transition-colors">
+        <Icon className="h-5 w-5 mr-3" />
+        <span>{label}</span>
+      </div>
+    </Link>
+  );
 
   return (
-    <nav className="font-sans h-full w-full">
-      {/* Top Navbar (Desktop) */}
-      <div
-        className={`fixed top-0 left-0 right-0 z-50 bg-gray-900/95 backdrop-blur-lg shadow-lg transition-transform duration-300 ${
-          isNavVisible ? "translate-y-0" : "-translate-y-full"
+    <header className="fixed w-full z-50">
+      {/* Desktop Navbar */}
+      <nav 
+        className={`hidden md:block text-white bg-gray-900/95 backdrop-blur-md border-b border-gray-800 transition-transform duration-300 ${
+          isVisible ? "translate-y-0" : "-translate-y-full"
         }`}
       >
-        <div className="container mx-auto px-4 lg:px-8 py-4 lg:py-5 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-6 py-3 flex justify-between items-center">
           {/* Logo */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, ease: "easeOut" }}
-          >
-            <h2 className="text-2xl font-extrabold">
-              <Link href="/">
-                <div className="items-center text-white hover:text-orange-400 transition-colors duration-300">
-                  <Image src={logo} alt="logo" className="h-auto lg:w-32 w-20" />
-                </div>
-              </Link>
-            </h2>
-          </motion.div>
+          <Link href="/" className="flex items-center">
+            <Image 
+              src={logo} 
+              alt="Logo" 
+              width={120}
+              height={40}
+              className="h-10 w-auto"
+            />
+          </Link>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-6 lg:space-x-8">
+          {/* Navigation */}
+          <div className="flex items-center space-x-6">
             {token ? (
               <>
-                <Greeting />
-                <motion.div whileHover={{ scale: 1.1 }} transition={{ duration: 0.2 }}>
-                  <Link href="/notifications" aria-label="Notifications">
-                    <BellIcon className="h-6 w-6 text-white hover:text-orange-400 transition-colors duration-300" />
-                  </Link>
-                </motion.div>
-                <MarketDeclutterButton />
-                <motion.div variants={buttonVariants} initial="initial" whileHover="hover">
-                  <Link href="/declutter/manage-items">
-                    <div className="inline-flex items-center px-4 py-2 lg:px-6 lg:py-2.5 bg-gray-800 text-white rounded-xl hover:bg-gray-700 transition-all duration-300 shadow-md hover:shadow-lg">
-                      Sell Item
-                      <ShoppingCartIcon className="ml-2 h-5 w-5" />
-                    </div>
-                  </Link>
-                </motion.div>
+                <NavButton href="/declutter/manage-items">Sell Items</NavButton>
+                <NavButton href="/appstore/stores">Marketplace</NavButton>
+                
+                {/* Notifications */}
+                <button className="p-2 rounded-full hover:bg-gray-800 transition-colors">
+                  <BellIcon className="h-5 w-5" />
+                </button>
+
+                {/* Account Dropdown */}
                 <div className="relative" ref={dropdownRef}>
-                  <motion.div variants={buttonVariants} initial="initial" whileHover="hover">
-                    <button
-                      onClick={toggleDropdown}
-                      className="inline-flex items-center px-4 py-2 lg:px-6 lg:py-2.5 bg-gray-800 text-white rounded-xl hover:bg-gray-700 transition-all duration-300 shadow-md hover:shadow-lg"
-                      aria-label="Account menu"
-                    >
-                      Account
-                      <ChevronDownIcon className="ml-2 h-5 w-5" />
-                    </button>
-                  </motion.div>
+                  <button
+                    onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                    className="flex items-center space-x-2 px-4 py-2 rounded-lg hover:bg-gray-800 transition-colors"
+                  >
+                    <span>{user?.name || "Account"}</span>
+                    <ChevronDownIcon className="h-4 w-4" />
+                  </button>
+
                   <AnimatePresence>
                     {isDropdownOpen && (
                       <motion.div
-                        variants={dropdownVariants}
-                        initial="hidden"
-                        animate="visible"
-                        exit="exit"
-                        className="absolute right-0 mt-2 w-56 bg-gray-800 rounded-xl shadow-xl overflow-hidden"
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 10 }}
+                        className="absolute right-0 mt-2 w-56 bg-gray-800 rounded-lg shadow-xl border border-gray-700 overflow-hidden"
                       >
-                        <Link href="/pages/chat" onClick={closeDropdown}>
-                          <div className="px-4 py-2 text-white hover:bg-gray-700 transition-colors duration-200 flex items-center">
-                            <ChatBubbleLeftIcon className="h-5 w-5 mr-2" />
-                            View Messages
-                          </div>
+                        <Link 
+                          href="/pages/chat" 
+                          onClick={closeAllMenus}
+                          className="block px-4 py-3 hover:bg-gray-700 transition-colors flex items-center"
+                        >
+                          <ChatBubbleLeftIcon className="h-5 w-5 mr-2" />
+                          Messages
                         </Link>
-                        <Link href="/declutter/purchases" onClick={closeDropdown}>
-                          <div className="px-4 py-2 text-white hover:bg-gray-700 transition-colors duration-200 flex items-center">
-                            <CreditCardIcon className="h-5 w-5 mr-2" />
-                            Transactions
-                          </div>
-                        </Link>
-                        <Link href="/declutter/manage-items" onClick={closeDropdown}>
-                          <div className="px-4 py-2 text-white hover:bg-gray-700 transition-colors duration-200 flex items-center">
-                            <Cog6ToothIcon className="h-5 w-5 mr-2" />
-                            Manage Products
-                          </div>
+                        <Link 
+                          href="/declutter/purchases" 
+                          onClick={closeAllMenus}
+                          className="block px-4 py-3 hover:bg-gray-700 transition-colors flex items-center"
+                        >
+                          <CreditCardIcon className="h-5 w-5 mr-2" />
+                          Transactions
                         </Link>
                         {storeId && (
-                          <Link href={`/appstore/managestore/${storeId}`} onClick={closeDropdown}>
-                            <div className="px-4 py-2 text-white hover:bg-gray-700 transition-colors duration-200 flex items-center">
-                              <StarIcon className="h-5 w-5 mr-2" />
-                              Manage Store
-                            </div>
+                          <Link 
+                            href={`/appstore/managestore/${storeId}`}
+                            onClick={closeAllMenus}
+                            className="block px-4 py-3 hover:bg-gray-700 transition-colors flex items-center"
+                          >
+                            <StarIcon className="h-5 w-5 mr-2" />
+                            Manage Store
                           </Link>
                         )}
                         <button
                           onClick={() => {
                             logout();
-                            closeDropdown();
+                            closeAllMenus();
                           }}
-                          className="w-full text-left px-4 py-2 text-white hover:bg-gray-700 transition-colors duration-200 flex items-center"
+                          className="w-full text-left px-4 py-3 hover:bg-gray-700 transition-colors flex items-center"
                         >
                           <ArrowRightOnRectangleIcon className="h-5 w-5 mr-2" />
                           Logout
@@ -303,167 +213,137 @@ export default function Navbar({ searchTerm, setSearchTerm }: NavbarProps) {
                 </div>
               </>
             ) : (
-              <div className="flex items-center space-x-6 lg:space-x-8">
-                <MarketDeclutterButton />
-                <motion.div variants={buttonVariants} initial="initial" whileHover="hover">
-                  <Link href="/declutter/upload">
-                    <div className="inline-flex items-center px-4 py-2 lg:px-6 lg:py-2.5 bg-gray-800 text-white rounded-xl hover:bg-gray-700 transition-all duration-300 shadow-md hover:shadow-lg">
-                      Sell Item
-                      <ShoppingCartIcon className="ml-2 h-5 w-5" />
-                    </div>
-                  </Link>
-                </motion.div>
-                <motion.div variants={buttonVariants} initial="initial" whileHover="hover">
-                  <Link href="/declutter/login">
-                    <div className="inline-flex items-center px-4 py-2 lg:px-6 lg:py-2.5 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-xl hover:from-orange-600 hover:to-orange-700 transition-all duration-300 shadow-md hover:shadow-lg">
-                      Login
-                    </div>
-                  </Link>
-                </motion.div>
-              </div>
+              <>
+                <NavButton href="/appstore/stores">Marketplace</NavButton>
+                <NavButton href="/declutter/upload">Sell Items</NavButton>
+                <Link href="/declutter/login">
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="bg-gradient-to-r from-orange-500 to-orange-600 px-6 py-2 rounded-lg font-medium"
+                  >
+                    Sign In
+                  </motion.button>
+                </Link>
+              </>
             )}
           </div>
+        </div>
+      </nav>
 
-          {/* Mobile Placeholder */}
-          <div className="md:hidden flex items-center space-x-4">
-            {token && <Greeting />}
-            <motion.div whileHover={{ scale: 1.1 }} transition={{ duration: 0.2 }}>
-              <button onClick={toggleMobileAccount} aria-label="Account menu">
-                <UserIcon className="h-6 w-6 text-white hover:text-orange-400 transition-colors duration-300" />
+      {/* Mobile Navbar */}
+      <nav className={`md:hidden bg-gray-900/95 backdrop-blur-md border-b border-gray-800 transition-transform duration-300 ${
+        isVisible ? "translate-y-0" : "-translate-y-full"
+      }`}>
+        <div className="px-4 py-3 flex justify-between items-center">
+          <Link href="/">
+            <Image 
+              src={logo} 
+              alt="Logo" 
+              width={100}
+              height={40}
+              className="h-8 w-auto"
+            />
+          </Link>
+
+          <div className="flex items-center space-x-4">
+            {token && (
+              <button className="p-2 rounded-full hover:bg-gray-800 transition-colors">
+                <BellIcon className="h-5 w-5" />
               </button>
-            </motion.div>
+            )}
+            <button 
+              onClick={toggleMobileMenu}
+              className="p-2 rounded-full hover:bg-gray-800 transition-colors"
+            >
+              <UserIcon className="h-5 w-5" />
+            </button>
           </div>
         </div>
+      </nav>
 
-        {/* Mobile Tabs (Only on Homepage) */}
-        {(pathname === "/" || pathname === "/appstore/stores") && (
-  <div className="md:hidden flex justify-between items-center px-4 lg:py-2 border-t border-gray-700">
-    <div className="relative flex w-full">
-      <Link href="/" className="flex-1">
-        <button
-          onClick={() => setActiveTab("Hub")}
-          className={`w-full py-2 text-center font-medium text-sm transition-colors duration-300 ${
-            activeTab === "Hub" ? "text-orange-400" : "text-gray-300"
-          }`}
-        >
-          Hub
-        </button>
-      </Link>
-      <Link href="/appstore/stores" className="flex-1">
-        <button
-          onClick={() => setActiveTab("Market")}
-          className={`w-full py-2 text-center font-medium text-sm transition-colors duration-300 ${
-            activeTab === "Market" ? "text-orange-400" : "text-gray-300"
-          }`}
-        >
-          Market
-        </button>
-      </Link>
-      <motion.div
-        className="absolute bottom-0 h-1 bg-orange-400 rounded-full"
-        initial={false}
-        animate={{
-          x: activeTab === "Hub" ? "0%" : "100%",
-          width: "50%",
-        }}
-        transition={{ duration: 0.3, ease: "easeInOut" }}
-      />
-    </div>
-  </div>
-)}
-      </div>
+      {/* Mobile Menu */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <motion.div
+            ref={mobileMenuRef}
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="md:hidden fixed inset-0 bg-gray-900/95 backdrop-blur-md z-40 pt-16 overflow-y-auto"
+          >
+            <div className="px-4 py-6 space-y-2">
+              {token ? (
+                <>
+                  <div className="px-4 py-3 mb-4 border-b border-gray-800">
+                    <p className="font-medium">Welcome back</p>
+                    <p className="text-orange-400">{user?.name || "User"}</p>
+                  </div>
 
-      {/* Bottom Navbar (Mobile Only, Hidden on Dynamic Product Routes) */}
-      {!hideBottomNavbar && (
-        <div className="md:hidden fixed bottom-0 left-0 right-0 bg-gray-900 z-50 py-2 rounded-t-2xl shadow-lg">
-          <div className="flex justify-around items-center py-3">
-            <motion.div whileHover={{ scale: 1.1 }} transition={{ duration: 0.2 }}>
-              <Link href="/" aria-label="Home">
-                <HomeIcon className="size-6 text-white hover:text-orange-400 transition-colors duration-300" />
-              </Link>
-            </motion.div>
-            <motion.div whileHover={{ scale: 1.1 }} transition={{ duration: 0.2 }}>
-              <MarketDeclutterButton isMobile />
-            </motion.div>
-            <motion.div whileHover={{ scale: 1.1 }} transition={{ duration: 0.2 }}>
-              <Link href="/declutter/purchases" aria-label="Purchases">
-                <ShoppingCartIcon className="size-6 text-white hover:text-orange-400 transition-colors duration-300" />
-              </Link>
-            </motion.div>
-            <div className="relative">
-              <motion.div whileHover={{ scale: 1.1 }} transition={{ duration: 0.2 }}>
-                <button
-                  onClick={toggleMobileAccount}
-                  aria-label="Account menu"
-                  className="focus:outline-none"
-                >
-                  <UserIcon className="size-6 text-white hover:text-orange-400 transition-colors duration-300" />
-                </button>
-              </motion.div>
-              <AnimatePresence>
-                {isMobileAccountOpen && (
-                  <motion.div
-                    ref={mobileAccountRef}
-                    variants={mobileAccountVariants}
-                    initial="hidden"
-                    animate="visible"
-                    exit="exit"
-                    className="absolute bottom-16 right-0 w-56 bg-gray-800 rounded-xl shadow-xl overflow-hidden"
+                  <MobileNavItem href="/" icon={HomeIcon} label="Home" />
+                  <MobileNavItem href="/declutter/manage-items" icon={ShoppingCartIcon} label="Sell Items" />
+                  <MobileNavItem href="/appstore/stores" icon={StarIcon} label="Marketplace" />
+                  <MobileNavItem href="/pages/chat" icon={ChatBubbleLeftIcon} label="Messages" />
+                  <MobileNavItem href="/declutter/purchases" icon={CreditCardIcon} label="Transactions" />
+                  
+                  {storeId && (
+                    <MobileNavItem 
+                      href={`/appstore/managestore/${storeId}`} 
+                      icon={Cog6ToothIcon} 
+                      label="Manage Store" 
+                    />
+                  )}
+
+                  <button
+                    onClick={() => {
+                      logout();
+                      closeAllMenus();
+                    }}
+                    className="w-full text-left px-4 py-3 hover:bg-gray-800 rounded-lg transition-colors flex items-center mt-4"
                   >
-                    {token ? (
-                      <>
-                        <Link href="/pages/chat" onClick={closeMobileAccount}>
-                          <div className="px-4 py-2 text-white hover:bg-gray-700 transition-colors duration-200 flex items-center">
-                            <ChatBubbleLeftIcon className="h-5 w-5 mr-2" />
-                            View Messages
-                          </div>
-                        </Link>
-                        <Link href="/declutter/purchases" onClick={closeMobileAccount}>
-                          <div className="px-4 py-2 text-white hover:bg-gray-700 transition-colors duration-200 flex items-center">
-                            <CreditCardIcon className="h-5 w-5 mr-2" />
-                            Transactions
-                          </div>
-                        </Link>
-                        <Link href="/declutter/manage-items" onClick={closeMobileAccount}>
-                          <div className="px-4 py-2 text-white hover:bg-gray-700 transition-colors duration-200 flex items-center">
-                            <Cog6ToothIcon className="h-5 w-5 mr-2" />
-                            Manage Products
-                          </div>
-                        </Link>
-                        {storeId && (
-                          <Link href={`/appstore/managestore/${storeId}`} onClick={closeMobileAccount}>
-                            <div className="px-4 py-2 text-white hover:bg-gray-700 transition-colors duration-200 flex items-center">
-                              <StarIcon className="h-5 w-5 mr-2" />
-                              Manage Store
-                            </div>
-                          </Link>
-                        )}
-                        <button
-                          onClick={() => {
-                            logout();
-                            closeMobileAccount();
-                          }}
-                          className="w-full text-left px-4 py-2 text-white hover:bg-gray-700 transition-colors duration-200 flex items-center"
-                        >
-                          <ArrowRightOnRectangleIcon className="h-5 w-5 mr-2" />
-                          Logout
-                        </button>
-                      </>
-                    ) : (
-                      <Link href="/declutter/login" onClick={closeMobileAccount}>
-                        <div className="px-4 py-2 text-white hover:bg-gray-700 transition-colors duration-200 flex items-center">
-                          <UserIcon className="h-5 w-5 mr-2" />
-                          Sign In
-                        </div>
-                      </Link>
-                    )}
-                  </motion.div>
-                )}
-              </AnimatePresence>
+                    <ArrowRightOnRectangleIcon className="h-5 w-5 mr-3" />
+                    Logout
+                  </button>
+                </>
+              ) : (
+                <>
+                  <MobileNavItem href="/" icon={HomeIcon} label="Home" />
+                  <MobileNavItem href="/appstore/stores" icon={StarIcon} label="Marketplace" />
+                  <MobileNavItem href="/declutter/upload" icon={ShoppingCartIcon} label="Sell Items" />
+                  <Link href="/declutter/login">
+                    <motion.button
+                      whileTap={{ scale: 0.95 }}
+                      className="w-full mt-4 bg-gradient-to-r from-orange-500 to-orange-600 px-6 py-3 rounded-lg font-medium flex items-center justify-center"
+                    >
+                      Sign In
+                    </motion.button>
+                  </Link>
+                </>
+              )}
             </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Mobile Bottom Navigation */}
+      {!pathname.startsWith("/declutter/products/") && (
+        <div className="md:hidden fixed bottom-0 left-0 right-0 bg-gray-900 border-t border-gray-800 z-30">
+          <div className="flex justify-around py-3">
+            <Link href="/" className="p-2">
+              <HomeIcon className="h-6 w-6" />
+            </Link>
+            <Link href="/appstore/stores" className="p-2">
+              <StarIcon className="h-6 w-6" />
+            </Link>
+            <Link href="/declutter/purchases" className="p-2">
+              <ShoppingCartIcon className="h-6 w-6" />
+            </Link>
+            <button onClick={toggleMobileMenu} className="p-2">
+              <UserIcon className="h-6 w-6" />
+            </button>
           </div>
         </div>
       )}
-    </nav>
+    </header>
   );
 }

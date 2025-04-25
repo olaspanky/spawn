@@ -150,7 +150,6 @@ export default function ProductPage() {
     <div className="min-h-screen font-sans bg-gray-100 text-gray-900">
       <div className="hidden lg:flex items-center"> 
       <Navbar searchTerm="" setSearchTerm={() => {}} />
-
       </div>
 
       <main className="max-w-7xl mx-auto lg:px-8 lg:pt-[88px]">

@@ -12,7 +12,8 @@ const LayoutWrapper = ({ children }: { children: React.ReactNode }) => {
     pathname === "/declutter/login" ||
     pathname === "/declutter/signup" ||
     pathname.startsWith("/declutter/products") ||
-    pathname.startsWith("/appstore/store/");
+    pathname.startsWith("/appstore/store/") ||
+    pathname.startsWith("/declutter/purchase/");
 
   return (
     <div className="min-h-screen flex flex-col">
