@@ -11,7 +11,7 @@ import MeetupForm from '@/app/components/MeetupForm';
 import RatingForm from '@/app/components/RatingForm';
 import { MessageSquare, Package, Calendar, CreditCard, MapPin, Clock, AlertCircle } from 'lucide-react';
 import { Order } from '@/app/types/chat';
-import Navbar from "@/app/components/Nav";
+import Navbar from "@/app/components/Navbar";
 
 const ImageGallery = dynamic(() => import('@/app/components/ImageGallery'), { ssr: false });
 
@@ -33,6 +33,8 @@ export default function OrderDetails() {
         .finally(() => setLoading(false));
     }
   }, [orderId, token]);
+  console.log('API response (order):', order); // Log full order data
+
 
   const handleReleaseFunds = async () => {
     try {
@@ -112,8 +114,10 @@ export default function OrderDetails() {
 
   const isBuyer = user?.id === (typeof order.buyer === 'string' ? order.buyer : order.buyer._id);
   const seller = typeof order.seller === 'string' ? { username: 'Unknown', verified: false } : (order.seller as unknown as { username: string; verified: boolean; rating?: number; ratingCount?: number; scamReports?: number; });
-  const scamLikely = 'scamReports' in seller && typeof seller.scamReports === 'number' && seller.scamReports >= 3;
-
+  const scamLikely =
+  seller?.scamReports != null &&
+  typeof seller.scamReports === 'number' &&
+  seller.scamReports >= 3;
   const getStatusColor = () => {
     switch (order.trackingStatus) {
       case 'paid': return 'bg-emerald-500';
@@ -123,6 +127,8 @@ export default function OrderDetails() {
       default: return 'bg-gray-500';
     }
   };
+
+  
 
   const getStatusIcon = () => {
     switch (order.trackingStatus) {
@@ -135,8 +141,8 @@ export default function OrderDetails() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 font-sans text-gray-800">
-       <div className="hidden lg:flex items-center"> 
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 font-sans text-gray-800 ">
+       <div className=" flex items-center lg:mb-20 mb-3"> 
             <Navbar searchTerm="" setSearchTerm={() => {}} />
             </div>
       <div className="max-w-7xl mx-auto  sm:px-6 lg:px-8">
@@ -179,7 +185,7 @@ export default function OrderDetails() {
             {/* Left Column - Gallery */}
             <div className="lg:w-1/2 lg:p-6">
               <div className="overflow-hidden shadow-lg">
-                <ImageGallery images={order.item.images} title={order.item.title} />
+                <ImageGallery images={order?.item?.images} title={order?.item?.title} />
               </div>
             </div>
 
@@ -187,10 +193,10 @@ export default function OrderDetails() {
             <div className="lg:w-1/2 lg:p-6  p-1 lg:space-y-6 space-y-2">
               {/* Product Title & Price */}
               <div>
-                <h1 className="lg:text-3xl text-xl font-bold text-gray-800">{order.item.title}</h1>
+                <h1 className="lg:text-3xl text-xl font-bold text-gray-800">{order?.item?.title}</h1>
                 <div className=" flex items-center">
                   <div className="lg:px-4 py-2 ">
-                    <span className="lg:text-2xl text-xl font-bold text-gray-800">₦{order.price.toLocaleString()}</span>
+                    <span className="lg:text-2xl text-xl font-bold text-gray-800">₦{order?.price?.toLocaleString()}</span>
                   </div>
                   <div className="ml-4 px-3 py-1 rounded-full flex items-center space-x-1 text-sm font-medium" style={{ backgroundColor: getStatusColor(), color: 'white' }}>
                     {getStatusIcon()}
@@ -208,7 +214,7 @@ export default function OrderDetails() {
                     </div>
                     <div>
                       <span className="text-sm text-gray-500"> Item Details</span>
-                      <p className="text-gray-600 whitespace-pre-line leading-relaxed">{order.item.description}</p>
+                      <p className="text-gray-600 whitespace-pre-line leading-relaxed">{order?.item?.description}</p>
                       </div>
                   </div>
               </div>
@@ -221,19 +227,19 @@ export default function OrderDetails() {
                     </div>
                     <div>
                       <span className="text-sm text-gray-500"> Seller Information</span>
-                      <p className="text-gray-600 whitespace-pre-line leading-relaxed">{seller.username}</p>
-                      {seller.verified && (
+                      <p className="text-gray-600 whitespace-pre-line leading-relaxed">{seller?.username}</p>
+                      {seller?.verified && (
                     <div className="ml-2 bg-blue-100 text-blue-600 px-3 py-1 rounded-full flex items-center lg:text-2xl text-xs font-medium">
                       <ShieldCheckIcon className="h-4 w-4 mr-1" />
                       Verified
                     </div>
                   )}
 
-{seller.rating && (
+{seller?.rating && (
                   <div className="mt-2 flex items-center text-yellow-600">
                     <StarIcon className="h-5 w-5 mr-1" />
-                    <span className="font-medium">{seller.rating.toFixed(1)}</span>
-                    <span className="text-gray-500 ml-1">({seller.ratingCount} reviews)</span>
+                    <span className="font-medium">{seller?.rating?.toFixed(1)}</span>
+                    <span className="text-gray-500 ml-1">({seller?.ratingCount} reviews)</span>
                   </div>
                 )}
                 
@@ -262,7 +268,7 @@ export default function OrderDetails() {
                     </div>
                     <div>
                       <span className="text-sm text-gray-500">Order ID</span>
-                      <p className="text-gray-800 font-medium">{order._id}</p>
+                      <p className="text-gray-800 font-medium">{order?._id}</p>
                     </div>
                   </div>
                   
@@ -272,7 +278,7 @@ export default function OrderDetails() {
                     </div>
                     <div>
                       <span className="text-sm text-gray-500">Payment Ref</span>
-                      <p className="text-gray-800 font-medium">{order.paymentReference}</p>
+                      <p className="text-gray-800 font-medium">{order?.paymentReference}</p>
                     </div>
                   </div>
                   
@@ -282,7 +288,7 @@ export default function OrderDetails() {
                     </div>
                     <div>
                       <span className="text-sm text-gray-500">Order Placed</span>
-                      <p className="text-gray-800 font-medium">{new Date(order.createdAt).toLocaleDateString()}</p>
+                      <p className="text-gray-800 font-medium">{new Date(order?.createdAt).toLocaleDateString()}</p>
                     </div>
                   </div>
                   
@@ -292,7 +298,7 @@ export default function OrderDetails() {
                     </div>
                     <div>
                       <span className="text-sm text-gray-500">Last Updated</span>
-                      <p className="text-gray-800 font-medium">{new Date(order.updatedAt).toLocaleDateString()}</p>
+                      <p className="text-gray-800 font-medium">{new Date(order?.updatedAt).toLocaleDateString()}</p>
                     </div>
                   </div>
                 </div>
@@ -303,11 +309,11 @@ export default function OrderDetails() {
                     <div className="flex flex-col space-y-3">
                       <div className="flex items-center">
                         <MapPin className="h-5 w-5 text-gray-500 mr-2" />
-                        <span className="text-gray-800">{order.meetingDetails.location}</span>
+                        <span className="text-gray-800">{order?.meetingDetails?.location}</span>
                       </div>
                       <div className="flex items-center">
                         <Clock className="h-5 w-5 text-gray-500 mr-2" />
-                        <span className="text-gray-800">{new Date(order.meetingDetails.time).toLocaleString()}</span>
+                        <span className="text-gray-800">{new Date(order?.meetingDetails?.time).toLocaleString()}</span>
                       </div>
                     </div>
                   </div>
@@ -357,20 +363,20 @@ export default function OrderDetails() {
               </div>
             )}
 
-            {isBuyer && order.trackingStatus === 'completed' && !seller.rating && (
+            {isBuyer && order?.trackingStatus === 'completed' && !seller?.rating && (
               <div className="max-w-lg mx-auto">
                 <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-200">
                   <h3 className="text-lg font-bold text-gray-800 mb-4 flex items-center">
                     <StarIcon className="h-5 w-5 mr-2 text-yellow-500" />
                     Rate Your Experience
                   </h3>
-                  <RatingForm orderId={order._id} onSuccess={() => alert('Rating submitted')} />
+                  <RatingForm orderId={order?._id} onSuccess={() => alert('Rating submitted')} />
                 </div>
               </div>
             )}
 
             <div className="flex justify-center mt-8">
-              <Link href={`/pages/chat?orderId=${order._id}`} passHref>
+              <Link href={`/pages/chat?orderId=${order?._id}`} passHref>
                 <div className="flex items-center p-4 px-6 gap-3 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 shadow-lg transition-all duration-300 transform hover:scale-105 cursor-pointer group">
                   <div className="w-10 h-10 rounded-full bg-white bg-opacity-20 flex items-center justify-center group-hover:bg-opacity-30 transition-all">
                     <MessageSquare className="h-5 w-5 text-white" />

@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeftIcon, ChevronRightIcon, XMarkIcon } from "@heroicons/react/24/outline";
 
 interface ImageGalleryProps {
-  images: string[];
+  images: string[] | null | undefined;
   title: string;
 }
 
@@ -15,19 +15,33 @@ export default function ImageGallery({ images, title }: ImageGalleryProps) {
   const [isZooming, setIsZooming] = useState(false);
   const mainImageRef = useRef<HTMLDivElement>(null);
 
+  // Log props for debugging
+  console.log('ImageGallery props:', { images, title });
+
+  // Ensure validImages is always an array
+  const validImages = Array.isArray(images) ? images.filter((img) => img && typeof img === "string") : [];
+  console.log('validImages:', validImages); // Log filtered images
+
+  // Reset selectedImageIndex if out of bounds
+  useEffect(() => {
+    if (validImages.length > 0 && selectedImageIndex >= validImages.length) {
+      setSelectedImageIndex(0);
+    }
+  }, [validImages, selectedImageIndex]);
+
   // Handle image navigation
   const handleNext = () => {
-    setSelectedImageIndex((prev) => (prev + 1) % images.length);
+    setSelectedImageIndex((prev) => (prev + 1) % validImages.length);
   };
 
-  const handlePrev = () => {
-    setSelectedImageIndex((prev) => (prev - 1 + images.length) % images.length);
+  const handlePrev: () => void = () => {
+    setSelectedImageIndex((prev: number) => (prev - 1 + validImages.length) % validImages.length);
   };
 
   // Open/close lightbox
   const toggleLightbox = (e?: React.MouseEvent) => {
-    if (e) e.stopPropagation(); // Prevent parent click from interfering
-    setIsZooming(false); // Reset zoom state before opening lightbox
+    if (e) e.stopPropagation();
+    setIsZooming(false);
     setIsLightboxOpen(!isLightboxOpen);
   };
 
@@ -63,9 +77,9 @@ export default function ImageGallery({ images, title }: ImageGalleryProps) {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isLightboxOpen]);
 
-  // Ensure valid images
-  const validImages = images.filter((img) => img && typeof img === "string");
+  // Handle empty or invalid images
   if (validImages.length === 0) {
+    console.log('No valid images, rendering fallback UI'); // Log when fallback is shown
     return (
       <div className="w-full h-64 flex items-center justify-center bg-gray-200 rounded-lg">
         <p className="text-gray-500">No images available</p>
@@ -80,7 +94,7 @@ export default function ImageGallery({ images, title }: ImageGalleryProps) {
         <div
           className="absolute inset-0 bg-center bg-cover bg-no-repeat opacity-80"
           style={{
-            backgroundImage: `url(${validImages[selectedImageIndex]})`,
+            backgroundImage: validImages[selectedImageIndex] ? `url(${validImages[selectedImageIndex]})` : "none",
             filter: "blur(10px)",
           }}
         />
@@ -105,6 +119,7 @@ export default function ImageGallery({ images, title }: ImageGalleryProps) {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.3 }}
             onError={(e) => {
+              console.log('Image failed to load:', validImages[selectedImageIndex]); // Log image errors
               e.currentTarget.src = "/fallback-image.jpg"; // Replace with your fallback image
             }}
           />
@@ -136,7 +151,7 @@ export default function ImageGallery({ images, title }: ImageGalleryProps) {
 
       {/* Thumbnail Navigation */}
       {validImages.length > 1 && (
-        <div className="flex  justify-center mt-4 lg:mt-0 lg:ml-4 gap-2 overflow-x-auto lg:overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
+        <div className="flex justify-center mt-4 lg:mt-0 lg:ml-4 gap-2 overflow-x-auto lg:overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
           {validImages.map((img, index) => (
             <motion.button
               key={img}
@@ -154,6 +169,7 @@ export default function ImageGallery({ images, title }: ImageGalleryProps) {
                 className="w-full h-full object-contain"
                 loading="lazy"
                 onError={(e) => {
+                  console.log('Thumbnail failed to load:', img); // Log thumbnail errors
                   e.currentTarget.src = "/fallback-image.jpg"; // Replace with your fallback image
                 }}
               />
@@ -182,7 +198,7 @@ export default function ImageGallery({ images, title }: ImageGalleryProps) {
               <div
                 className="absolute inset-0 bg-center bg-cover bg-no-repeat opacity-80"
                 style={{
-                  backgroundImage: `url(${validImages[selectedImageIndex]})`,
+                  backgroundImage: validImages[selectedImageIndex] ? `url(${validImages[selectedImageIndex]})` : "none",
                   filter: "blur(20px)",
                 }}
               />
@@ -202,6 +218,7 @@ export default function ImageGallery({ images, title }: ImageGalleryProps) {
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.3 }}
                 onError={(e) => {
+                  console.log('Lightbox image failed to load:', validImages[selectedImageIndex]); // Log lightbox errors
                   e.currentTarget.src = "/fallback-image.jpg"; // Replace with your fallback image
                 }}
               />

@@ -131,33 +131,30 @@ export default function Home() {
   if (error) return <ErrorState error={error} />;
 
   return (
-    <div className="min-h-screen font-sans antialiased relative">
+    <div className="min-h-screen font-sans antialiased relative lg:pt-[88px] pb-[80px] md:pb-0">
       {/* Main Content */}
       <div className="relative z-10">
         {/* Featured Items Slider */}
         <div className="relative overflow-hidden mt-[44px] lg:mt-0 backdrop-blur-md border-b border-white/5 shadow-md font-semibold">
-          <div className="container mx-auto px-4 py-4 md:py-3 flex flex-col md:flex-row items-start">
+          <div className="container mx-auto lg:px-4 lg:py-4 p-2 md:py-3 flex flex-col md:flex-row items-start">
             {/* Left Section: Creative Slogan with White Background */}
             <div className="w-full md:w-1/2 lg:p-4 md:p-6 flex flex-col justify-center h-[190px] sm:h-[210px] md:h-[260px] relative overflow-hidden">
               {/* Subtle Background Pattern */}
-              <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=%2220%22 height=%2220%22 viewBox=%220 0 20 20%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cpath d=%22M10 10a2 2 0 100-4 2 2 0 000 4z%22 fill=%22%23000000%22 fill-opacity=%220.05%22/%3E%3C/svg%3E')] opacity-20"></div>
               
               {/* Glowing Decorative Element */}
-              <div className="absolute top-0 left-0 w-32 h-32 bg-gradient-to-r from-blue-500/30 to-purple-500/30 rounded-full filter blur-3xl animate-pulse"></div>
               
               <div className="relative z-10">
-                <h2 className="text-xl sm:text-2xl md:text-4xl font-extrabold bg-clip-text text-transparent W bg-gradient-to-r from-cyan-400 via-fuchsia-500 to-rose-500 mb-2 md:mb-4 animate-slideIn">
-                  Unleash Epic Finds
+                <h2 className="text-xl sm:text-2xl md:text-4xl font-extrabold bg-clip-text text-transparent  bg-black mb-2 md:mb-4 animate-slideIn">
+                  Sell your cllutter for money
                 </h2>
                 <p className="text-sm sm:text-base md:text-lg text-gray-700 font-medium mb-4 md:mb-6 animate-slideInDelay drop-shadow-md">
-                  Dive into a world of unique treasures, sustainable shopping, and stories waiting to be told.
+                  Best platform that connects you to buyers and sellers all over Nigeria
                 </p>
                 <button
                   onClick={handleShopMagicClick}
-                  className="relative bg-gradient-to-r from-cyan-600 to-fuchsia-600 text-white px-4 py-2 sm:px-5 sm:py-2.5 md:px-6 md:py-3 rounded-xl text-xs sm:text-sm md:text-base font-semibold tracking-wide transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 w-fit overflow-hidden group"
+                  className="relative bg-black text-white px-4 py-2 sm:px-5 sm:py-2.5 md:px-6 md:py-3 rounded-xl text-xs sm:text-sm md:text-base font-semibold tracking-wide transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 w-fit overflow-hidden group"
                 >
-                  <span className="relative z-10">Shop the Magic</span>
-                  <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 to-fuchsia-400 opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
+                  <span className="relative z-10">Hop on</span>
                 </button>
               </div>
             </div>
@@ -331,7 +328,7 @@ export default function Home() {
         {/* Listings Section */}
         <div
           ref={listingsRef}
-          className="relative z-10 container mx-auto px-4 py-6 md:py-8 mb-8"
+          className="relative z-10 container mx-auto p-2 lg:px-4 lg:py-6 md:py-8 mb-8"
         >
           {filteredItems.length === 0 ? (
             <EmptyState searchTerm={searchTerm} />
@@ -447,6 +444,9 @@ const ListingCard = ({
             <span className="text-[10px] md:text-xs truncate max-w-[80px]">{item.location}</span>
           </div>
         </div>
+      </div>
+      <div className="p-3 md:p-4 text-white  text-xs bg-black">
+        <button>Buy now</button>
       </div>
     </div>
   );

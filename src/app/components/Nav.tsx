@@ -122,7 +122,7 @@ export default function Navbar({ searchTerm, setSearchTerm }: NavbarProps) {
   );
 
   return (
-    <header className="fixed w-full z-50">
+    <header className="fixed w-full z-50 ">
       {/* Desktop Navbar */}
       <nav 
         className={`hidden md:block text-white bg-gray-900/95 backdrop-blur-md border-b border-gray-800 transition-transform duration-300 ${
