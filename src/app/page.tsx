@@ -340,7 +340,7 @@ export default function Home() {
                   <span className="ml-2 text-sm text-black-400">({filteredItems.length})</span>
                 </span>
               </h3>
-              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
+              <div className="grid grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 lg:gap-4 gap-2 md:gap-6">
                 {filteredItems.map((item) => (
                   <Link key={item._id} href={`/declutter/products/${item._id}`}>
                     <ListingCard
@@ -419,7 +419,7 @@ const ListingCard = ({
           </div>
         )}
         <div className="absolute top-2 right-2 bg-black/70 backdrop-blur-sm rounded-full px-2 py-0.5">
-          <span className="text-[10px] md:text-xs font-medium text-white">{item.category}</span>
+          <span className="text-[8px] md:text-xs font-medium text-white">{item.category}</span>
         </div>
         <button
           className="absolute bottom-2 right-2 bg-black/70 backdrop-blur-sm rounded-full p-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover:bg-black/90"
@@ -433,10 +433,10 @@ const ListingCard = ({
           )}
         </button>
       </div>
-      <div className="p-3 md:p-4 text-black">
-        <h4 className="font-semibold mb-1 truncate text-sm text-black md:text-base">{item.title}</h4>
-        <div className="flex justify-between items-center mt-2">
-          <span className="text-[#36454F] font-bold text-sm md:text-base">
+      <div className="p-1 md:p-4 text-black">
+        <h4 className="font-semibold mb-1 truncate text-[12px]  text-black md:text-base">{item.title}</h4>
+        <div className="flex flex-col  mt-2">
+          <span className="text-[#36454F] font-bold text-[12px]  md:text-base">
             ₦{item.price.toLocaleString()}
           </span>
           <div className="flex items-center text-gray-400">
@@ -445,8 +445,8 @@ const ListingCard = ({
           </div>
         </div>
       </div>
-      <div className="p-3 md:p-4 text-white  text-xs bg-black">
-        <button>Buy now</button>
+      <div className="  text-white  text-[12px] md:text-xs ">
+        <button className="w-full lg:px-2 lg:py-3 px-2 py-1 bg-gray-900/95 text-left">Buy now</button>
       </div>
     </div>
   );
