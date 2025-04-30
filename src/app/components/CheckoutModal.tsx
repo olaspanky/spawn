@@ -116,6 +116,8 @@ export default function CheckoutModal({
                     <X className="h-5 w-5 text-gray-500" />
                   </button>
                   <h3 className="text-xl font-bold text-gray-900 mx-auto">Complete Your Purchase</h3>
+                  <div className="text-[12px] lg:text-xs italic "><span className="text-orange-600">PLEASE NOTE:</span> The ESCROW system ensures "Your Money, Your Control" until you are satisfied and release the funds, Please keep all transactions within SpawnHub for your safety and control</div>
+
                   <div className="w-6"></div> {/* Spacer for alignment */}
                 </div>
                 
