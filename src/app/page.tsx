@@ -135,7 +135,7 @@ export default function Home() {
       {/* Main Content */}
       <div className="relative z-10">
         {/* Featured Items Slider */}
-        <div className="relative overflow-hidden mt-[44px] lg:mt-0 backdrop-blur-md border-b border-white/5 shadow-md font-semibold">
+        <div className="relative overflow-hidden mt-[44px] lg:mt-0 backdrop-blur-md border-b border-white/5 shadow-md font-semibold py-3">
           <div className="container mx-auto lg:px-4 lg:py-4 p-2 md:py-3 flex flex-col md:flex-row items-start">
             {/* Left Section: Creative Slogan with White Background */}
             <div className="w-full md:w-1/2 lg:p-4 md:p-6 flex flex-col justify-center h-[190px] sm:h-[210px] md:h-[260px] relative overflow-hidden">
