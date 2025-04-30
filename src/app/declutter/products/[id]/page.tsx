@@ -733,6 +733,7 @@ export default function ProductPage() {
                 </div>
               </div>
             </div>
+            <div className="text-[8px] lg:text-xs italic "><span className="text-orange-600">PLEASE NOTE:</span> The ESCROW system ensures "Your Money, Your Control" until you are satisfied and release the funds, Please keep all transactions within SpawnHub for your safety and control</div>
 
             {/* Action Buttons - Desktop */}
             <div className="hidden lg:block mt-6">

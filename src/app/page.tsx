@@ -145,16 +145,16 @@ export default function Home() {
               
               <div className="relative z-10">
                 <h2 className="text-xl sm:text-2xl md:text-4xl font-extrabold bg-clip-text text-transparent  bg-black mb-2 md:mb-4 animate-slideIn">
-                  Sell your cllutter for money
+                Buy and Sell with confidence
                 </h2>
                 <p className="text-sm sm:text-base md:text-lg text-gray-700 font-medium mb-4 md:mb-6 animate-slideInDelay drop-shadow-md">
-                  Best platform that connects you to buyers and sellers all over Nigeria
+                  At spawnhub, we prioritize your peace of mind, Our platform guarantees secure and transparent transactions, ensuring the financial safety of both buyers and sellers, Every step is designed to protect you, so you can focus on what matters-making great deals with ease.
                 </p>
                 <button
                   onClick={handleShopMagicClick}
                   className="relative bg-black text-white px-4 py-2 sm:px-5 sm:py-2.5 md:px-6 md:py-3 rounded-xl text-xs sm:text-sm md:text-base font-semibold tracking-wide transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 w-fit overflow-hidden group"
                 >
-                  <span className="relative z-10">Hop on</span>
+                  <span className="relative z-10">Explore</span>
                 </button>
               </div>
             </div>
