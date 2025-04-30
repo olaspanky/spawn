@@ -343,12 +343,7 @@ export default function ProductPage() {
         <div className="hidden md:block mb-6">
           <nav className="flex text-sm text-gray-600">
             <Link href="/" className="hover:text-orange-600">Home</Link>
-            <span className="mx-2">/</span>
-            <Link href="/declutter" className="hover:text-orange-600">Declutter</Link>
-            <span className="mx-2">/</span>
-            <Link href={`/declutter/category/${product.category.toLowerCase()}`} className="hover:text-orange-600">
-              {product.category}
-            </Link>
+            
             <span className="mx-2">/</span>
             <span className="text-gray-900 truncate max-w-xs">{product.title}</span>
           </nav>
