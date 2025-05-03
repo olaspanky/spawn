@@ -8,10 +8,11 @@ const EditItem = () => {
   const router = useRouter();
   const { id } = useParams();
   const { token } = useAuth();
-  const [item, setItem] = useState<any>(null); // Use a more specific type if possible
+  const [item, setItem] = useState<any>(null); // TODO: Define a specific Item type
   const [formData, setFormData] = useState({
     title: "",
     price: "",
+    quantity: "1", // Initialize with default value of 1
     description: "",
     location: "",
     category: "",
@@ -47,6 +48,7 @@ const EditItem = () => {
         setFormData({
           title: data.title || "",
           price: data.price || "",
+          quantity: data.quantity?.toString() || "1", // Populate quantity from backend
           description: data.description || "",
           location: data.location || "",
           category: data.category || "",
@@ -55,6 +57,7 @@ const EditItem = () => {
         setExistingImages(data.images || []);
       } catch (error) {
         console.error("Failed to fetch item:", error);
+        setError(error instanceof Error ? error.message : "Failed to fetch item");
       }
     };
 
@@ -77,8 +80,19 @@ const EditItem = () => {
       return;
     }
 
-    const updatedImages = [...images, ...newFiles];
-    const newUrls = newFiles.map((file) => URL.createObjectURL(file));
+    // Validate file size (max 5MB) and type
+    const validImages = newFiles.filter((file) => {
+      const isValidType = ["image/jpeg", "image/png"].includes(file.type);
+      const isValidSize = file.size <= 5 * 1024 * 1024; // 5MB
+      if (!isValidType) setError("Only JPEG/PNG images are allowed");
+      if (!isValidSize) setError("Each image must be under 5MB");
+      return isValidType && isValidSize;
+    });
+
+    if (validImages.length !== newFiles.length) return;
+
+    const updatedImages = [...images, ...validImages];
+    const newUrls = validImages.map((file) => URL.createObjectURL(file));
     setImages(updatedImages);
     setPreviewUrls([...previewUrls, ...newUrls]);
     setError("");
@@ -142,6 +156,22 @@ const EditItem = () => {
       return;
     }
 
+    // Validate price
+    const priceValue = parseInt(formData.price.toString().replace(/\D/g, ""));
+    if (isNaN(priceValue) || priceValue < 1000) {
+      setError("Price must be at least ₦1,000");
+      setLoading(false);
+      return;
+    }
+
+    // Validate quantity
+    const quantityValue = parseInt(formData.quantity);
+    if (isNaN(quantityValue) || quantityValue < 0) {
+      setError("Quantity must be a non-negative number");
+      setLoading(false);
+      return;
+    }
+
     try {
       let updatedImageUrls = [...existingImages];
 
@@ -152,7 +182,8 @@ const EditItem = () => {
 
       const updatedFormData = {
         ...formData,
-        price: parseInt(formData.price.toString().replace(/\D/g, "")),
+        price: priceValue,
+        quantity: quantityValue, // Include quantity in the payload
         images: updatedImageUrls,
       };
 
@@ -160,12 +191,15 @@ const EditItem = () => {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          "x-auth-token": token, // Token is guaranteed to be string here
+          "x-auth-token": token,
         },
         body: JSON.stringify(updatedFormData),
       });
 
-      if (!response.ok) throw new Error("Failed to update item");
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.msg || "Failed to update item");
+      }
 
       // Clean up preview URLs
       previewUrls.forEach((url) => URL.revokeObjectURL(url));
@@ -193,7 +227,11 @@ const EditItem = () => {
               name="title"
               value={formData.title}
               onChange={handleChange}
+              required
+              minLength={10}
+              maxLength={100}
               className="w-full px-4 py-2 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+              placeholder="e.g., iPhone 12 Pro 128GB - Pacific Blue"
             />
           </div>
           <div>
@@ -203,17 +241,38 @@ const EditItem = () => {
               name="price"
               value={formData.price}
               onChange={handleChange}
+              required
+              min="1000"
               className="w-full px-4 py-2 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+              placeholder="e.g., 250000"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Description</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Quantity</label>
+            <input
+              type="number"
+              name="quantity"
+              value={formData.quantity}
+              onChange={handleChange}
+              required
+              min="0"
+              className="w-full px-4 py-2 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+              placeholder="e.g., 1"
+            />
+            <p className="mt-1 text-sm text-gray-500">
+              Enter the number of items available for sale (default is 1).
+            </p>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Description (Optional)</label>
             <textarea
               name="description"
               value={formData.description}
               onChange={handleChange}
+              maxLength={1000}
               className="w-full px-4 py-2 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
               rows={4}
+              placeholder="Describe the item, its condition, and any included accessories"
             />
           </div>
           <div>
@@ -223,7 +282,9 @@ const EditItem = () => {
               name="location"
               value={formData.location}
               onChange={handleChange}
+              required
               className="w-full px-4 py-2 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+              placeholder="Enter the item location"
             />
           </div>
           <div>
@@ -232,16 +293,26 @@ const EditItem = () => {
               name="category"
               value={formData.category}
               onChange={handleChange}
+              required
               className="w-full px-4 py-2 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
             >
+              <option value="" disabled>
+                Select category
+              </option>
               <option value="Electronics">Electronics</option>
               <option value="Fashion">Fashion</option>
               <option value="Furniture">Furniture</option>
+              <option value="Home & Appliances">Home & Appliances</option>
+              <option value="Books & Media">Books & Media</option>
+              <option value="Sports & Outdoors">Sports & Outdoors</option>
+              <option value="Toys & Games">Toys & Games</option>
+              <option value="Vehicles">Vehicles</option>
+              <option value="Collectibles">Collectibles</option>
               <option value="Other">Other</option>
             </select>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Images (Max 4)</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Images (2-4 images required)</label>
             {/* Display existing images */}
             {existingImages.length > 0 && (
               <div className="mt-2 grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -278,7 +349,7 @@ const EditItem = () => {
             <input
               type="file"
               multiple
-              accept="image/*"
+              accept="image/jpeg,image/png"
               onChange={handleImageChange}
               className="mt-4 w-full"
             />
@@ -316,6 +387,9 @@ const EditItem = () => {
             )}
             <p className="mt-2 text-sm text-gray-500">
               {existingImages.length + images.length} of 4 images
+              {existingImages.length + images.length < 2 && (
+                <span className="text-red-500 ml-2">(Minimum 2 images required)</span>
+              )}
             </p>
           </div>
           {error && (
@@ -325,7 +399,7 @@ const EditItem = () => {
           )}
           <button
             type="submit"
-            disabled={loading}
+            disabled={loading || existingImages.length + images.length < 2}
             className="w-full bg-orange-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-orange-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? "Saving Changes..." : "Save Changes"}

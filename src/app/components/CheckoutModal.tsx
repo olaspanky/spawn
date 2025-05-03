@@ -14,6 +14,8 @@ interface CheckoutModalProps {
     id: string;
     title: string;
     price: number;
+    quantity?: number; // Add optional quantity field
+
   };
   user: {
     id: string;
@@ -108,15 +110,15 @@ export default function CheckoutModal({
               className="inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-xl transform transition-all sm:align-middle sm:max-w-lg w-full relative z-50"
             >
               <div className="bg-white px-6 py-4 relative">
-                <div className="flex justify-between items-center mb-4">
+                <div className="flex flex-col justify-between items-left mb-4">
                   <button
                     onClick={onClose}
-                    className="p-1 rounded-full hover:bg-gray-100 transition-colors"
+                    className="p-1 flex justify-left  rounded-full  transition-colors"
                   >
                     <X className="h-5 w-5 text-gray-500" />
                   </button>
                   <h3 className="text-xl font-bold text-gray-900 mx-auto">Complete Your Purchase</h3>
-                  <div className="text-[12px] lg:text-xs italic "><span className="text-orange-600">PLEASE NOTE:</span> The ESCROW system ensures "Your Money, Your Control" until you are satisfied and release the funds, Please keep all transactions within SpawnHub for your safety and control</div>
+                  <div className="text-[12px] lg:text-xs italic my-3"><span className="text-orange-600">PLEASE NOTE:</span> The ESCROW system ensures "Your Money, Your Control" until you are satisfied and release the funds, Please keep all transactions within SpawnHub for your safety and control</div>
 
                   <div className="w-6"></div> {/* Spacer for alignment */}
                 </div>

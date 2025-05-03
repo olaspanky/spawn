@@ -91,6 +91,8 @@ export interface Item {
   description: string;
   images: string[];
   status: string;
+  quantity?: number; // Add optional quantity field
+
 }
 
 export interface Order {
@@ -99,6 +101,7 @@ export interface Order {
   seller: string | User;
   item: Item;
   price: number;
+  quantity?: number; // Add optional quantity field
   paymentReference: string;
   status: 'pending' | 'completed' | 'cancelled' | 'refund_requested';
   trackingStatus: 'paid' | 'meeting_scheduled' | 'completed' | 'refund_requested' | 'refunded';
