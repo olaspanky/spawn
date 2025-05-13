@@ -122,7 +122,6 @@ export default function Home() {
     );
   };
 
-  // Handler for smooth scrolling to the listings section
   const handleShopMagicClick = () => {
     listingsRef.current?.scrollIntoView({ behavior: "smooth" });
   };
@@ -387,7 +386,6 @@ export default function Home() {
   );
 }
 
-// ... (ListingCard, LoadingState, ErrorState, EmptyState components remain unchanged)
 const ListingCard = ({
   item,
   isFavorite,

@@ -9,8 +9,8 @@ const LayoutWrapper = ({ children }: { children: React.ReactNode }) => {
   const pathname = usePathname();
   const isDeclutterRoute = pathname.startsWith("/pages");
   const isLoginOrSignupOrProduct =
-    pathname === "/declutter/login" ||
-    pathname === "/declutter/signup" ||
+    // pathname === "/declutter/login" ||
+    // pathname === "/declutter/signup" ||
     pathname.startsWith("/declutter/products") ||
     pathname.startsWith("/appstore/store/") ||
     pathname.startsWith("/declutter/purchase/");

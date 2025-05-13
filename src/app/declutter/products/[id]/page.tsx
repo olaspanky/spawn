@@ -1,3 +1,4 @@
+
 // "use client";
 
 // import { useParams, useRouter } from "next/navigation";
@@ -14,13 +15,13 @@
 // import CheckoutModal from "@/app/components/CheckoutModal";
 
 // // Lazy load the image gallery component
-// const ImageGallery = dynamic(() => import("../../../components/ImageGallery"), { 
+// const ImageGallery = dynamic(() => import("../../../components/ImageGallery"), {
 //   ssr: false,
 //   loading: () => (
 //     <div className="w-full h-80 bg-gray-100 animate-pulse rounded-lg flex items-center justify-center">
 //       <p className="text-gray-400">Loading gallery...</p>
 //     </div>
-//   )
+//   ),
 // });
 
 // interface Seller {
@@ -36,6 +37,7 @@
 //   _id: string;
 //   title: string;
 //   price: number;
+//   quantity: number; // Added quantity field
 //   description: string;
 //   location: string;
 //   category: string;
@@ -68,12 +70,16 @@
 //   const [showPopup, setShowPopup] = useState(false);
 //   const [showCheckoutModal, setShowCheckoutModal] = useState(false);
 //   const [showShareMenu, setShowShareMenu] = useState(false);
-
+//   const [selectedQuantity, setSelectedQuantity] = useState(1); // State for user-selected quantity
+//  const WHATSAPP_NUMBER = +2347019312514;
+//  const WHATSAPP_MESSAGE = encodeURIComponent(
+//   "Hello! I'm interested in this item: [PRODUCT_TITLE]. Can we discuss the deal?"
+// );
 //   const fetchProduct = useCallback(async () => {
 //     try {
 //       if (!id) throw new Error("Product ID is missing");
 //       setLoading(true);
-      
+
 //       const response = await fetch(`https://spawnback.vercel.app/api/items/${id}`);
 //       if (!response.ok) throw new Error("Product not found");
 //       const data = await response.json();
@@ -82,13 +88,13 @@
 //       setProduct({
 //         ...data,
 //         price: data.price,
+//         quantity: data.quantity, // Include quantity from backend
 //         images: data.images.filter((img: string | null) => img !== null),
 //         views: Math.floor(Math.random() * 100) + 50, // Placeholder
 //         favorites: Math.floor(Math.random() * 20) + 5, // Placeholder
 //       });
 
 //       // Simulate API call for related products
-//       // In production, you'd fetch actual related products
 //       setTimeout(() => {
 //         fetchRelatedProducts(data.category, data.seller._id);
 //       }, 500);
@@ -97,7 +103,6 @@
 //       if (user) {
 //         checkIfFavorite(id.toString());
 //       }
-      
 //     } catch (err) {
 //       setError(err instanceof Error ? err.message : "Failed to load product");
 //     } finally {
@@ -107,29 +112,29 @@
 
 //   // Fetch related products based on category or seller
 //   const fetchRelatedProducts = async (category: string, sellerId: string) => {
-//     // This would be an actual API call in production
-//     // For now, simulate with placeholder data
-//     const mockProducts = Array(4).fill(null).map((_, idx) => ({
-//       _id: `related-${idx}`,
-//       title: `${category} Item ${idx + 1}`,
-//       price: Math.floor(Math.random() * 20000) + 5000,
-//       image: `/api/placeholder/${300 + idx}/${200 + idx}`,
-//       condition: idx % 2 === 0 ? "New" : "Used"
-//     }));
-    
+//     // Simulate with placeholder data
+//     const mockProducts = Array(4)
+//       .fill(null)
+//       .map((_, idx) => ({
+//         _id: `related-${idx}`,
+//         title: `${category} Item ${idx + 1}`,
+//         price: Math.floor(Math.random() * 20000) + 5000,
+//         image: `/api/placeholder/${300 + idx}/${200 + idx}`,
+//         condition: idx % 2 === 0 ? "New" : "Used",
+//       }));
+
 //     setRelatedProducts(mockProducts);
 //   };
 
 //   // Check if product is in user's favorites
 //   const checkIfFavorite = async (productId: string) => {
-//     // This would be an actual API call in production
-//     // Simulate random favorite status for demo
+//     // Simulate random favorite status
 //     setIsFavorite(Math.random() > 0.7);
 //   };
 
 //   useEffect(() => {
 //     fetchProduct();
-    
+
 //     // Record view (in production)
 //     const recordView = async () => {
 //       if (id && user) {
@@ -137,7 +142,7 @@
 //         // await fetch(`/api/products/${id}/view`, { method: 'POST' });
 //       }
 //     };
-    
+
 //     recordView();
 //   }, [id, user, fetchProduct]);
 
@@ -157,6 +162,11 @@
 //       return;
 //     }
 
+//     if (product.quantity <= 0) {
+//       setError("This item is out of stock.");
+//       return;
+//     }
+
 //     setShowCheckoutModal(true);
 //   };
 
@@ -172,15 +182,9 @@
 //       setShowPopup(true);
 //       return;
 //     }
-    
+
 //     setIsFavorite(!isFavorite);
-    
-//     // In production, you'd make an API call to toggle favorite status
-//     // if (isFavorite) {
-//     //   await fetch(`/api/products/${id}/favorite`, { method: 'DELETE' });
-//     // } else {
-//     //   await fetch(`/api/products/${id}/favorite`, { method: 'POST' });
-//     // }
+//     // In production, toggle favorite status via API
 //   };
 
 //   const handleShare = () => {
@@ -190,29 +194,29 @@
 //   const shareVia = (platform: string) => {
 //     const shareText = `Check out this ${product?.title} on Declutter: `;
 //     const shareUrl = `${window.location.origin}/declutter/item/${id}`;
-    
+
 //     let shareLink = '';
-    
+
 //     switch (platform) {
-//       case 'whatsapp':
+//       case "whatsapp":
 //         shareLink = `https://wa.me/?text=${encodeURIComponent(shareText + shareUrl)}`;
 //         break;
-//       case 'twitter':
+//       case "twitter":
 //         shareLink = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`;
 //         break;
-//       case 'facebook':
+//       case "facebook":
 //         shareLink = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`;
 //         break;
-//       case 'copy':
+//       case "copy":
 //         navigator.clipboard.writeText(shareUrl);
 //         // Show a toast notification here
 //         return;
 //     }
-    
+
 //     if (shareLink) {
-//       window.open(shareLink, '_blank');
+//       window.open(shareLink, "_blank");
 //     }
-    
+
 //     setShowShareMenu(false);
 //   };
 
@@ -235,7 +239,7 @@
 //         <div className="hidden top-0 lg:flex items-center">
 //           <Navbar searchTerm="" setSearchTerm={() => {}} />
 //         </div>
-        
+
 //         <main className="max-w-7xl mx-auto px-4 lg:px-8 pt-4 lg:pt-[88px]">
 //           <div className="bg-white rounded-lg shadow-lg overflow-hidden lg:flex animate-pulse">
 //             <div className="lg:w-1/2 h-80 bg-gray-200"></div>
@@ -260,13 +264,27 @@
 //       <div className="min-h-screen flex items-center justify-center bg-gray-50">
 //         <div className="text-center p-8 max-w-md">
 //           <div className="bg-red-50 p-4 rounded-full inline-flex items-center justify-center mb-4">
-//             <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-//               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+//             <svg
+//               xmlns="http://www.w3.org/2000/svg"
+//               className="h-10 w-10 text-red-500"
+//               fill="none"
+//               viewBox="0 0 24 24"
+//               stroke="currentColor"
+//             >
+//               <path
+//                 strokeLinecap="round"
+//                 strokeLinejoin="round"
+//                 strokeWidth={2}
+//                 d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+//               />
 //             </svg>
 //           </div>
 //           <h2 className="text-2xl font-semibold text-gray-700 mb-2">Oops!</h2>
 //           <p className="text-gray-500 mb-6">{error}</p>
-//           <Link href="/declutter" className="inline-block px-5 py-3 bg-orange-600 text-white font-medium rounded-lg hover:bg-orange-700 transition-colors">
+//           <Link
+//             href="/declutter"
+//             className="inline-block px-5 py-3 bg-orange-600 text-white font-medium rounded-lg hover:bg-orange-700 transition-colors"
+//           >
 //             Return to Declutter
 //           </Link>
 //         </div>
@@ -290,7 +308,7 @@
 //   }
 
 //   return (
-//     <div className="min-h-screen font-sans  text-gray-900">
+//     <div className="min-h-screen font-sans text-gray-900">
 //       <div className="hidden lg:flex items-center">
 //         <Navbar searchTerm="" setSearchTerm={() => {}} />
 //       </div>
@@ -302,29 +320,44 @@
 //             <ArrowLeftIcon className="h-5 w-5" />
 //           </button>
 //           <div className="flex space-x-2">
-//             <button onClick={handleShare} className="p-2 rounded-full hover:bg-gray-100 relative">
+//             <button
+//               onClick={handleShare}
+//               className="p-2 rounded-full hover:bg-gray-100 relative"
+//             >
 //               <Share2 className="h-5 w-5" />
-              
+
 //               {/* Share menu */}
 //               {showShareMenu && (
 //                 <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl p-2 z-50">
-//                   <button onClick={() => shareVia('whatsapp')} className="flex items-center w-full p-2 hover:bg-gray-100 rounded">
+//                   <button
+//                     onClick={() => shareVia("whatsapp")}
+//                     className="flex items-center w-full p-2 hover:bg-gray-100 rounded"
+//                   >
 //                     <span>WhatsApp</span>
 //                   </button>
-//                   <button onClick={() => shareVia('twitter')} className="flex items-center w-full p-2 hover:bg-gray-100 rounded">
+//                   <button
+//                     onClick={() => shareVia("twitter")}
+//                     className="flex items-center w-full p-2 hover:bg-gray-100 rounded"
+//                   >
 //                     <span>Twitter</span>
 //                   </button>
-//                   <button onClick={() => shareVia('facebook')} className="flex items-center w-full p-2 hover:bg-gray-100 rounded">
+//                   <button
+//                     onClick={() => shareVia("facebook")}
+//                     className="flex items-center w-full p-2 hover:bg-gray-100 rounded"
+//                   >
 //                     <span>Facebook</span>
 //                   </button>
-//                   <button onClick={() => shareVia('copy')} className="flex items-center w-full p-2 hover:bg-gray-100 rounded">
+//                   <button
+//                     onClick={() => shareVia("copy")}
+//                     className="flex items-center w-full p-2 hover:bg-gray-100 rounded"
+//                   >
 //                     <span>Copy Link</span>
 //                   </button>
 //                 </div>
 //               )}
 //             </button>
-//             <button 
-//               onClick={handleFavoriteToggle} 
+//             <button
+//               onClick={handleFavoriteToggle}
 //               className="p-2 rounded-full hover:bg-gray-100"
 //               aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
 //             >
@@ -342,8 +375,9 @@
 //         {/* Breadcrumb Navigation - Hidden on Mobile */}
 //         <div className="hidden md:block mb-6">
 //           <nav className="flex text-sm text-gray-600">
-//             <Link href="/" className="hover:text-orange-600">Home</Link>
-            
+//             <Link href="/" className="hover:text-orange-600">
+//               Home
+//             </Link>
 //             <span className="mx-2">/</span>
 //             <span className="text-gray-900 truncate max-w-xs">{product.title}</span>
 //           </nav>
@@ -355,11 +389,11 @@
 //             <div className="overflow-hidden rounded-lg">
 //               <ImageGallery images={product.images} title={product.title} />
 //             </div>
-            
+
 //             {/* Product Actions - Desktop Only */}
 //             <div className="hidden lg:flex items-center justify-between mt-4">
 //               <div className="flex items-center space-x-6">
-//                 <button 
+//                 <button
 //                   onClick={handleFavoriteToggle}
 //                   className="flex items-center text-gray-700 hover:text-red-500 transition-colors"
 //                 >
@@ -370,39 +404,67 @@
 //                   )}
 //                   <span>{isFavorite ? "Saved" : "Save"}</span>
 //                 </button>
-                
-//                 <button 
+
+//                 <button
 //                   onClick={handleShare}
 //                   className="flex items-center text-gray-700 hover:text-orange-600 transition-colors relative"
 //                 >
 //                   <Share2 className="h-5 w-5 mr-1" />
 //                   <span>Share</span>
-                  
+
 //                   {/* Share menu */}
 //                   {showShareMenu && (
 //                     <div className="absolute left-0 bottom-full mb-2 w-48 bg-white rounded-lg shadow-xl p-2 z-50">
-//                       <button onClick={() => shareVia('whatsapp')} className="flex items-center w-full p-2 hover:bg-gray-100 rounded">
+//                       <button
+//                         onClick={() => shareVia("whatsapp")}
+//                         className="flex items-center w-full p-2 hover:bg-gray-100 rounded"
+//                       >
 //                         <span>WhatsApp</span>
 //                       </button>
-//                       <button onClick={() => shareVia('twitter')} className="flex items-center w-full p-2 hover:bg-gray-100 rounded">
+//                       <button
+//                         onClick={() => shareVia("twitter")}
+//                         className="flex items-center w-full p-2 hover:bg-gray-100 rounded"
+//                       >
 //                         <span>Twitter</span>
 //                       </button>
-//                       <button onClick={() => shareVia('facebook')} className="flex items-center w-full p-2 hover:bg-gray-100 rounded">
+//                       <button
+//                         onClick={() => shareVia("facebook")}
+//                         className="flex items-center w-full p-2 hover:bg-gray-100 rounded"
+//                       >
 //                         <span>Facebook</span>
 //                       </button>
-//                       <button onClick={() => shareVia('copy')} className="flex items-center w-full p-2 hover:bg-gray-100 rounded">
+//                       <button
+//                         onClick={() => shareVia("copy")}
+//                         className="flex items-center w-full p-2 hover:bg-gray-100 rounded"
+//                       >
 //                         <span>Copy Link</span>
 //                       </button>
 //                     </div>
 //                   )}
 //                 </button>
 //               </div>
-              
+
 //               <div className="flex items-center text-gray-500 text-sm">
 //                 <span className="flex items-center mr-4">
-//                   <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-//                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-//                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+//                   <svg
+//                     xmlns="http://www.w3.org/2000/svg"
+//                     className="h-4 w-4 mr-1"
+//                     fill="none"
+//                     viewBox="0 0 24 24"
+//                     stroke="currentColor"
+//                   >
+//                     <path
+//                       strokeLinecap="round"
+//                       strokeLinejoin="round"
+//                       strokeWidth={2}
+//                       d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+//                     />
+//                     <path
+//                       strokeLinecap="round"
+//                       strokeLinejoin="round"
+//                       strokeWidth={2}
+//                       d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+//                     />
 //                   </svg>
 //                   {product.views} views
 //                 </span>
@@ -418,29 +480,67 @@
 //           <div className="lg:w-1/2 p-4 lg:p-6 flex flex-col">
 //             <div className="flex-1">
 //               {/* Status Badge */}
-//               {product.status !== 'available' && (
+//               {product.status !== "available" || product.quantity === 0 ? (
 //                 <div className="inline-block bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded mb-2">
-//                   {product.status.charAt(0).toUpperCase() + product.status.slice(1)}
+//                   {product.quantity === 0 ? "Out of Stock" : product.status.charAt(0).toUpperCase() + product.status.slice(1)}
 //                 </div>
-//               )}
-//               {product.status === 'available' && (
+//               ) : (
 //                 <div className="inline-block bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded mb-2">
 //                   Available
 //                 </div>
 //               )}
-              
+
 //               <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">{product.title}</h1>
 //               <p className="text-xl md:text-2xl font-semibold text-orange-600 mb-4">
 //                 ₦{product.price.toLocaleString()}
 //               </p>
 
+//               {/* Quantity Input */}
+//               {product.status === "available" && product.quantity > 0 && !isSeller && (
+//                 <div className="mb-4">
+//                   <label className="block text-sm font-medium text-gray-700 mb-2">
+//                     Quantity
+//                   </label>
+//                   <select
+//                     value={selectedQuantity}
+//                     onChange={(e) => setSelectedQuantity(Number(e.target.value))}
+//                     className="w-24 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+//                   >
+//                     {[...Array(Math.min(product.quantity, 10))].map((_, i) => (
+//                       <option key={i + 1} value={i + 1}>
+//                         {i + 1}
+//                       </option>
+//                     ))}
+//                   </select>
+//                   <p className="mt-1 text-sm text-gray-500">
+//                     {product.quantity} {product.quantity === 1 ? "item" : "items"} available
+//                   </p>
+//                 </div>
+//               )}
+
 //               {/* Mobile Actions */}
 //               <div className="flex items-center justify-between lg:hidden mb-4">
 //                 <div className="flex items-center text-gray-500 text-sm">
 //                   <span className="flex items-center mr-3">
-//                     <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-//                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-//                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+//                     <svg
+//                       xmlns="http://www.w3.org/2000/svg"
+//                       className="h-4 w-4 mr-1"
+//                       fill="none"
+//                       viewBox="0 0 24 24"
+//                       stroke="currentColor"
+//                     >
+//                       <path
+//                         strokeLinecap="round"
+//                         strokeLinejoin="round"
+//                         strokeWidth={2}
+//                         d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+//                       />
+//                       <path
+//                         strokeLinecap="round"
+//                         strokeLinejoin="round"
+//                         strokeWidth={2}
+//                         d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+//                       />
 //                     </svg>
 //                     {product.views}
 //                   </span>
@@ -454,21 +554,27 @@
 //               {/* Mobile Tabs Navigation */}
 //               <div className="block lg:hidden mb-4 border-b">
 //                 <div className="flex">
-//                   <button 
+//                   <button
 //                     onClick={() => setActiveTab("details")}
-//                     className={`flex-1 py-2 font-medium text-sm ${activeTab === "details" ? "text-orange-600 border-b-2 border-orange-600" : "text-gray-500"}`}
+//                     className={`flex-1 py-2 font-medium text-sm ${
+//                       activeTab === "details" ? "text-orange-600 border-b-2 border-orange-600" : "text-gray-500"
+//                     }`}
 //                   >
 //                     Details
 //                   </button>
-//                   <button 
+//                   <button
 //                     onClick={() => setActiveTab("description")}
-//                     className={`flex-1 py-2 font-medium text-sm ${activeTab === "description" ? "text-orange-600 border-b-2 border-orange-600" : "text-gray-500"}`}
+//                     className={`flex-1 py-2 font-medium text-sm ${
+//                       activeTab === "description" ? "text-orange-600 border-b-2 border-orange-600" : "text-gray-500"
+//                     }`}
 //                   >
 //                     Description
 //                   </button>
-//                   <button 
+//                   <button
 //                     onClick={() => setActiveTab("seller")}
-//                     className={`flex-1 py-2 font-medium text-sm ${activeTab === "seller" ? "text-orange-600 border-b-2 border-orange-600" : "text-gray-500"}`}
+//                     className={`flex-1 py-2 font-medium text-sm ${
+//                       activeTab === "seller" ? "text-orange-600 border-b-2 border-orange-600" : "text-gray-500"
+//                     }`}
 //                   >
 //                     Seller
 //                   </button>
@@ -495,6 +601,10 @@
 //                           <div className="flex justify-between py-2 border-b border-gray-100">
 //                             <span className="font-medium text-gray-900">Condition</span>
 //                             <span>{product.condition}</span>
+//                           </div>
+//                           <div className="flex justify-between py-2 border-b border-gray-100">
+//                             <span className="font-medium text-gray-900">Quantity Available</span>
+//                             <span>{product.quantity}</span>
 //                           </div>
 //                           {product.brand && (
 //                             <div className="flex justify-between py-2 border-b border-gray-100">
@@ -548,7 +658,7 @@
 //                           <p className="text-gray-600 leading-relaxed">{product.description}</p>
 //                         </div>
 //                       )}
-                      
+
 //                       {product.reason && (
 //                         <div className="mb-6">
 //                           <h3 className="text-lg font-semibold text-gray-900 mb-2">Reason for Selling</h3>
@@ -558,51 +668,63 @@
 //                     </motion.div>
 //                   )}
 
-//                   {activeTab === "seller" && (
-//                     <motion.div
-//                       key="seller"
-//                       initial={{ opacity: 0 }}
-//                       animate={{ opacity: 1 }}
-//                       exit={{ opacity: 0 }}
-//                       transition={{ duration: 0.2 }}
-//                     >
-//                       <div className="mb-6">
-//                         <div className="flex items-center mb-4">
-//                           <div className="h-12 w-12 bg-gray-200 rounded-full flex items-center justify-center text-gray-500 mr-3">
-//                             <UserIcon className="h-6 w-6" />
-//                           </div>
-//                           <div>
-//                             <div className="flex items-center">
-//                               <span className="font-medium text-gray-900">{product.seller.username}</span>
-//                               {product.seller.verified && (
-//                                 <span className="ml-2 inline-flex items-center px-2 py-1 text-xs font-medium text-green-700 bg-green-100 rounded-full">
-//                                   <ShieldCheckIcon className="h-3 w-3 mr-1" />
-//                                   Verified
-//                                 </span>
-//                               )}
-//                             </div>
-//                             <div className="text-sm text-gray-500 flex items-center">
-//                               <Star className="h-3 w-3 mr-1 text-yellow-400" />
-//                               {product.seller.rating || "4.5"} · Member since {product.seller.memberSince || "2023"}
-//                             </div>
-//                           </div>
-//                         </div>
-                        
-//                         <div className="space-y-2">
-//                           <div className="flex items-center">
-//                             <MapPinIcon className="h-5 w-5 text-orange-600 mr-2" />
-//                             <span className="text-gray-600">{product.location}</span>
-//                           </div>
-//                           {product.contact && (
-//                             <div className="flex items-center">
-//                               <MessageSquare className="h-5 w-5 text-orange-600 mr-2" />
-//                               <span className="text-gray-600">{product.contact}</span>
-//                             </div>
-//                           )}
-//                         </div>
-//                       </div>
-//                     </motion.div>
-//                   )}
+// {activeTab === "seller" && (
+//   <motion.div
+//     key="seller"
+//     initial={{ opacity: 0 }}
+//     animate={{ opacity: 1 }}
+//     exit={{ opacity: 0 }}
+//     transition={{ duration: 0.2 }}
+//   >
+//     <div className="mb-6">
+//       <div className="flex items-center mb-4">
+//         <div className="h-12 w-12 bg-gray-200 rounded-full flex items-center justify-center text-gray-500 mr-3">
+//           <UserIcon className="h-6 w-6" />
+//         </div>
+//         <div>
+//           <div className="flex items-center">
+//             <span className="font-medium text-gray-900">{product.seller.username}</span>
+//             {product.seller.verified && (
+//               <span className="ml-2 inline-flex items-center px-2 py-1 text-xs font-medium text-green-700 bg-green-100 rounded-full">
+//                 <ShieldCheckIcon className="h-3 w-3 mr-1" />
+//                 Verified
+//               </span>
+//             )}
+//           </div>
+//           <div className="text-sm text-gray-500 flex items-center">
+//             <Star className="h-3 w-3 mr-1 text-yellow-400" />
+//             {product.seller.rating || "4.5"} · Member since {product.seller.memberSince || "2023"}
+//           </div>
+//         </div>
+//       </div>
+
+//       <div className="space-y-2">
+//         <div className="flex items-center">
+//           <MapPinIcon className="h-5 w-5 text-orange-600 mr-2" />
+//           <span className="text-gray-600">{product.location}</span>
+//         </div>
+//         <div className="flex items-center">
+//           <svg
+//             className="h-5 w-5 text-green-600 mr-2"
+//             fill="currentColor"
+//             viewBox="0 0 24 24"
+//             xmlns="http://www.w3.org/2000/svg"
+//           >
+//             <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.198-.347.223-.644.075-.297-.148-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.074-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.099-.198-.198-.297-.347zM12 20.25c-4.556 0-8.25-3.694-8.25-8.25S7.444 3.75 12 3.75s8.25 3.694 8.25 8.25c0 2.09-.812 4.012-2.144 5.474l.03-.024-2.414 1.255a.75.75 0 01-.986-.093l-.008-.009a8.204 8.204 0 01-2.728 1.347z" />
+//           </svg>
+//           <a
+//             href={`https://wa.me/${WHATSAPP_NUMBER}?text=${WHATSAPP_MESSAGE.replace("[PRODUCT_TITLE]", encodeURIComponent(product.title))}`}
+//             target="_blank"
+//             rel="noopener noreferrer"
+//             className="text-green-600 hover:underline"
+//           >
+//             Chat on WhatsApp
+//           </a>
+//         </div>
+//       </div>
+//     </div>
+//   </motion.div>
+// )}
 //                 </AnimatePresence>
 //               </div>
 
@@ -619,6 +741,10 @@
 //                     <div>
 //                       <span className="block text-sm text-gray-500">Condition</span>
 //                       <span className="font-medium">{product.condition}</span>
+//                     </div>
+//                     <div>
+//                       <span className="block text-sm text-gray-500">Quantity Available</span>
+//                       <span className="font-medium">{product.quantity}</span>
 //                     </div>
 //                     {product.brand && (
 //                       <div>
@@ -662,7 +788,7 @@
 //                 {/* Description */}
 //                 {product.description && (
 //                   <div className="mb-6">
-// <h3 className="text-lg font-semibold text-gray-900 mb-3">Description</h3>
+//                     <h3 className="text-lg font-semibold text-gray-900 mb-3">Description</h3>
 //                     <p className="text-gray-600 leading-relaxed whitespace-pre-line">{product.description}</p>
 //                   </div>
 //                 )}
@@ -699,20 +825,30 @@
 //                         {product.seller.rating || "4.5"} · Member since {product.seller.memberSince || "2023"}
 //                       </div>
 //                     </div>
-                    
+
 //                     {!isSeller && (
-//                       <Link href={user ? `/pages/chat?sellerId=${sellerId}` : "#"} passHref>
-//                         <button
-//                           onClick={handleChatClick}
-//                           className="ml-auto px-4 py-2 bg-gray-100 text-gray-900 rounded-lg hover:bg-gray-200 transition-colors flex items-center"
-//                         >
-//                           <MessageSquare className="h-4 w-4 mr-2" />
-//                           Message Seller
-//                         </button>
-//                       </Link>
-//                     )}
+//   <a
+//     href={`https://wa.me/${WHATSAPP_NUMBER}?text=${WHATSAPP_MESSAGE.replace("[PRODUCT_TITLE]", encodeURIComponent(product.title))}`}
+//     target="_blank"
+//     rel="noopener noreferrer"
+//     className="ml-auto px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center relative group"
+//   >
+//     <svg
+//       className="h-4 w-4 mr-2"
+//       fill="currentColor"
+//       viewBox="0 0 24 24"
+//       xmlns="http://www.w3.org/2000/svg"
+//     >
+//       <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.198-.347.223-.644.075-.297-.148-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.074-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.099-.198-.198-.297-.347zM12 20.25c-4.556 0-8.25-3.694-8.25-8.25S7.444 3.75 12 3.75s8.25 3.694 8.25 8.25c0 2.09-.812 4.012-2.144 5.474l.03-.024-2.414 1.255a.75.75 0 01-.986-.093l-.008-.009a8.204 8.204 0 01-2.728 1.347z" />
+//     </svg>
+//     Chat on WhatsApp to Deal
+//     <span className="absolute top-full mt-2 hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2">
+//       Negotiate and complete your deal via our verified WhatsApp Business account
+//     </span>
+//   </a>
+// )}
 //                   </div>
-                  
+
 //                   <div className="space-y-3 mt-4">
 //                     <div className="flex items-center">
 //                       <MapPinIcon className="h-5 w-5 text-orange-600 mr-3" />
@@ -728,7 +864,9 @@
 //                 </div>
 //               </div>
 //             </div>
-//             <div className="text-[12px] lg:text-xs italic "><span className="text-orange-600">PLEASE NOTE:</span> The ESCROW system ensures "Your Money, Your Control" until you are satisfied and release the funds, Please keep all transactions within SpawnHub for your safety and control</div>
+//             <div className="text-[12px] lg:text-xs italic">
+//               <span className="text-orange-600">PLEASE NOTE:</span> The ESCROW system ensures "Your Money, Your Control" until you are satisfied and release the funds, Please keep all transactions within SpawnHub for your safety and control
+//             </div>
 
 //             {/* Action Buttons - Desktop */}
 //             <div className="hidden lg:block mt-6">
@@ -737,10 +875,10 @@
 //                   <button
 //                     onClick={handlePayment}
 //                     className="flex-1 py-3 px-6 bg-orange-600 text-white font-semibold rounded-lg hover:bg-orange-700 transition-all duration-300 flex items-center justify-center"
-//                     disabled={product.status !== 'available'}
+//                     disabled={product.status !== "available" || product.quantity === 0}
 //                   >
 //                     <CreditCard className="h-5 w-5 mr-2" />
-//                     {product.status === 'available' ? 'Pay Now' : 'Item Unavailable'}
+//                     {product.status === "available" && product.quantity > 0 ? "Pay Now" : "Item Unavailable"}
 //                   </button>
 //                 </div>
 //               ) : (
@@ -759,11 +897,14 @@
 //         <div className="mt-10 mb-20">
 //           <div className="flex items-center justify-between mb-4 px-4 lg:px-0">
 //             <h3 className="text-xl font-semibold text-gray-900">More from this Seller</h3>
-//             <Link href={`/declutter/seller/${product.seller._id}`} className="text-orange-600 text-sm hover:underline">
+//             <Link
+//               href={`/declutter/seller/${product.seller._id}`}
+//               className="text-orange-600 text-sm hover:underline"
+//             >
 //               View all
 //             </Link>
 //           </div>
-          
+
 //           <div className="flex flex-row overflow-x-auto snap-x snap-mandatory gap-4 px-4 md:grid md:grid-cols-2 lg:grid-cols-4 md:gap-6 md:overflow-visible md:px-0 scrollbar-hide pb-4">
 //             {relatedProducts.length > 0 ? (
 //               relatedProducts.map((item, index) => (
@@ -817,10 +958,10 @@
 //             <button
 //               onClick={handlePayment}
 //               className="flex-1 mx-2 py-3 px-4 bg-orange-600 text-white font-semibold rounded-xl hover:bg-orange-700 transition-all duration-300 flex items-center justify-center text-sm"
-//               disabled={product.status !== 'available'}
+//               disabled={product.status !== "available" || product.quantity === 0}
 //             >
 //               <CreditCard className="mr-2 h-5 w-5" />
-//               {product.status === 'available' ? 'Pay Now' : 'Unavailable'}
+//               {product.status === "available" && product.quantity > 0 ? "Pay Now" : "Unavailable"}
 //             </button>
 //           ) : (
 //             <Link
@@ -856,13 +997,14 @@
 //             id: id?.toString() || "",
 //             title: product.title,
 //             price: product.price,
+//             quantity: selectedQuantity, // Pass selected quantity
 //           }}
 //           user={user}
 //           token={token}
 //           cart={[]}
 //           storeId="default-store-id"
 //           store={{ name: "Default Store", location: "Default Location" }}
-//           totalPrice={product.price}
+//           totalPrice={product.price * selectedQuantity} // Adjust total price based on quantity
 //           onSuccess={(orderId) => {
 //             router.push(`/declutter/purchase/${orderId}`);
 //           }}
@@ -872,7 +1014,7 @@
 //       {/* Login Popup */}
 //       {showPopup && (
 //         <div className="fixed inset-0 flex items-center justify-center bg-black/70 backdrop-blur-sm z-50 px-4">
-//           <motion.div 
+//           <motion.div
 //             initial={{ opacity: 0, scale: 0.9 }}
 //             animate={{ opacity: 1, scale: 1 }}
 //             className="bg-white rounded-2xl shadow-2xl p-6 max-w-sm w-full"
@@ -906,13 +1048,14 @@
 //     </div>
 //   );
 // }
+
 "use client";
 
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeftIcon, ShieldCheckIcon, MapPinIcon, UserIcon } from "@heroicons/react/24/outline";
+import { ArrowLeftIcon, ShieldCheckIcon, MapPinIcon, UserIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import dynamic from "next/dynamic";
-import { MessageSquare, PencilIcon, CreditCard, Share2, Calendar, Tag, Star } from "lucide-react";
+import { PencilIcon, CreditCard, Share2, Star } from "lucide-react";
 import { useAuth } from "@/app/context/AuthContext";
 import Navbar from "@/app/components/Navbar";
 import { useState, useEffect, useCallback } from "react";
@@ -921,7 +1064,6 @@ import { HomeIcon, HeartIcon as HeartOutline } from "@heroicons/react/24/outline
 import { HeartIcon as HeartSolid } from "@heroicons/react/24/solid";
 import CheckoutModal from "@/app/components/CheckoutModal";
 
-// Lazy load the image gallery component
 const ImageGallery = dynamic(() => import("../../../components/ImageGallery"), {
   ssr: false,
   loading: () => (
@@ -944,7 +1086,7 @@ interface Product {
   _id: string;
   title: string;
   price: number;
-  quantity: number; // Added quantity field
+  quantity: number;
   description: string;
   location: string;
   category: string;
@@ -977,7 +1119,30 @@ export default function ProductPage() {
   const [showPopup, setShowPopup] = useState(false);
   const [showCheckoutModal, setShowCheckoutModal] = useState(false);
   const [showShareMenu, setShowShareMenu] = useState(false);
-  const [selectedQuantity, setSelectedQuantity] = useState(1); // State for user-selected quantity
+  const [selectedQuantity, setSelectedQuantity] = useState(1);
+  const [showWhatsAppBanner, setShowWhatsAppBanner] = useState(true);
+
+  // WhatsApp Configuration
+  const WHATSAPP_NUMBER = "+2347019312514";
+  const WHATSAPP_MESSAGE = "Hello! I'm interested in this item: [PRODUCT_TITLE]. Can we discuss the deal?";
+  const whatsappLink = product
+    ? `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
+        WHATSAPP_MESSAGE.replace("[PRODUCT_TITLE]", product.title || "this item")
+      )}`
+    : `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(WHATSAPP_MESSAGE.replace("[PRODUCT_TITLE]", "this item"))}`;
+
+  // Handle WhatsApp banner dismissal
+  useEffect(() => {
+    const dismissed = localStorage.getItem(`whatsappBannerDismissed_${id}`);
+    if (dismissed) {
+      setShowWhatsAppBanner(false);
+    }
+  }, [id]);
+
+  const handleDismissBanner = () => {
+    setShowWhatsAppBanner(false);
+    localStorage.setItem(`whatsappBannerDismissed_${id}`, "true");
+  };
 
   const fetchProduct = useCallback(async () => {
     try {
@@ -988,22 +1153,19 @@ export default function ProductPage() {
       if (!response.ok) throw new Error("Product not found");
       const data = await response.json();
 
-      // Format the product data
       setProduct({
         ...data,
         price: data.price,
-        quantity: data.quantity, // Include quantity from backend
+        quantity: data.quantity,
         images: data.images.filter((img: string | null) => img !== null),
-        views: Math.floor(Math.random() * 100) + 50, // Placeholder
-        favorites: Math.floor(Math.random() * 20) + 5, // Placeholder
+        views: Math.floor(Math.random() * 100) + 50,
+        favorites: Math.floor(Math.random() * 20) + 5,
       });
 
-      // Simulate API call for related products
       setTimeout(() => {
         fetchRelatedProducts(data.category, data.seller._id);
       }, 500);
 
-      // Check if product is in user's favorites (if user is logged in)
       if (user) {
         checkIfFavorite(id.toString());
       }
@@ -1014,9 +1176,7 @@ export default function ProductPage() {
     }
   }, [id, user]);
 
-  // Fetch related products based on category or seller
   const fetchRelatedProducts = async (category: string, sellerId: string) => {
-    // Simulate with placeholder data
     const mockProducts = Array(4)
       .fill(null)
       .map((_, idx) => ({
@@ -1030,19 +1190,15 @@ export default function ProductPage() {
     setRelatedProducts(mockProducts);
   };
 
-  // Check if product is in user's favorites
   const checkIfFavorite = async (productId: string) => {
-    // Simulate random favorite status
     setIsFavorite(Math.random() > 0.7);
   };
 
   useEffect(() => {
     fetchProduct();
 
-    // Record view (in production)
     const recordView = async () => {
       if (id && user) {
-        // API call to record product view
         // await fetch(`/api/products/${id}/view`, { method: 'POST' });
       }
     };
@@ -1074,13 +1230,6 @@ export default function ProductPage() {
     setShowCheckoutModal(true);
   };
 
-  const handleChatClick = (e: React.MouseEvent) => {
-    if (!user) {
-      e.preventDefault();
-      setShowPopup(true);
-    }
-  };
-
   const handleFavoriteToggle = async () => {
     if (!user) {
       setShowPopup(true);
@@ -1088,7 +1237,6 @@ export default function ProductPage() {
     }
 
     setIsFavorite(!isFavorite);
-    // In production, toggle favorite status via API
   };
 
   const handleShare = () => {
@@ -1113,7 +1261,6 @@ export default function ProductPage() {
         break;
       case "copy":
         navigator.clipboard.writeText(shareUrl);
-        // Show a toast notification here
         return;
     }
 
@@ -1136,10 +1283,9 @@ export default function ProductPage() {
   const sellerId = product?.seller._id;
   const isSeller = user && sellerId === user.id;
 
-  // Loading state with skeleton UI
   if (loading) {
     return (
-      <div className="min-h-screen ">
+      <div className="min-h-screen">
         <div className="hidden top-0 lg:flex items-center">
           <Navbar searchTerm="" setSearchTerm={() => {}} />
         </div>
@@ -1162,7 +1308,6 @@ export default function ProductPage() {
     );
   }
 
-  // Error state
   if (error) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
@@ -1196,7 +1341,6 @@ export default function ProductPage() {
     );
   }
 
-  // Product not found state
   if (!product) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
@@ -1217,7 +1361,6 @@ export default function ProductPage() {
         <Navbar searchTerm="" setSearchTerm={() => {}} />
       </div>
 
-      {/* Mobile header */}
       <div className="lg:hidden sticky top-0 z-30 bg-white shadow-sm">
         <div className="flex items-center justify-between p-4">
           <button onClick={() => router.back()} className="p-2 rounded-full hover:bg-gray-100">
@@ -1229,8 +1372,6 @@ export default function ProductPage() {
               className="p-2 rounded-full hover:bg-gray-100 relative"
             >
               <Share2 className="h-5 w-5" />
-
-              {/* Share menu */}
               {showShareMenu && (
                 <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl p-2 z-50">
                   <button
@@ -1276,7 +1417,6 @@ export default function ProductPage() {
       </div>
 
       <main className="max-w-7xl mx-auto px-4 lg:px-8 pt-4 lg:pt-[88px] pb-20">
-        {/* Breadcrumb Navigation - Hidden on Mobile */}
         <div className="hidden md:block mb-6">
           <nav className="flex text-sm text-gray-600">
             <Link href="/" className="hover:text-orange-600">
@@ -1288,13 +1428,11 @@ export default function ProductPage() {
         </div>
 
         <div className="bg-white rounded-lg shadow-lg overflow-hidden lg:flex">
-          {/* Image Gallery */}
           <div className="lg:w-1/2 p-0 lg:p-6">
             <div className="overflow-hidden rounded-lg">
               <ImageGallery images={product.images} title={product.title} />
             </div>
 
-            {/* Product Actions - Desktop Only */}
             <div className="hidden lg:flex items-center justify-between mt-4">
               <div className="flex items-center space-x-6">
                 <button
@@ -1315,8 +1453,6 @@ export default function ProductPage() {
                 >
                   <Share2 className="h-5 w-5 mr-1" />
                   <span>Share</span>
-
-                  {/* Share menu */}
                   {showShareMenu && (
                     <div className="absolute left-0 bottom-full mb-2 w-48 bg-white rounded-lg shadow-xl p-2 z-50">
                       <button
@@ -1380,10 +1516,8 @@ export default function ProductPage() {
             </div>
           </div>
 
-          {/* Product Details */}
           <div className="lg:w-1/2 p-4 lg:p-6 flex flex-col">
             <div className="flex-1">
-              {/* Status Badge */}
               {product.status !== "available" || product.quantity === 0 ? (
                 <div className="inline-block bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded mb-2">
                   {product.quantity === 0 ? "Out of Stock" : product.status.charAt(0).toUpperCase() + product.status.slice(1)}
@@ -1399,7 +1533,6 @@ export default function ProductPage() {
                 ₦{product.price.toLocaleString()}
               </p>
 
-              {/* Quantity Input */}
               {product.status === "available" && product.quantity > 0 && !isSeller && (
                 <div className="mb-4">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -1422,7 +1555,6 @@ export default function ProductPage() {
                 </div>
               )}
 
-              {/* Mobile Actions */}
               <div className="flex items-center justify-between lg:hidden mb-4">
                 <div className="flex items-center text-gray-500 text-sm">
                   <span className="flex items-center mr-3">
@@ -1455,7 +1587,6 @@ export default function ProductPage() {
                 </div>
               </div>
 
-              {/* Mobile Tabs Navigation */}
               <div className="block lg:hidden mb-4 border-b">
                 <div className="flex">
                   <button
@@ -1485,7 +1616,6 @@ export default function ProductPage() {
                 </div>
               </div>
 
-              {/* Mobile Tab Content */}
               <div className="block lg:hidden">
                 <AnimatePresence mode="wait">
                   {activeTab === "details" && (
@@ -1607,12 +1737,30 @@ export default function ProductPage() {
                             <MapPinIcon className="h-5 w-5 text-orange-600 mr-2" />
                             <span className="text-gray-600">{product.location}</span>
                           </div>
-                          {product.contact && (
-                            <div className="flex items-center">
-                              <MessageSquare className="h-5 w-5 text-orange-600 mr-2" />
-                              <span className="text-gray-600">{product.contact}</span>
-                            </div>
-                          )}
+                          <div className="mt-4">
+                            <a
+                              href={whatsappLink}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center px-4 py-2 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition-colors"
+                              aria-label="Chat on WhatsApp to negotiate and deal"
+                              title="Chat on WhatsApp to negotiate and deal"
+                            >
+                              <svg
+                                className="h-5 w-5 mr-2"
+                                fill="currentColor"
+                                viewBox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.198-.347.223-.644.075-.297-.148-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.074-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.099-.198-.198-.297-.347zM12 20.25c-4.556 0-8.25-3.694-8.25-8.25S7.444 3.75 12 3.75s8.25 3.694 8.25 8.25c0 2.09-.812 4.012-2.144 5.474l.03-.024-2.414 1.255a.75.75 0 01-.986-.093l-.008-.009a8.204 8.204 0 01-2.728 1.347z" />
+                              </svg>
+                              Deal on WhatsApp
+                              <span className="ml-2 inline-flex items-center px-2 py-1 text-xs font-medium text-green-100 bg-green-800 rounded-full">
+                                <ShieldCheckIcon className="h-3 w-3 mr-1" />
+                                Verified
+                              </span>
+                            </a>
+                          </div>
                         </div>
                       </div>
                     </motion.div>
@@ -1620,9 +1768,7 @@ export default function ProductPage() {
                 </AnimatePresence>
               </div>
 
-              {/* Desktop Full Content View */}
               <div className="hidden lg:block">
-                {/* Product Information */}
                 <div className="mb-6">
                   <h3 className="text-lg font-semibold text-gray-900 mb-3">Product Information</h3>
                   <div className="grid grid-cols-2 gap-x-6 gap-y-3 text-gray-600">
@@ -1677,7 +1823,6 @@ export default function ProductPage() {
 
                 <div className="border-t border-gray-100 my-6"></div>
 
-                {/* Description */}
                 {product.description && (
                   <div className="mb-6">
                     <h3 className="text-lg font-semibold text-gray-900 mb-3">Description</h3>
@@ -1685,7 +1830,6 @@ export default function ProductPage() {
                   </div>
                 )}
 
-                {/* Reason for Selling */}
                 {product.reason && (
                   <div className="mb-6">
                     <h3 className="text-lg font-semibold text-gray-900 mb-3">Reason for Selling</h3>
@@ -1695,7 +1839,6 @@ export default function ProductPage() {
 
                 <div className="border-t border-gray-100 my-6"></div>
 
-                {/* Seller Information */}
                 <div className="mb-6">
                   <h3 className="text-lg font-semibold text-gray-900 mb-3">Seller Information</h3>
                   <div className="flex items-center mb-4">
@@ -1719,15 +1862,25 @@ export default function ProductPage() {
                     </div>
 
                     {!isSeller && (
-                      <Link href={user ? `/pages/chat?sellerId=${sellerId}` : "#"} passHref>
-                        <button
-                          onClick={handleChatClick}
-                          className="ml-auto px-4 py-2 bg-gray-100 text-gray-900 rounded-lg hover:bg-gray-200 transition-colors flex items-center"
+                      <a
+                        href={whatsappLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="ml-auto px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center relative group"
+                      >
+                        <svg
+                          className="h-4 w-4 mr-2"
+                          fill="currentColor"
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
                         >
-                          <MessageSquare className="h-4 w-4 mr-2" />
-                          Message Seller
-                        </button>
-                      </Link>
+                          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.198-.347.223-.644.075-.297-.148-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.074-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.099-.198-.198-.297-.347zM12 20.25c-4.556 0-8.25-3.694-8.25-8.25S7.444 3.75 12 3.75s8.25 3.694 8.25 8.25c0 2.09-.812 4.012-2.144 5.474l.03-.024-2.414 1.255a.75.75 0 01-.986-.093l-.008-.009a8.204 8.204 0 01-2.728 1.347z" />
+                        </svg>
+                        Chat on WhatsApp to Deal
+                        <span className="absolute top-full mt-2 hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2">
+                          Negotiate and complete your deal via our verified WhatsApp Business account
+                        </span>
+                      </a>
                     )}
                   </div>
 
@@ -1736,12 +1889,24 @@ export default function ProductPage() {
                       <MapPinIcon className="h-5 w-5 text-orange-600 mr-3" />
                       <span className="text-gray-600">{product.location}</span>
                     </div>
-                    {product.contact && (
-                      <div className="flex items-center">
-                        <MessageSquare className="h-5 w-5 text-orange-600 mr-3" />
-                        <span className="text-gray-600">{product.contact}</span>
-                      </div>
-                    )}
+                    <div className="flex items-center">
+                      <svg
+                        className="h-5 w-5 text-green-600 mr-3"
+                        fill="currentColor"
+                        viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.198-.347.223-.644.075-.297-.148-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.074-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.099-.198-.198-.297-.347zM12 20.25c-4.556 0-8.25-3.694-8.25-8.25S7.444 3.75 12 3.75s8.25 3.694 8.25 8.25c0 2.09-.812 4.012-2.144 5.474l.03-.024-2.414 1.255a.75.75 0 01-.986-.093l-.008-.009a8.204 8.204 0 01-2.728 1.347z" />
+                      </svg>
+                      <a
+                        href={whatsappLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-green-600 hover:underline"
+                      >
+                        Chat on WhatsApp
+                      </a>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1749,8 +1914,18 @@ export default function ProductPage() {
             <div className="text-[12px] lg:text-xs italic">
               <span className="text-orange-600">PLEASE NOTE:</span> The ESCROW system ensures "Your Money, Your Control" until you are satisfied and release the funds, Please keep all transactions within SpawnHub for your safety and control
             </div>
+            <div className="text-sm text-gray-600 mt-2 flex items-center">
+              <svg
+                className="h-5 w-5 text-green-600 mr-2"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15.5l-5-5 1.41-1.41L11 14.67l6.59-6.59L19 9.5l-8 8z" />
+              </svg>
+              Trade safely with our verified WhatsApp Business account for off-app deals
+            </div>
 
-            {/* Action Buttons - Desktop */}
             <div className="hidden lg:block mt-6">
               {!isSeller ? (
                 <div className="flex flex-col sm:flex-row gap-4 w-full">
@@ -1775,7 +1950,6 @@ export default function ProductPage() {
           </div>
         </div>
 
-        {/* Related Products */}
         <div className="mt-10 mb-20">
           <div className="flex items-center justify-between mb-4 px-4 lg:px-0">
             <h3 className="text-xl font-semibold text-gray-900">More from this Seller</h3>
@@ -1827,50 +2001,92 @@ export default function ProductPage() {
         </div>
       </main>
 
-      {/* Mobile Bottom Navigation */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white z-40 py-2 rounded-t-2xl shadow-lg border-t border-gray-100">
-        <div className="flex justify-evenly items-center px-4">
-          {/* Home */}
-          <Link href="/" aria-label="Home" className="p-2">
-            <HomeIcon className="h-6 w-6 text-gray-600" />
-          </Link>
-
-          {/* Main Button (Pay Now or Manage Item) */}
-          {!isSeller ? (
-            <button
-              onClick={handlePayment}
-              className="flex-1 mx-2 py-3 px-4 bg-orange-600 text-white font-semibold rounded-xl hover:bg-orange-700 transition-all duration-300 flex items-center justify-center text-sm"
-              disabled={product.status !== "available" || product.quantity === 0}
-            >
-              <CreditCard className="mr-2 h-5 w-5" />
-              {product.status === "available" && product.quantity > 0 ? "Pay Now" : "Unavailable"}
-            </button>
-          ) : (
-            <Link
-              href="/declutter/manage-items"
-              className="flex-1 mx-2 py-3 px-4 bg-gray-900 text-white font-semibold rounded-xl hover:bg-gray-800 transition-all duration-300 flex items-center justify-center text-sm"
-            >
-              <PencilIcon className="mr-2 h-5 w-5" />
-              Manage Item
-            </Link>
-          )}
-
-          {/* Chat */}
-          {!isSeller && (
-            <Link href={user ? `/pages/chat?sellerId=${sellerId}` : "#"} passHref>
-              <button
-                onClick={handleChatClick}
-                className="p-2"
-                aria-label={user ? "Chat with seller" : "Login to chat"}
+      {/* WhatsApp CTA Banner for Mobile */}
+      {showWhatsAppBanner && !isSeller && (
+        <div className="md:hidden fixed bottom-16 left-0 right-0 bg-green-100 z-40 py-2 px-4 shadow-lg">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center">
+              <svg
+                className="h-5 w-5 text-green-600 mr-2"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
               >
-                <MessageSquare className="h-6 w-6 text-gray-600" />
-              </button>
-            </Link>
-          )}
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15.5l-5-5 1.41-1.41L11 14.67l6.59-6.59L19 9.5l-8 8z" />
+              </svg>
+              <p className="text-sm text-gray-800">
+                Negotiate & deal on WhatsApp with our verified account!
+              </p>
+            </div>
+            <button
+              onClick={handleDismissBanner}
+              className="p-1 rounded-full hover:bg-green-200"
+              aria-label="Dismiss WhatsApp banner"
+            >
+              <XMarkIcon className="h-5 w-5 text-gray-600" />
+            </button>
+          </div>
         </div>
-      </div>
+      )}
 
-      {/* Checkout Modal */}
+<div className="md:hidden fixed bottom-0 left-0 right-0 bg-white z-40 py-2 rounded-t-2xl shadow-lg border-t border-gray-100">
+  <div className="flex items-center px-4">
+    {/* Home icon container - fixed width for consistent spacing */}
+    <div className="w-12 flex justify-center">
+      <Link href="/" aria-label="Home" className="p-2">
+        <HomeIcon className="h-6 w-6 text-gray-600" />
+      </Link>
+    </div>
+
+    {/* Buttons container - takes remaining space */}
+    <div className="flex-1 flex gap-2">
+      {!isSeller ? (
+        <>
+          <button
+            onClick={handlePayment}
+            className="flex-1 py-3 px-4 bg-orange-600 text-white font-semibold rounded-xl hover:bg-orange-700 transition-all duration-300 flex items-center justify-center text-sm min-h-[48px] disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={product.status !== "available" || product.quantity === 0}
+          >
+            <CreditCard className="mr-2 h-5 w-5 flex-shrink-0" />
+            <span className="whitespace-nowrap">
+              {product.status === "available" && product.quantity > 0 ? "Pay Now" : "Unavailable"}
+            </span>
+          </button>
+          <a
+            href={whatsappLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex-1 py-3 px-4 bg-green-600 text-white font-semibold rounded-xl hover:bg-green-700 transition-all duration-300 flex items-center justify-center text-sm min-h-[48px]"
+            aria-label="Deal on WhatsApp to negotiate and complete your purchase"
+            title="Deal on WhatsApp to negotiate and complete your purchase"
+          >
+            <svg
+              className="h-5 w-5 mr-2 flex-shrink-0"
+              fill="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.198-.347.223-.644.075-.297-.148-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.074-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.099-.198-.198-.297-.347zM12 20.25c-4.556 0-8.25-3.694-8.25-8.25S7.444 3.75 12 3.75s8.25 3.694 8.25 8.25c0 2.09-.812 4.012-2.144 5.474l.03-.024-2.414 1.255a.75.75 0 01-.986-.093l-.008-.009a8.204 8.204 0 01-2.728 1.347z" />
+            </svg>
+            <span className="whitespace-nowrap">Deal on WhatsApp</span>
+          </a>
+        </>
+      ) : (
+        <Link
+          href="/declutter/manage-items"
+          className="flex-1 py-3 px-4 bg-gray-900 text-white font-semibold rounded-xl hover:bg-gray-800 transition-all duration-300 flex items-center justify-center text-sm min-h-[48px]"
+        >
+          <PencilIcon className="mr-2 h-5 w-5 flex-shrink-0" />
+          <span className="whitespace-nowrap">Manage Item</span>
+        </Link>
+      )}
+    </div>
+
+    {/* Empty spacer to balance the home icon */}
+    <div className="w-12"></div>
+  </div>
+</div>
+
       {showCheckoutModal && product && (
         <CheckoutModal
           isOpen={showCheckoutModal}
@@ -1879,21 +2095,20 @@ export default function ProductPage() {
             id: id?.toString() || "",
             title: product.title,
             price: product.price,
-            quantity: selectedQuantity, // Pass selected quantity
+            quantity: selectedQuantity,
           }}
           user={user}
           token={token}
           cart={[]}
           storeId="default-store-id"
           store={{ name: "Default Store", location: "Default Location" }}
-          totalPrice={product.price * selectedQuantity} // Adjust total price based on quantity
+          totalPrice={product.price * selectedQuantity}
           onSuccess={(orderId) => {
             router.push(`/declutter/purchase/${orderId}`);
           }}
         />
       )}
 
-      {/* Login Popup */}
       {showPopup && (
         <div className="fixed inset-0 flex items-center justify-center bg-black/70 backdrop-blur-sm z-50 px-4">
           <motion.div
