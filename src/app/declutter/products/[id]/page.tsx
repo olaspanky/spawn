@@ -1534,14 +1534,15 @@ export default function ProductPage() {
               </p>
 
               {product.status === "available" && product.quantity > 0 && !isSeller && (
-                <div className="mb-4">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                <div className="mb-4 flex gap-2 justify-between items-center">
+                  <label className="block text-xs lg:text-sm font-medium text-gray-700 mb-2">
                     Quantity
                   </label>
+                  <div>
                   <select
                     value={selectedQuantity}
                     onChange={(e) => setSelectedQuantity(Number(e.target.value))}
-                    className="w-24 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                    className="w-24 lg:px-3 lg:py-2 p-2 text-xs border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                   >
                     {[...Array(Math.min(product.quantity, 10))].map((_, i) => (
                       <option key={i + 1} value={i + 1}>
@@ -1552,6 +1553,7 @@ export default function ProductPage() {
                   <p className="mt-1 text-sm text-gray-500">
                     {product.quantity} {product.quantity === 1 ? "item" : "items"} available
                   </p>
+                </div>
                 </div>
               )}
 
@@ -1876,7 +1878,7 @@ export default function ProductPage() {
                         >
                           <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.198-.347.223-.644.075-.297-.148-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.074-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.099-.198-.198-.297-.347zM12 20.25c-4.556 0-8.25-3.694-8.25-8.25S7.444 3.75 12 3.75s8.25 3.694 8.25 8.25c0 2.09-.812 4.012-2.144 5.474l.03-.024-2.414 1.255a.75.75 0 01-.986-.093l-.008-.009a8.204 8.204 0 01-2.728 1.347z" />
                         </svg>
-                        Chat on WhatsApp to Deal
+                        Buy on whatsapp
                         <span className="absolute top-full mt-2 hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2">
                           Negotiate and complete your deal via our verified WhatsApp Business account
                         </span>
@@ -1937,6 +1939,25 @@ export default function ProductPage() {
                     <CreditCard className="h-5 w-5 mr-2" />
                     {product.status === "available" && product.quantity > 0 ? "Pay Now" : "Item Unavailable"}
                   </button>
+                  <a
+                        href={whatsappLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="ml-auto px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center relative group"
+                      >
+                        <svg
+                          className="h-4 w-4 mr-2"
+                          fill="currentColor"
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.198-.347.223-.644.075-.297-.148-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.074-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.099-.198-.198-.297-.347zM12 20.25c-4.556 0-8.25-3.694-8.25-8.25S7.444 3.75 12 3.75s8.25 3.694 8.25 8.25c0 2.09-.812 4.012-2.144 5.474l.03-.024-2.414 1.255a.75.75 0 01-.986-.093l-.008-.009a8.204 8.204 0 01-2.728 1.347z" />
+                        </svg>
+                        Buy on whatsapp
+                        <span className="absolute top-full mt-2 hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2">
+                          Negotiate and complete your deal via our verified WhatsApp Business account
+                        </span>
+                      </a>
                 </div>
               ) : (
                 <Link href="/declutter/manage-items" className="block w-full">
@@ -2032,11 +2053,7 @@ export default function ProductPage() {
 <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white z-40 py-2 rounded-t-2xl shadow-lg border-t border-gray-100">
   <div className="flex items-center px-4">
     {/* Home icon container - fixed width for consistent spacing */}
-    <div className="w-12 flex justify-center">
-      <Link href="/" aria-label="Home" className="p-2">
-        <HomeIcon className="h-6 w-6 text-gray-600" />
-      </Link>
-    </div>
+    
 
     {/* Buttons container - takes remaining space */}
     <div className="flex-1 flex gap-2">
@@ -2057,8 +2074,8 @@ export default function ProductPage() {
             target="_blank"
             rel="noopener noreferrer"
             className="flex-1 py-3 px-4 bg-green-600 text-white font-semibold rounded-xl hover:bg-green-700 transition-all duration-300 flex items-center justify-center text-sm min-h-[48px]"
-            aria-label="Deal on WhatsApp to negotiate and complete your purchase"
-            title="Deal on WhatsApp to negotiate and complete your purchase"
+            aria-label="Buy on our verified WhatsApp to negotiate and complete your purchase"
+            title="Buy on our verified WhatsApp to negotiate and complete your purchase"
           >
             <svg
               className="h-5 w-5 mr-2 flex-shrink-0"
@@ -2068,7 +2085,7 @@ export default function ProductPage() {
             >
               <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.198-.347.223-.644.075-.297-.148-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.074-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.099-.198-.198-.297-.347zM12 20.25c-4.556 0-8.25-3.694-8.25-8.25S7.444 3.75 12 3.75s8.25 3.694 8.25 8.25c0 2.09-.812 4.012-2.144 5.474l.03-.024-2.414 1.255a.75.75 0 01-.986-.093l-.008-.009a8.204 8.204 0 01-2.728 1.347z" />
             </svg>
-            <span className="whitespace-nowrap">Deal on WhatsApp</span>
+            <span className="whitespace-nowrap">Buy on WhatsApp</span>
           </a>
         </>
       ) : (
@@ -2082,8 +2099,7 @@ export default function ProductPage() {
       )}
     </div>
 
-    {/* Empty spacer to balance the home icon */}
-    <div className="w-12"></div>
+   
   </div>
 </div>
 

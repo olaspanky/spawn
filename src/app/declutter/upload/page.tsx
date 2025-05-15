@@ -709,10 +709,10 @@ export default function UploadPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
+    <div className="min-h-screen bg-gray-50 mt-[88px] ">
       {showModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white rounded-xl shadow-lg p-6 max-w-sm w-full text-center">
+          <div className="bg-white rounded-xl shadow-lg p-2 lg:p-6 max-w-sm w-full text-center">
             <h2 className="text-xl font-bold text-gray-900 mb-2">
               Please Sign Up & Verify Your Identity
             </h2>
@@ -729,9 +729,9 @@ export default function UploadPage() {
         </div>
       )}
 
-      <div className="max-w-3xl mx-auto px-4">
+      <div className="max-w-3xl mx-auto lg:px-4">
         <h1 className="text-3xl font-bold text-gray-900 mb-8">Sell Your Item</h1>
-        <form onSubmit={handleSubmit} className="space-y-6 bg-white p-6 rounded-xl shadow-sm">
+        <form onSubmit={handleSubmit} className="space-y-6 bg-white p-2 lg:p-6 rounded-xl shadow-sm">
           {/* Title */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">

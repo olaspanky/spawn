@@ -17,6 +17,8 @@ import {
 import { HeartIcon as HeartIconSolid } from "@heroicons/react/24/solid";
 import Link from "next/link";
 import { useAuth } from "./context/AuthContext";
+import { FaChevronDown } from "react-icons/fa";
+import { motion } from "framer-motion";
 
 interface Item {
   _id: string;
@@ -137,7 +139,7 @@ export default function Home() {
         <div className="relative overflow-hidden mt-[44px] lg:mt-0 backdrop-blur-md border-b border-white/5 shadow-md font-semibold py-5">
           <div className="container mx-auto lg:px-4 lg:py-4 p-2 md:py-3 flex flex-col md:flex-row items-start">
             {/* Left Section: Creative Slogan with White Background */}
-            <div className="w-full md:w-1/2 lg:p-4 md:p-6 flex flex-col justify-center h-[190px] sm:h-[210px] md:h-[260px] relative overflow-hidden">
+            <div className="w-full md:w-1/2 lg:p-4 md:p-6 flex flex-col justify-center h-auto relative overflow-hidden">
               {/* Subtle Background Pattern */}
               
               {/* Glowing Decorative Element */}
@@ -151,10 +153,19 @@ export default function Home() {
                 </p>
                 <button
                   onClick={handleShopMagicClick}
-                  className="relative bg-black text-white px-4 py-2 sm:px-5 sm:py-2.5 md:px-6 md:py-3 rounded-xl text-[14px] sm:text-sm md:text-base font-semibold tracking-wide transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 w-fit overflow-hidden group"
-                >
-                  <span className="relative z-10">Explore</span>
-                </button>
+                  className="relative bg-gray-800 text-white p-2 md:px-6 md:py-3 rounded-xl text-[14px] sm:text-sm md:text-base font-semibold tracking-wide transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 w-fit overflow-hidden group"
+                  >
+                    <span className="relative z-10 flex items-center gap-2">
+                      Explore
+                      <motion.span
+                        className="inline-block"
+                        animate={{ y: [0, 4, 0] }} // Bounce animation
+                        transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+                      >
+                        <FaChevronDown className="text-white w-3 h-3 lg:w-4 lg:h-4" />
+                      </motion.span>
+                    </span>
+                  </button>
               </div>
             </div>
 
@@ -259,7 +270,7 @@ export default function Home() {
 
       {/* Sticky Filter Section */}
 <div className="z-30 backdrop-blur-md border-b border-white/10 shadow-md">
-  <div className="mx-auto px-4 lg:px-5 py-2 md:py-4 max-w-7xl">
+  <div className="mx-auto px-4 lg:px-5 py-2 md:py-4 max-w-7xl overflow-auto">
     {filterOpen && (
       <div className="relative animate-fadeIn">
         {/* Mobile View */}
@@ -275,8 +286,8 @@ export default function Home() {
               }`}
               aria-label="Search"
             >
-              <MagnifyingGlassIcon className="h-5 w-5" />
-              <span className="text-sm">Search</span>
+              <MagnifyingGlassIcon className="text-black lg:h-5 lg:w-5 h-3 w-3" />
+              <span className="text-black text-xs lg:text-sm">Search</span>
             </button>
             
             <div className="text-xs text-gray-400">
@@ -289,13 +300,13 @@ export default function Home() {
           </div>
 
           {/* Categories Scroll */}
-          <div className="overflow-x-auto scrollbar-hidden -mx-4 px-4">
-            <div className="flex space-x-3 min-w-max pb-1">
+          <div className="overflow-x-auto  lg:mx-4 lg:px-4">
+            <div className="flex space-x-3 min-w-max pb-1 p-1">
               {categories.map((category) => (
                 <button
                   key={category}
                   onClick={() => setSelectedCategory(category)}
-                  className={`px-4 py-2 rounded-full text-xs transition-all duration-300 whitespace-nowrap ${
+                  className={`lg:px-4 lg:py-2 p-2 rounded-full text-xs my-2 transition-all duration-300 whitespace-nowrap ${
                     selectedCategory === category
                       ? "bg-[#36454F] text-white scale-105 shadow-lg shadow-gray-600/20"
                       : "bg-white/5 hover:bg-white/10 border text-black border-white/10 hover:border-white/20"
@@ -350,19 +361,18 @@ export default function Home() {
               <input
                 type="text"
                 placeholder="Search for items..."
-                className="w-full py-3 pl-12 pr-12 text-base rounded-lg bg-white/10 border border-white/20 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent transition-all text-white placeholder-gray-400"
+                className="w-full p-2 lg:py-3 pl-12 pr-12 text-base rounded-lg bg-white/10 border border-white/20 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent transition-all text-white placeholder-gray-400"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 autoFocus
               />
-              <MagnifyingGlassIcon className="h-5 w-5 text-gray-400 absolute top-4 left-4" />
               {searchTerm && (
                 <button
                   onClick={() => setSearchTerm("")}
                   className="absolute right-4 top-4 text-gray-400 hover:text-white transition-colors p-0.5 rounded-full hover:bg-white/10"
                   aria-label="Clear search"
                 >
-                  <XMarkIcon className="h-5 w-5" />
+                  <XMarkIcon className="lg:h-5 lg:w-5 h-3 w-3 text-black" />
                 </button>
               )}
             </div>
@@ -405,7 +415,7 @@ export default function Home() {
 
         {/* Footer */}
         <footer className="relative z-10 border-t bg-white backdrop-blur-md">
-          <div className="container mx-auto px-4 py-6">
+          {/* <div className="container mx-auto px-4 py-6">
             <div className="flex flex-col md:flex-row justify-between items-center">
               <div className="mb-4 md:mb-0">
                 <h2 className="text-xl font-bold text-black">
@@ -428,7 +438,7 @@ export default function Home() {
             <div className="mt-6 text-center text-xs text-gray-500">
               © {new Date().getFullYear()} TradeHub. All rights reserved.
             </div>
-          </div>
+          </div> */}
         </footer>
       </div>
     </div>

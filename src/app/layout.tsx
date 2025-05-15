@@ -64,10 +64,7 @@ export default function RootLayout({
         <Theme />
         <AuthProvider>
           <ClientAuthProvider />
-          <LayoutWrapper>
-
-  {children}
-          </LayoutWrapper>
+          <LayoutWrapper>{children}</LayoutWrapper>
           <Toaster /> {/* Add Toaster for toast notifications */}
         </AuthProvider>
       </body>

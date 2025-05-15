@@ -36,20 +36,7 @@ export default function Navbar({ searchTerm, setSearchTerm }: NavbarProps) {
   const pathname = usePathname();
 
   // Scroll behavior
-  useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      if (currentScrollY > lastScrollY && currentScrollY > 100) {
-        setIsVisible(false);
-      } else {
-        setIsVisible(true);
-      }
-      setLastScrollY(currentScrollY);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [lastScrollY]);
+ 
 
   // Fetch user stores
   useEffect(() => {
@@ -125,9 +112,7 @@ export default function Navbar({ searchTerm, setSearchTerm }: NavbarProps) {
     <header className="fixed w-full z-50 ">
       {/* Desktop Navbar */}
       <nav 
-        className={`hidden md:block text-white bg-gray-900/95 backdrop-blur-md border-b border-gray-800 transition-transform duration-300 ${
-          isVisible ? "translate-y-0" : "-translate-y-full"
-        }`}
+        className={`hidden md:block text-white bg-gray-900/95 backdrop-blur-md border-b border-gray-800 transition-transform duration-300`}
       >
         <div className="max-w-7xl mx-auto px-6 py-3 flex justify-between items-center">
           {/* Logo */}

@@ -216,10 +216,10 @@ const EditItem = () => {
   if (!item) return <div className="text-center text-gray-500">Loading...</div>;
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
-      <div className="max-w-3xl mx-auto px-4">
+    <div className="min-h-screen bg-gray-50 lg:py-12 mt-[88px]">
+      <div className="max-w-3xl mx-auto lg:px-4">
         <h1 className="text-3xl font-bold text-gray-900 mb-8">Edit Item</h1>
-        <form onSubmit={handleSubmit} className="space-y-6 bg-white p-6 rounded-xl shadow-sm">
+        <form onSubmit={handleSubmit} className="space-y-6 bg-white p-2 lg:p-6 rounded-xl shadow-sm">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Title</label>
             <input

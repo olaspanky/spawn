@@ -16,11 +16,11 @@ const LayoutWrapper = ({ children }: { children: React.ReactNode }) => {
     pathname.startsWith("/declutter/purchase/");
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col gap-3">
       {!isLoginOrSignupOrProduct && (
         <Navbar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
       )}
-      <main className="flex-1 ">
+      <main className=" ">
         {children}
       </main>
     </div>

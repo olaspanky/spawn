@@ -53,3 +53,54 @@ background-color: white;
 .animate-slideDown {
   animation: slideDown 0.3s ease-out forwards;
 }
+
+/* global.css */
+
+/* Target all input elements, select, and textarea */
+input,
+select,
+textarea {
+  color: #000000 !important; /* Black text color for input content */
+  background-color: #ffffff !important; /* White background for contrast */
+  border: 1px solid #000000 !important; /* Black border for visibility */
+  outline: none !important; /* Remove default outline */
+  font-size: 16px !important; /* Ensure readable font size */
+  padding: 8px !important; /* Consistent padding */
+}
+
+/* Ensure placeholder text is visible */
+input::placeholder,
+textarea::placeholder {
+  color: #333333 !important; /* Dark gray for placeholders */
+  opacity: 1 !important; /* Full opacity for visibility */
+}
+
+/* Target all labels */
+label {
+  color: #000000 !important; /* Black text color for labels */
+  font-size: 16px !important; /* Readable font size */
+  font-weight: 600 !important; /* Slightly bold for emphasis */
+}
+
+/* Ensure focus state is visible */
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: #000000 !important; /* Black border on focus */
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3) !important; /* Subtle shadow for focus */
+}
+
+/* Override any browser-specific or inherited styles */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  -webkit-text-fill-color: #000000 !important; /* Black text for autofill */
+  background-color: #ffffff !important; /* White background for autofill */
+  transition: background-color 5000s ease-in-out 0s !important; /* Prevent autofill background flicker */
+}
