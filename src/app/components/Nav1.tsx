@@ -296,7 +296,7 @@ export default function Navbar({
 
       {/* Mobile Navbar */}
       <nav
-        className={`md:hidden bg-[#800020]  text-white transition-transform duration-300 $`}
+        className={`md:hidden bg-[#1A1A1A]  text-white transition-transform duration-300 $`}
       >
         <div className="px-4 py-3 flex justify-between items-center">
           <Link href="/">
@@ -306,7 +306,7 @@ export default function Navbar({
            
             <button
               onClick={() => setSearchOpen(!searchOpen)}
-              className="p-2 rounded-full hover:bg-gray-800 transition-colors"
+              className="p-2 rounded-full hover:bg-[#1A1A1A] transition-colors"
             >
               <MagnifyingGlassIcon className="h-5 w-5" />
             </button>
@@ -317,7 +317,7 @@ export default function Navbar({
             )} */}
             <button
               onClick={toggleMobileMenu}
-              className="p-2 rounded-full hover:bg-gray-800 transition-colors"
+              className="p-2 rounded-full hover:bg-[#1A1A1A] transition-colors"
             >
               <UserIcon className="h-5 w-5" />
             </button>
@@ -331,7 +331,7 @@ export default function Navbar({
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
-              className="bg-[#800020] px-4 py-4"
+              className="bg-[#D4AF37] px-4 py-4"
             >
               <div className="relative">
                 <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
@@ -381,7 +381,7 @@ export default function Navbar({
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="md:hidden fixed inset-0 bg-gray-300  text-black z-40 pt-16 overflow-y-auto"
+            className="md:hidden fixed inset-0 bg-[#1A1A1A]  text-black z-40 pt-16 overflow-y-auto"
           >
             <div className="px-4 py-6 space-y-2">
               {token ? (
@@ -447,7 +447,7 @@ export default function Navbar({
 
       {/* Mobile Bottom Navigation (unchanged) */}
       {!pathname.startsWith("/declutter/products/") && (
-        <div className="md:hidden fixed bottom-0 left-0 right-0 bg-[#800020] z-30 text-white">
+        <div className="md:hidden fixed bottom-0 left-0 right-0 bg-[#1A1A1A] z-30 text-white">
           <div className="flex justify-around py-3">
             <Link href="/" className="p-2">
               <HomeIcon className="h-6 w-6" />
