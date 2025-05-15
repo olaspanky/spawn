@@ -112,7 +112,7 @@ export default function Navbar({ searchTerm, setSearchTerm }: NavbarProps) {
     <header className="fixed w-full z-50 ">
       {/* Desktop Navbar */}
       <nav 
-        className={`hidden md:block text-white bg-gray-900/95 backdrop-blur-md border-b border-gray-800 transition-transform duration-300`}
+        className={`hidden md:block text-white bg-[#1A1A1A] transition-transform duration-300`}
       >
         <div className="max-w-7xl mx-auto px-6 py-3 flex justify-between items-center">
           {/* Logo */}
@@ -217,7 +217,7 @@ export default function Navbar({ searchTerm, setSearchTerm }: NavbarProps) {
       </nav>
 
       {/* Mobile Navbar */}
-      <nav className={`md:hidden bg-gray-900/95 backdrop-blur-md border-b border-gray-800 transition-transform duration-300 ${
+      <nav className={`md:hidden bg-[#1A1A1A] text-white transition-transform duration-300 ${
         isVisible ? "translate-y-0" : "-translate-y-full"
       }`}>
         <div className="px-4 py-3 flex justify-between items-center">
@@ -233,13 +233,13 @@ export default function Navbar({ searchTerm, setSearchTerm }: NavbarProps) {
 
           <div className="flex items-center space-x-4">
             {token && (
-              <button className="p-2 rounded-full hover:bg-gray-800 transition-colors">
+              <button className="p-2 rounded-full hover:bg-[#1A1A1A] transition-colors">
                 <BellIcon className="h-5 w-5" />
               </button>
             )}
             <button 
               onClick={toggleMobileMenu}
-              className="p-2 rounded-full hover:bg-gray-800 transition-colors"
+              className="p-2 rounded-full hover:bg-[#1A1A1A] transition-colors"
             >
               <UserIcon className="h-5 w-5" />
             </button>
@@ -255,14 +255,14 @@ export default function Navbar({ searchTerm, setSearchTerm }: NavbarProps) {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="md:hidden fixed inset-0 bg-gray-900/95 backdrop-blur-md z-40 pt-16 overflow-y-auto"
+            className="md:hidden fixed inset-0 bg-[#1A1A1A] backdrop-blur-md z-40 pt-16 overflow-y-auto"
           >
             <div className="px-4 py-6 space-y-2">
               {token ? (
                 <>
                   <div className="px-4 py-3 mb-4 border-b border-gray-800">
                     <p className="font-medium">Welcome back</p>
-                    <p className="text-orange-400">{user?.name || "User"}</p>
+                    <p className="text-white">{user?.name || "User"}</p>
                   </div>
 
                   <MobileNavItem href="/" icon={HomeIcon} label="Home" />
@@ -284,7 +284,7 @@ export default function Navbar({ searchTerm, setSearchTerm }: NavbarProps) {
                       logout();
                       closeAllMenus();
                     }}
-                    className="w-full text-left px-4 py-3 hover:bg-gray-800 rounded-lg transition-colors flex items-center mt-4"
+                    className="w-full text-left px-4 py-3 hover:bg-[#1A1A1A] rounded-lg transition-colors flex items-center mt-4"
                   >
                     <ArrowRightOnRectangleIcon className="h-5 w-5 mr-3" />
                     Logout
@@ -298,7 +298,7 @@ export default function Navbar({ searchTerm, setSearchTerm }: NavbarProps) {
                   <Link href="/declutter/login">
                     <motion.button
                       whileTap={{ scale: 0.95 }}
-                      className="w-full mt-4 bg-gradient-to-r from-orange-500 to-orange-600 px-6 py-3 rounded-lg font-medium flex items-center justify-center"
+                      className="w-full mt-4 bg-[#1A1A1A] px-6 py-3 rounded-lg font-medium flex items-center justify-center"
                     >
                       Sign In
                     </motion.button>
@@ -312,7 +312,7 @@ export default function Navbar({ searchTerm, setSearchTerm }: NavbarProps) {
 
       {/* Mobile Bottom Navigation */}
       {!pathname.startsWith("/declutter/products/") && (
-        <div className="md:hidden fixed bottom-0 left-0 right-0 bg-gray-900 border-t border-gray-800 z-30">
+        <div className="md:hidden fixed bottom-0 left-0 right-0 bg-[#1A1A1A] text-white z-30">
           <div className="flex justify-around py-3">
             <Link href="/" className="p-2">
               <HomeIcon className="h-6 w-6" />

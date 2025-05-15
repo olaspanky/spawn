@@ -138,7 +138,7 @@ export default function Navbar({
     <header className="fixed w-full z-50">
       {/* Desktop Navbar */}
       <nav
-        className={`hidden md:block text-white bg-gray-900/95 backdrop-blur-md border-b border-gray-800 transition-transform duration-300 `}
+        className={`hidden md:block text-white bg-[#1A1A1A] transition-transform duration-300 `}
       >
         <div className="max-w-7xl mx-auto px-6 py-3 flex justify-between items-center">
           {/* Logo */}
@@ -155,7 +155,7 @@ export default function Navbar({
                   onClick={() => setSelectedCategory(category)}
                   className={`px-3 py-1 rounded-full text-sm transition-all duration-300 ${
                     selectedCategory === category
-                      ? "bg-gray-700 text-white"
+                      ? "bg-[#1A1A1A] text-white"
                       : "text-gray-300 hover:bg-gray-800"
                   }`}
                 >
@@ -166,7 +166,7 @@ export default function Navbar({
             <button
               onClick={() => setSearchOpen(!searchOpen)}
               className={`p-2 rounded-full ${
-                searchOpen ? "bg-gray-800" : "hover:bg-gray-800"
+                searchOpen ? "bg-[#1A1A1A]" : "hover:bg-[#1A1A1A]"
               } transition-colors`}
               aria-label="Search"
             >
@@ -331,10 +331,9 @@ export default function Navbar({
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
-              className="bg-[#D4AF37] px-4 py-4"
+              className="bg-[#1A1A1A] px-4 py-4"
             >
               <div className="relative">
-                <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
                 <input
                   type="text"
                   placeholder="Search for items..."
@@ -381,14 +380,14 @@ export default function Navbar({
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="md:hidden fixed inset-0 bg-[#1A1A1A]  text-black z-40 pt-16 overflow-y-auto"
+            className="md:hidden fixed inset-0 bg-[#1A1A1A]  text-white z-40 pt-6 overflow-y-auto"
           >
-            <div className="px-4 py-6 space-y-2">
+            <div className="p-2 space-y-2">
               {token ? (
                 <>
                   <div className="px-4 py-3 mb-4 border-b border-gray-800">
                     <p className="font-medium">Welcome back</p>
-                    <p className="text-orange-400">{user?.name || "User"}</p>
+                    <p className="text-white">{user?.name || "User"}</p>
                   </div>
                   <MobileNavItem href="/" icon={HomeIcon} label="Home" />
                   <MobileNavItem
