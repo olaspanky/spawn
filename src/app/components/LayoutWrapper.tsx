@@ -8,7 +8,8 @@ const LayoutWrapper = ({ children }: { children: React.ReactNode }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const pathname = usePathname();
   const isDeclutterRoute = pathname.startsWith("/pages");
-  const isLoginOrSignupOrProduct =
+  const isExcludedRoute =
+    pathname === "/" || // Add root path to exclude navbar
     // pathname === "/declutter/login" ||
     // pathname === "/declutter/signup" ||
     pathname.startsWith("/declutter/products") ||
@@ -17,7 +18,7 @@ const LayoutWrapper = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <div className="min-h-screen flex flex-col gap-3">
-      {!isLoginOrSignupOrProduct && (
+      {!isExcludedRoute && (
         <Navbar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
       )}
       <main className=" ">

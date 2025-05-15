@@ -19,7 +19,7 @@ import Link from "next/link";
 import { useAuth } from "./context/AuthContext";
 import { FaChevronDown } from "react-icons/fa";
 import { motion } from "framer-motion";
-
+import Navbar from "./components/Nav1";
 interface Item {
   _id: string;
   title: string;
@@ -46,6 +46,11 @@ export default function Home() {
   const featuredItemsRef = useRef<HTMLDivElement>(null);
   // Add reference for the listings section
   const listingsRef = useRef<HTMLDivElement>(null);
+
+  const categories = useMemo(() => {
+    const allCategories = items.map((item) => item.category);
+    return ["All", ...Array.from(new Set(allCategories))];
+  }, [items]);
 
   useEffect(() => {
     const fetchItems = async () => {
@@ -87,10 +92,7 @@ export default function Home() {
 
   const pauseSlider = () => {};
 
-  const categories = useMemo(() => {
-    const allCategories = items.map((item) => item.category);
-    return ["All", ...Array.from(new Set(allCategories))];
-  }, [items]);
+
 
   const filteredItems = useMemo(() => {
     return items.filter((item) => {
@@ -132,11 +134,18 @@ export default function Home() {
   if (error) return <ErrorState error={error} />;
 
   return (
-    <div className="min-h-screen font-sans antialiased relative lg:pt-[88px] pb-[80px] md:pb-0">
+    <div className="min-h-screen font-sans antialiased relative  md:pb-0 flex flex-col gap-5">
+       <Navbar
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+        selectedCategory={selectedCategory}
+        setSelectedCategory={setSelectedCategory}
+        categories={categories}
+      />
       {/* Main Content */}
-      <div className="relative z-10">
+      <div className="relative z-10 lg:pt-[88px] pt-[32px]">
         {/* Featured Items Slider */}
-        <div className="relative overflow-hidden mt-[20px] lg:mt-0 backdrop-blur-md border-b border-white/5 shadow-md font-semibold py-5">
+        <div className="relative overflow-hidden   backdrop-blur-md border-b border-white/5 shadow-md font-semibold py-5">
           <div className="container mx-auto lg:px-4 lg:py-4 p-2 md:py-3 flex flex-col md:flex-row items-start">
             {/* Left Section: Creative Slogan with White Background */}
            
@@ -180,10 +189,13 @@ export default function Home() {
                         </span>
                       </div>
                       <Link href={`/declutter/products/${item._id}`}>
-                        <button className="relative bg-gradient-to-r from-gray-800 to-gray-700 text-white px-3 py-1 sm:px-4 sm:py-1.5 md:px-5 md:py-2 rounded-xl text-[10px] sm:text-xs md:text-sm font-semibold tracking-wide transition-all duration-300 shadow-md hover:shadow-lg hover:scale-105 overflow-hidden group">
-                          <span className="relative z-10">View Details</span>
-                          <div className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-fuchsia-500 opacity-0 group-hover:opacity-30 transition-opacity duration-300"></div>
-                        </button>
+                        
+                        <div className="flex items-center justify-between mt-3">
+          
+          <button className="px-4 py-1.5 bg-gray-100 text-gray-800 text-[10px] font-medium rounded-full hover:bg-gray-200 transition-all duration-300 shadow-sm">
+          View Details
+          </button>
+        </div>
                       </Link>
                     </div>
                     <div className="w-1/2 relative h-full sm:h-[130px] md:h-[200px] overflow-hidden rounded-t-2xl  mt-0 md:mt-0 md:mx-3 order-1 md:order-2">
@@ -243,120 +255,7 @@ export default function Home() {
           </div>
         </div>
 
-      {/* Sticky Filter Section */}
-<div className="z-30 backdrop-blur-md border-b border-white/10 shadow-md">
-  <div className="mx-auto px-4 lg:px-5 py-2 md:py-4 max-w-7xl overflow-auto">
-    {filterOpen && (
-      <div className="relative animate-fadeIn">
-        {/* Mobile View */}
-        <div className="flex flex-col gap-4 md:hidden">
-          {/* Search and Categories Toggle Row */}
-          <div className="flex items-center justify-between">
-            <button
-              onClick={() => setSearchOpen(!searchOpen)}
-              className={`flex items-center space-x-2 px-4 py-2 rounded-full transition-all duration-300 ${
-                searchOpen 
-                  ? "bg-gray-800 text-white" 
-                  : "bg-white/5 hover:bg-white/10 border border-white/10 text-gray-300"
-              }`}
-              aria-label="Search"
-            >
-              <MagnifyingGlassIcon className="text-black lg:h-5 lg:w-5 h-3 w-3" />
-              <span className="text-black text-xs lg:text-sm">Search</span>
-            </button>
-            
-            <div className="text-xs text-gray-400">
-              {selectedCategory !== "All" && (
-                <span className="bg-gray-800 px-3 py-1 rounded-full">
-                  {selectedCategory}
-                </span>
-              )}
-            </div>
-          </div>
 
-          {/* Categories Scroll */}
-          <div className="overflow-x-auto  lg:mx-4 lg:px-4">
-            <div className="flex space-x-3 min-w-max pb-1 p-1">
-              {categories.map((category) => (
-                <button
-                  key={category}
-                  onClick={() => setSelectedCategory(category)}
-                  className={`lg:px-4 lg:py-2 p-2 rounded-full text-xs my-2 transition-all duration-300 whitespace-nowrap ${
-                    selectedCategory === category
-                      ? "bg-[#36454F] text-white scale-105 shadow-lg shadow-gray-600/20"
-                      : "bg-white/5 hover:bg-white/10 border text-black border-white/10 hover:border-white/20"
-                  }`}
-                >
-                  {category}
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Desktop View */}
-        <div className="hidden md:flex flex-row justify-between items-center gap-5">
-          <div className="overflow-x-auto scrollbar-hidden">
-            <div className="flex space-x-4 min-w-min">
-              {categories.map((category) => (
-                <button
-                  key={category}
-                  onClick={() => setSelectedCategory(category)}
-                  className={`px-4 py-2 rounded-full text-sm transition-all duration-300 whitespace-nowrap ${
-                    selectedCategory === category
-                      ? "bg-[#36454F] text-white scale-105 shadow-lg shadow-gray-600/20"
-                      : "bg-white/5 hover:bg-white/10 border text-black border-white/10 hover:border-white/20"
-                  }`}
-                >
-                  {category}
-                </button>
-              ))}
-            </div>
-          </div>
-          
-          <div className="flex space-x-6 items-center">
-            <button
-              onClick={() => setSearchOpen(!searchOpen)}
-              className={`transition-all duration-300 p-2 rounded-full ${
-                searchOpen 
-                  ? "text-white bg-gray-800" 
-                  : "text-gray-300 hover:text-white hover:bg-white/5"
-              }`}
-              aria-label="Search"
-            >
-              <MagnifyingGlassIcon className="h-5 w-5" />
-            </button>
-          </div>
-        </div>
-
-        {/* Search Bar */}
-        {searchOpen && (
-          <div className="mt-4 border-t border-white/10 pt-4 animate-fadeIn">
-            <div className="relative">
-              <input
-                type="text"
-                placeholder="Search for items..."
-                className="w-full p-2 lg:py-3 pl-12 pr-12 text-base rounded-lg bg-white/10 border border-white/20 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent transition-all text-white placeholder-gray-400"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                autoFocus
-              />
-              {searchTerm && (
-                <button
-                  onClick={() => setSearchTerm("")}
-                  className="absolute right-4 top-4 text-gray-400 hover:text-white transition-colors p-0.5 rounded-full hover:bg-white/10"
-                  aria-label="Clear search"
-                >
-                  <XMarkIcon className="lg:h-5 lg:w-5 h-3 w-3 text-black" />
-                </button>
-              )}
-            </div>
-          </div>
-        )}
-      </div>
-    )}
-  </div>
-</div>
 
         {/* Listings Section */}
         <div
@@ -369,8 +268,8 @@ export default function Home() {
             <>
               <h3 className="text-lg md:text-xl font-semibold text-black mb-4 md:mb-6 flex justify-between items-center">
                 <span>
-                  {selectedCategory !== "All" ? `${selectedCategory} Items` : "All Listings"}
-                  <span className="ml-2 text-sm text-black-400">({filteredItems.length})</span>
+                  {selectedCategory !== "All" ? `${selectedCategory} Items` : ""}
+                  {/* <span className="ml-2 text-sm text-black-400">({filteredItems.length})</span> */}
                 </span>
               </h3>
               <div className="grid grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 lg:gap-4 gap-2 md:gap-6">
@@ -432,53 +331,76 @@ const ListingCard = ({
   const hasValidImage = item.images?.length > 0 && item.images[0];
 
   return (
-    <div className="rounded-xl shadow-lg hover:shadow-gray-500/20 transition-all duration-300 transform hover:-translate-y-1 overflow-hidden group h-full bg-white/5 border border-white/10 backdrop-blur-sm hover:bg-white/8 hover:border-white/15">
-      <div className="relative h-40 md:h-52 overflow-hidden">
+    <div className="relative rounded-2xl shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-0.5 overflow-hidden h-full bg-white border border-gray-100">
+      {/* Full-box Image */}
+      <div className="relative w-full h-48 md:h-64">
         {hasValidImage ? (
-          <div className="relative w-full h-full">
-            <Image
-              src={item.images[0]}
-              alt={item.title}
-              fill
-              className="object-cover group-hover:scale-110 transition-transform duration-700"
-              sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 25vw"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-          </div>
+          <Image
+            src={item.images[0]}
+            alt={item.title}
+            fill
+            className="object-cover transition-transform duration-500 ease-out"
+            sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 25vw"
+            priority
+          />
         ) : (
-          <div className="w-full h-full flex items-center justify-center bg-gray-800/50 backdrop-blur-sm">
-            <ShoppingCartIcon className="h-10 w-10 text-gray-600" />
+          <div className="w-full h-full flex items-center justify-center bg-gray-200">
+            <ShoppingCartIcon className="h-10 w-10 text-gray-400" />
           </div>
         )}
-        <div className="absolute top-2 right-2 bg-black/70 backdrop-blur-sm rounded-full px-2 py-0.5">
-          <span className="text-[8px] md:text-xs font-medium text-white">{item.category}</span>
-        </div>
+
+        {/* Gradient Overlay for Readability */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+
+        {/* Category Tag */}
+       
+        {/* Favorite Button */}
         <button
-          className="absolute bottom-2 right-2 bg-black/70 backdrop-blur-sm rounded-full p-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover:bg-black/90"
+          className="absolute top-3 left-3 bg-white/80 rounded-full p-1.5 hover:bg-white transition-all duration-300 hover:scale-105"
           onClick={(e) => toggleFavorite(e, item._id)}
-          aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
+          aria-label={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
         >
           {isFavorite ? (
-            <HeartIconSolid className="h-4 w-4 text-red-500" />
+            <HeartIconSolid className="lg:h-4 lg:w-4 h-2 w-2 text-red-500" />
           ) : (
-            <HeartIcon className="h-4 w-4 text-white" />
+            <HeartIconSolid className="lg:h-4 lg:w-4 h-2 w-2 text-gray-800" />
           )}
         </button>
       </div>
-      <div className="p-1 md:p-4 text-black">
-        <h4 className="font-semibold mb-1 truncate text-[12px]  text-black md:text-base">{item.title}</h4>
-        <div className="flex flex-col  mt-2">
-          <span className="text-[#36454F] font-bold text-[12px]  md:text-base">
+
+      {/* Info Section */}
+      <div className="lg:p-4 p-1">
+        <h4
+          className="font-semibold text-transparent bg-clip-text bg-gradient-to-r from-gray-800 via-gray-600 to-gray-400 
+          filter blur-[0.5px] truncate mb-1 tracking-tight text-[10px] lg:text-[16px]"
+        >
+          {item.title}
+        </h4>
+        <div className="flex flex-col gap-1">
+          <span
+            className="font-medium text-transparent bg-clip-text bg-gradient-to-r from-gray-800 via-gray-600 to-gray-400 
+            filter blur-[0.5px] text-[10px] lg:text-[16px]"
+          >
             ₦{item.price.toLocaleString()}
           </span>
-          <div className="flex items-center text-gray-400">
-            <MapPinIcon className="h-3 w-3 mr-1 text-black" />
-            <span className="text-[10px] md:text-xs truncate max-w-[80px]">{item.location}</span>
+          <div className="flex items-center">
+            <MapPinIcon className="h-4 w-4 mr-1 text-gray-600" />
+            <span
+              className="text-transparent bg-clip-text bg-gradient-to-r from-gray-800 via-gray-600 to-gray-400 
+              filter blur-[0.5px] truncate max-w-[120px] md:max-w-[200px] text-[10px] lg:text-[16px]"
+            >
+              {item.location}
+            </span>
           </div>
         </div>
-      </div>
-      <div className="  text-white  text-[12px] md:text-xs ">
-        <button className="w-full lg:px-2 lg:py-3 px-2 py-1 bg-gray-900/95 text-left">Buy now</button>
+
+        {/* Buy Now Button and Stats */}
+        <div className="flex items-center justify-between mt-3">
+          
+          <button className="px-4 py-1.5 bg-gray-100 text-gray-800 text-[10px] font-medium rounded-full hover:bg-gray-200 transition-all duration-300 shadow-sm">
+            Buy Now +
+          </button>
+        </div>
       </div>
     </div>
   );
