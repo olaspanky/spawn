@@ -136,63 +136,38 @@ export default function Home() {
       {/* Main Content */}
       <div className="relative z-10">
         {/* Featured Items Slider */}
-        <div className="relative overflow-hidden mt-[44px] lg:mt-0 backdrop-blur-md border-b border-white/5 shadow-md font-semibold py-5">
+        <div className="relative overflow-hidden mt-[20px] lg:mt-0 backdrop-blur-md border-b border-white/5 shadow-md font-semibold py-5">
           <div className="container mx-auto lg:px-4 lg:py-4 p-2 md:py-3 flex flex-col md:flex-row items-start">
             {/* Left Section: Creative Slogan with White Background */}
-            <div className="w-full md:w-1/2 lg:p-4 md:p-6 flex flex-col justify-center h-auto relative overflow-hidden">
-              {/* Subtle Background Pattern */}
-              
-              {/* Glowing Decorative Element */}
-              
-              <div className="relative z-10">
-                <h2 className="text-[16px] sm:text-2xl md:text-4xl font-extrabold bg-clip-text text-transparent  bg-black mb-2 md:mb-4 animate-slideIn">
-                Buy and Sell with confidence
-                </h2>
-                <p className="text-[14px] sm:text-base md:text-lg text-gray-700 font-light mb-4 md:mb-6 animate-slideInDelay drop-shadow-md">
-                  At spawnhub, we prioritize your peace of mind, Our platform guarantees secure and transparent transactions, ensuring the financial safety of both buyers and sellers, Every step is designed to protect you, so you can focus on what matters-making great deals with ease.
-                </p>
-                <button
-                  onClick={handleShopMagicClick}
-                  className="relative bg-gray-800 text-white p-2 md:px-6 md:py-3 rounded-xl text-[14px] sm:text-sm md:text-base font-semibold tracking-wide transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 w-fit overflow-hidden group"
-                  >
-                    <span className="relative z-10 flex items-center gap-2">
-                      Explore
-                      <motion.span
-                        className="inline-block"
-                        animate={{ y: [0, 4, 0] }} // Bounce animation
-                        transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
-                      >
-                        <FaChevronDown className="text-white w-3 h-3 lg:w-4 lg:h-4" />
-                      </motion.span>
-                    </span>
-                  </button>
-              </div>
-            </div>
+           
 
             {/* Right Section: Featured Container with Drop Transition */}
             <div
               ref={featuredItemsRef}
-              className="w-full md:w-1/2 flex flex-col items-end mt-4 md:mt-0"
+              className="w-full md:w-1/2 flex flex-col  mt-4 md:mt-0"
               onMouseEnter={pauseSlider}
               onMouseLeave={pauseSlider}
             >
-              <div className="relative h-[45vh] md:h-[260px] w-full overflow-hidden rounded-xl border shadow-md bg-white">
+
+              <div className="relative h-[20vh] md:h-[260px] w-full overflow-hidden rounded-xl border shadow-md bg-white">
                 {featuredItems.map((item, index) => (
                   <div
                     key={item._id}
-                    className={`absolute inset-0 transition-all duration-700 ease-in-out flex flex-col md:flex-row items-center ${
+                    className={`flex absolute inset-0 transition-all duration-700 ease-in-out  items-center ${
                       index === currentFeaturedIndex
                         ? "opacity-100 z-10 translate-y-0"
                         : "opacity-0 z-0 translate-y-[-100%]"
                     }`}
                   >
-                    <div className="w-full md:w-1/2 p-2 md:p-5 z-10 order-2 md:order-1">
+                    <div className=" w-1/2 p-2 md:p-5 z-10 order-2 md:order-1">
+                    <h1 className="text-left text-xs">Hottest Deals</h1>
+
                       <div className="mb-1 md:mb-2">
                         <span className="text-[8px] sm:text-[10px] md:text-xs uppercase tracking-widest text-black bg-gray-200/30 px-1.5 py-0.5 md:px-2 md:py-1 rounded-full backdrop-blur-sm">
                           {item.category}
                         </span>
                       </div>
-                      <h1 className="text-sm sm:text-base md:text-3xl font-extrabold leading-tight bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-cyan-600 mb-1 md:mb-2 truncate w-full drop-shadow">
+                      <h1 className="text-sm sm:text-base md:text-3xl font-extrabold leading-tight bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600 mb-1 md:mb-2 truncate w-full drop-shadow">
                         {item.title}
                       </h1>
                       <p className="text-sm sm:text-base md:text-xl font-medium text-gray-700 mb-2 md:mb-4">
@@ -211,7 +186,7 @@ export default function Home() {
                         </button>
                       </Link>
                     </div>
-                    <div className="w-full md:w-1/2 relative h-full sm:h-[130px] md:h-[200px] overflow-hidden rounded-t-2xl md:rounded-lg mt-0 md:mt-0 md:mx-3 order-1 md:order-2">
+                    <div className="w-1/2 relative h-full sm:h-[130px] md:h-[200px] overflow-hidden rounded-t-2xl  mt-0 md:mt-0 md:mx-3 order-1 md:order-2">
                       {item.images && item.images.length > 0 ? (
                         <div className="relative w-full h-full group">
                           {/* Blurred background image */}
@@ -230,14 +205,14 @@ export default function Home() {
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-300 z-10"></div>
                           <button
-                            className="absolute bottom-2 right-2 bg-black/80 backdrop-blur-md rounded-full p-1.5 hover:bg-black/95 transition-all duration-200 z-20 shadow-md hover:shadow-cyan-500/50"
+                            className="absolute bottom-2 right-2  backdrop-blur-md rounded-full p-1.5  transition-all duration-200 z-20 shadow-md hover:shadow-cyan-500/50"
                             onClick={(e) => toggleFavorite(e, item._id)}
                             aria-label={favorites.includes(item._id) ? "Remove from favorites" : "Add to favorites"}
                           >
                             {favorites.includes(item._id) ? (
                               <HeartIconSolid className="h-4 w-4 text-rose-500" />
                             ) : (
-                              <HeartIcon className="h-4 w-4 text-cyan-600" />
+                              <HeartIcon className="h-4 w-4 " />
                             )}
                           </button>
                         </div>
@@ -257,7 +232,7 @@ export default function Home() {
                     onClick={() => setCurrentFeaturedIndex(index)}
                     className={`transition-all duration-300 ease-in-out rounded-full ${
                       index === currentFeaturedIndex
-                        ? "h-1.5 w-4 md:h-1.5 md:w-6 bg-cyan-600 shadow-md"
+                        ? "h-1.5 w-4 md:h-1.5 md:w-6  shadow-md"
                         : "h-1.5 w-1.5 bg-gray-400 hover:bg-gray-600"
                     }`}
                     aria-label={`Go to slide ${index + 1}`}

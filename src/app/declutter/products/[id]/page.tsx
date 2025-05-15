@@ -1123,7 +1123,7 @@ export default function ProductPage() {
   const [showWhatsAppBanner, setShowWhatsAppBanner] = useState(true);
 
   // WhatsApp Configuration
-  const WHATSAPP_NUMBER = "+2347019312514";
+  const WHATSAPP_NUMBER = "+2347049374912";
   const WHATSAPP_MESSAGE = "Hello! I'm interested in this item: [PRODUCT_TITLE]. Can we discuss the deal?";
   const whatsappLink = product
     ? `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
