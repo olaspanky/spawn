@@ -143,7 +143,7 @@ export default function Home() {
         categories={categories}
       />
       {/* Main Content */}
-      <div className="relative z-10 lg:pt-[88px] pt-[32px]">
+      <div className="relative z-10 lg:pt-[88px] pt-[32px] pb-20">
         {/* Featured Items Slider */}
         <div className="relative overflow-hidden   backdrop-blur-md border-b border-white/5 shadow-md font-semibold py-5">
           <div className="container mx-auto lg:px-4 lg:py-4 p-2 md:py-3 flex flex-col md:flex-row items-start">

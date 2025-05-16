@@ -709,7 +709,7 @@ export default function UploadPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 mt-[88px] ">
+    <div className="min-h-screen bg-gray-50 mt-[88px] mb-20">
       {showModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white rounded-xl shadow-lg p-2 lg:p-6 max-w-sm w-full text-center">

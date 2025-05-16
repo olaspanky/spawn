@@ -1285,7 +1285,7 @@ export default function ProductPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen">
+      <div className="min-h-screen pb-20">
         <div className="hidden top-0 lg:flex items-center">
           <Navbar searchTerm="" setSearchTerm={() => {}} />
         </div>

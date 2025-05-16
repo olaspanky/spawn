@@ -123,7 +123,7 @@ const ManageItems = () => {
   }
 
   return (
-    <div className=" mx-auto lg:p-6 p-2 bg-gray-50 mt-[88px]">
+    <div className=" mx-auto lg:p-6 p-2 bg-gray-50 mt-[88px] mb-20">
       <h1 className="text-4xl font-extrabold text-gray-900 mb-8">Manage Your Items</h1>
       <Link href="/declutter/upload">
         <button className="bg-orange-600 text-white px-6 py-3 rounded-lg shadow-md hover:bg-orange-700 transition mb-8">
