@@ -134,7 +134,7 @@ export default function Home() {
   if (error) return <ErrorState error={error} />;
 
   return (
-    <div className="min-h-screen font-sans antialiased relative  md:pb-0 flex flex-col gap-5">
+    <div className="min-h-screen font-sans antialiased relative bg-white  md:pb-0 flex flex-col gap-5">
        <Navbar
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}

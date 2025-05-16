@@ -1356,7 +1356,7 @@ export default function ProductPage() {
   }
 
   return (
-    <div className="min-h-screen font-sans text-gray-900">
+    <div className="min-h-screen font-sans bg-white text-gray-900">
       <div className="hidden lg:flex items-center">
         <Navbar searchTerm="" setSearchTerm={() => {}} />
       </div>
@@ -1416,7 +1416,7 @@ export default function ProductPage() {
         </div>
       </div>
 
-      <main className="max-w-7xl mx-auto px-4 lg:px-8 pt-4 lg:pt-[88px] pb-20">
+      <main className="max-w-7xl mx-auto  lg:px-8 pt-4 lg:pt-[88px] pb-20">
         <div className="hidden md:block mb-6">
           <nav className="flex text-sm text-gray-600">
             <Link href="/" className="hover:text-orange-600">
