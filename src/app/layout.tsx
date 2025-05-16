@@ -33,6 +33,15 @@ const font2 = Roboto_Slab({
 export const metadata: Metadata = {
   title: "SpawnHub",
   description: "Sell your clutter easily",
+  viewport: {
+    width: 'device-width',
+    initialScale: 1,
+    viewportFit: 'cover', // Ensures the viewport accounts for the notch
+  },
+  other: {
+    'apple-mobile-web-app-capable': 'yes',
+    'apple-mobile-web-app-status-bar-style': 'black-translucent', // Blends status bar with background
+  },
 };
 
 export default function RootLayout({
