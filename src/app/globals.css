@@ -104,3 +104,33 @@ select:-webkit-autofill:focus {
   background-color: #ffffff !important; /* White background for autofill */
   transition: background-color 5000s ease-in-out 0s !important; /* Prevent autofill background flicker */
 }
+
+
+/* styles/globals.css */
+.safe-area-wrapper {
+  background-color: #1A1A1A; /* Matches bg-[#1A1A1A] */
+  min-height: 100vh; /* Ensures the wrapper covers the full viewport height */
+  padding-top: env(safe-area-inset-top); /* Pushes content below the notch */
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+  position: relative;
+  overflow-x: hidden; /* Prevents horizontal scroll issues */
+}
+
+/* Ensure the body matches the background color to avoid white flashes */
+body {
+  background-color: #1A1A1A;
+  margin: 0;
+}
+
+/* Ensure the root HTML element also matches */
+html {
+  background-color: #1A1A1A;
+}
+
+/* Handle scrolling content */
+.safe-area-wrapper > * {
+  position: relative;
+  z-index: 1; /* Ensures content stays above the background but respects safe area */
+}
