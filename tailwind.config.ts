@@ -13,11 +13,11 @@ export default {
         background: "var(--background)",
         foreground: "var(--foreground)",
         primary: {
-          light: '#3b82f6', // blue-500
-          dark: '#60a5fa',  // blue-400
+          light: '#1A1A1A', // blue-500
+          dark: '#1A1A1A',  // blue-400
         },
-        orange: {
-          600: '#FF5A1F', // Primary brand color
+        gray: {
+          600: '#1A1A1A', // Primary brand color
         }
       },
       fontFamily: {
@@ -25,15 +25,7 @@ export default {
         font2: ["var(--font-robo-slab)", "serif"],
       },
 
-        keyframes: {
-    fadeIn: {
-      '0%': { opacity: '0' },
-      '100%': { opacity: '1' },
-    }
-  },
-  animation: {
-    fadeIn: 'fadeIn 0.3s ease-in-out',
-  },
+       
     },
   },
   darkMode: 'class', // This enables the dark mode variant
