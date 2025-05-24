@@ -9,6 +9,7 @@ export default function InstallPWAButton() {
   useEffect(() => {
     const handler = (e: any) => {
       e.preventDefault();
+      console.log("beforeinstallprompt event captured");
       setDeferredPrompt(e);
       setShowButton(true);
     };
@@ -19,19 +20,23 @@ export default function InstallPWAButton() {
   }, []);
 
   const handleInstall = async () => {
-    if (!deferredPrompt) return;
+    if (!deferredPrompt) {
+      console.log("No deferred prompt available");
+      return;
+    }
     deferredPrompt.prompt();
     const choiceResult = await deferredPrompt.userChoice;
-    if (choiceResult.outcome === "accepted") {
-      console.log("User accepted the install prompt");
-    } else {
-      console.log("User dismissed the install prompt");
-    }
+    console.log("User choice:", choiceResult.outcome);
     setShowButton(false);
     setDeferredPrompt(null);
   };
 
-  if (!showButton) return null;
+  if (!showButton) {
+    console.log("Install button hidden");
+    return null;
+  }
+
+  console.log("Install button showing");
 
   return (
     <button

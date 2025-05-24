@@ -314,6 +314,7 @@ export default function Navbar({
 
             {/* Insert Install Button here */}
       <InstallPWAButton />
+      <p>hgh</p>
             {/* {token && (
               <button className="p-2 rounded-full hover:bg-gray-800 transition-colors">
                 <BellIcon className="h-5 w-5" />
