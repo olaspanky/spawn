@@ -21,6 +21,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { usePathname } from "next/navigation";
 import logo from "../../../public/splogo1.png";
 import Image from "next/image";
+import InstallPWAButton from "./InstallPWAButton";
 
 interface NavbarProps {
   searchTerm: string;
@@ -310,6 +311,9 @@ export default function Navbar({
             >
               <MagnifyingGlassIcon className="h-5 w-5" />
             </button>
+
+            {/* Insert Install Button here */}
+      <InstallPWAButton />
             {/* {token && (
               <button className="p-2 rounded-full hover:bg-gray-800 transition-colors">
                 <BellIcon className="h-5 w-5" />

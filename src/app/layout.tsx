@@ -65,20 +65,21 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${font1.variable} ${font2.variable} antialiased`}
-      >
-        <DisableZoom />
+  className={`${geistSans.variable} ${geistMono.variable} ${font1.variable} ${font2.variable} antialiased`}
+>
+  <DisableZoom />
+  <InstallPWA /> {/* ← MOVE HERE */}
 
-        <Theme />
-        <AuthProvider>
-          <ClientAuthProvider />
-          <LayoutWrapper>
-          <InstallPWA />
-          
-          {children}</LayoutWrapper>
-          <Toaster /> {/* Add Toaster for toast notifications */}
-        </AuthProvider>
-      </body>
+  <Theme />
+  <AuthProvider>
+    <ClientAuthProvider />
+    <LayoutWrapper>
+      {children}
+    </LayoutWrapper>
+    <Toaster />
+  </AuthProvider>
+</body>
+
     </html>
   );
 }
