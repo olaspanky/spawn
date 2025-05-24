@@ -8,6 +8,8 @@ import { Montserrat } from "next/font/google";
 import { Roboto_Slab } from "next/font/google";
 import ClientAuthProvider from "./components/ClientAuthProvider";
 import DisableZoom from "./components/DisableZoom";
+import InstallPWA from "./components/InstallPWA";
+
 
 import Theme from "./components/Theme";
 import { Toaster } from "react-hot-toast"; // Import Toaster
@@ -52,13 +54,10 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
-        />
+      
         <meta name="theme-color" content="#f97316" />
         <link rel="manifest" href="/manifest.json" />
-        <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
+        <link rel="apple-touch-icon" href="/icon512_rounded.png" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta
           name="apple-mobile-web-app-status-bar-style"
@@ -73,7 +72,10 @@ export default function RootLayout({
         <Theme />
         <AuthProvider>
           <ClientAuthProvider />
-          <LayoutWrapper>{children}</LayoutWrapper>
+          <LayoutWrapper>
+          <InstallPWA />
+          
+          {children}</LayoutWrapper>
           <Toaster /> {/* Add Toaster for toast notifications */}
         </AuthProvider>
       </body>
