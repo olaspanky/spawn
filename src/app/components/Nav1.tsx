@@ -449,7 +449,7 @@ export default function Navbar({
       </AnimatePresence>
 
       {/* Mobile Bottom Navigation (unchanged) */}
-      {!pathname.startsWith("/declutter/products/") && (
+      {/* {!pathname.startsWith("/declutter/products/") && (
         <div className="md:hidden fixed bottom-0 left-0 right-0 bg-[#1A1A1A] z-30 text-white">
           <div className="flex justify-around py-3">
             <Link href="/" className="p-2">
@@ -466,7 +466,7 @@ export default function Navbar({
             </button>
           </div>
         </div>
-      )}
+      )} */}
     </header>
   );
 }
