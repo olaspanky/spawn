@@ -1,6 +1,6 @@
 import { Good, Category } from '../types/goods';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://spawnback.vercel.app/api/store';
+const API_BASE_URL = 'https://spawnback.vercel.app/api/store';
 
 export const goodsApi = {
   // Get all goods (public, no auth required)
