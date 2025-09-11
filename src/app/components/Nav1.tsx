@@ -263,12 +263,15 @@ const Navbar: React.FC<NavbarProps> = ({ tabs, activeTab, setActiveTab, setIsCar
             <Link href="/">
               <img src="/assets/oja.jpeg" alt="Oja Logo" className="h-8" />
             </Link>
+                                              <MobileNavItem href="/goods/list" icon={Upload} label="Upload List" />
+
             <div className="flex items-center space-x-4">
               {token && (
                 <button className="p-2 rounded-full hover:bg-gray-800 transition-colors">
                   <BellIcon className="h-5 w-5" />
                 </button>
               )}
+
               <button
                 onClick={toggleMobileMenu}
                 className="p-2 rounded-full hover:bg-gray-800 transition-colors"
@@ -297,7 +300,6 @@ const Navbar: React.FC<NavbarProps> = ({ tabs, activeTab, setActiveTab, setIsCar
                       <p className="text-white">{user?.name || 'User'}</p>
                     </div>
                     <MobileNavItem href="/" icon={HomeIcon} label="Home" />
-                    <MobileNavItem href="/goods/list" icon={Upload} label="Upload List" />
                     <MobileNavItem href="/pages/chat" icon={MessageCircle} label="Messages" />
                     <MobileNavItem href="/declutter/purchases" icon={CreditCardIcon} label="Transactions" />
                     {storeId && (
@@ -338,7 +340,7 @@ const Navbar: React.FC<NavbarProps> = ({ tabs, activeTab, setActiveTab, setIsCar
         </AnimatePresence>
 
         {/* Navigation Tabs - Mobile (Horizontal Scroll) */}
-        <div className="sm:hidden py-4">
+        <div className="sm:hidden py-4 px-2">
           <div className="flex space-x-2 overflow-x-auto scrollbar-hide">
             {tabs.map((tab) => (
               <button
