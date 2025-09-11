@@ -2,6 +2,15 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 
+// Define StoreItem type or import it from the correct module
+// Example definition (replace with your actual StoreItem type if different)
+export interface StoreItem {
+  _id: string;
+  name: string;
+  price: number;
+  // add other fields as needed
+}
+
 interface CartItem {
   storeId: string;
   item: StoreItem;
