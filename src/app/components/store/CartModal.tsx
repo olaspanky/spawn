@@ -92,8 +92,8 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
                 <div className="flex-1">
                   <h3 className="text-lg font-medium text-gray-900">{cartItem.item.name}</h3>
                   <p className="text-gray-600">
-                    {cartItem.item.measurement.value}{' '}
-                    {cartItem.item.measurement.customUnit || cartItem.item.measurement.unit}
+                    {/* {cartItem.item.measurement.value}{' '}
+                    {cartItem.item.measurement.customUnit || cartItem.item.measurement.unit} */}
                   </p>
                   <p className="text-gray-800 font-medium">
                     ${cartItem.item.price.toFixed(2)} x {cartItem.quantity} = $
