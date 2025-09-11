@@ -18,9 +18,7 @@ const LayoutWrapper = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <div className="min-h-screen flex flex-col gap-3">
-      {!isExcludedRoute && (
-        <Navbar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-      )}
+    
       <main className=" ">
         {children}
       </main>

@@ -70,12 +70,7 @@ const StoreWebapp: React.FC = () => {
     fetchGoods();
   }, [activeTab]);
 
-  useEffect(() => {
-    if (!isAuthLoading && !token) {
-      toast.error('Please log in to access goods');
-      router.push('/login');
-    }
-  }, [token, isAuthLoading, router]);
+ 
 
   const categorizeGoods = (goods: Good[]) => {
     const categories = {

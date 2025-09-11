@@ -4,6 +4,8 @@ import { motion } from "framer-motion";
 import { FiUpload, FiUser, FiMail, FiPhone, FiImage, FiFile, FiX } from "react-icons/fi";
 import toast from "react-hot-toast";
 import axios from "axios";
+import Navbar from "../Nav1";
+import Link from "next/link";
 
 interface FormData {
   name: string;
@@ -216,7 +218,14 @@ const ShoppingListUpload: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 py-12 px-4 mt-12">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 py-12 px-4 ">
+
+      <Link href="/" className="absolute top-4 left-4 text-indigo-600 hover:text-indigo-800 flex items-center space-x-1">
+        <FiX className="transform rotate-45" />
+        <span className="text-sm font-medium">Back to Store</span>
+      </Link>
+
+
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}

@@ -71,9 +71,11 @@ export default function RootLayout({
         <Theme />
         <AuthProvider>
           <ClientAuthProvider />
+           <CartProvider>
           <LayoutWrapper>
-            <CartProvider>{children}</CartProvider>
+           {children}
           </LayoutWrapper>
+          </CartProvider>
           <Toaster />
         </AuthProvider>
       </body>
