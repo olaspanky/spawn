@@ -102,7 +102,7 @@ const Navbar: React.FC<NavbarProps> = ({ tabs, activeTab, setActiveTab, setIsCar
 
   return (
     <header className="sticky top-0 z-50 bg-white shadow-sm border-b">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl lg:mx-auto  lg:px-8">
         {/* Desktop Navbar */}
         <div className="hidden md:block  text-white">
           <div className="flex items-center justify-between py-4 sm:py-6">
@@ -258,7 +258,7 @@ const Navbar: React.FC<NavbarProps> = ({ tabs, activeTab, setActiveTab, setIsCar
         </div>
 
         {/* Mobile Navbar */}
-        <div className="md:hidden bg-[#1A1A1A] text-white">
+        <div className="md:hidden text-black">
           <div className="px-4 py-3 flex justify-between items-center">
             <Link href="/">
               <img src="/assets/oja.jpeg" alt="Oja Logo" className="h-8" />
@@ -338,7 +338,7 @@ const Navbar: React.FC<NavbarProps> = ({ tabs, activeTab, setActiveTab, setIsCar
         </AnimatePresence>
 
         {/* Navigation Tabs - Mobile (Horizontal Scroll) */}
-        <div className="sm:hidden pb-4">
+        <div className="sm:hidden py-4">
           <div className="flex space-x-2 overflow-x-auto scrollbar-hide">
             {tabs.map((tab) => (
               <button
