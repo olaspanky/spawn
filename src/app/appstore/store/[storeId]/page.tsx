@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { useAuth } from "../../../context/AuthContext";
 import toast from "react-hot-toast";
+import { FiUpload } from "react-icons/fi";
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import Image from "next/image";
 import { 
@@ -352,69 +353,80 @@ const StoreDetail: React.FC = () => {
       </motion.div>
 
       {/* Navigation Bar */}
-      <div className="sticky top-0 z-30 bg-white shadow-md border-b border-gray-100">
-        <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-          <div className="flex items-center space-x-4">
-            <button
-              onClick={() => router.back()}
-              className="text-gray-600 hover:text-gray-800 transition p-2 rounded-full hover:bg-gray-100"
-              aria-label="Go back"
-            >
-              <FiArrowLeft size={24} />
-            </button>
-            <h2 className="text-lg font-medium text-gray-900 hidden md:block">{store.name}</h2>
-          </div>
-          
-          <div className="flex items-center space-x-3">
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => setLiked(!liked)}
-              className={`p-2 rounded-full ${liked ? 'bg-red-50 text-red-500' : 'bg-gray-100 text-gray-500'} hover:bg-gray-200 transition-colors`}
-            >
-              <FiHeart size={20} className={liked ? "fill-red-500" : ""} />
-            </motion.button>
-            
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => setShowCart(!showCart)}
-              className="relative p-2 bg-indigo-100 text-indigo-600 rounded-full hover:bg-indigo-200 transition-colors"
-              aria-label="View cart"
-            >
-              <FiShoppingCart size={20} />
-              {totalItems > 0 && (
-                <motion.span
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  className="absolute -top-1 -right-1 bg-indigo-600 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center"
-                >
-                  {totalItems}
-                </motion.span>
-              )}
-            </motion.button>
-          </div>
-        </div>
-        
-        {/* Category Navigation */}
-        <div className="max-w-7xl mx-auto px-4 py-1 overflow-x-auto flex items-center space-x-2 no-scrollbar">
-          {getCategories().map(category => (
-            <motion.button
-              key={category}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => setActiveCategory(category)}
-              className={`py-2 px-4 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${
-                activeCategory === category 
-                  ? 'bg-indigo-600 text-white' 
-                  : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-100'
-              }`}
-            >
-              {category}
-            </motion.button>
-          ))}
-        </div>
-      </div>
+     <div className="sticky top-0 z-30 bg-white shadow-md border-b border-gray-100">
+  <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+    <div className="flex items-center space-x-4">
+      <button
+        onClick={() => router.back()}
+        className="text-gray-600 hover:text-gray-800 transition p-2 rounded-full hover:bg-gray-100"
+        aria-label="Go back"
+      >
+        <FiArrowLeft size={24} />
+      </button>
+      <h2 className="text-lg font-medium text-gray-900 hidden md:block">{store.name}</h2>
+    </div>
+    
+    <div className="flex items-center space-x-3">
+      <motion.button
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+        onClick={() => setLiked(!liked)}
+        className={`p-2 rounded-full ${liked ? 'bg-red-50 text-red-500' : 'bg-gray-100 text-gray-500'} hover:bg-gray-200 transition-colors`}
+      >
+        <FiHeart size={20} className={liked ? "fill-red-500" : ""} />
+      </motion.button>
+      
+      <motion.button
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+        onClick={() => setShowCart(!showCart)}
+        className="relative p-2 bg-indigo-100 text-indigo-600 rounded-full hover:bg-indigo-200 transition-colors"
+        aria-label="View cart"
+      >
+        <FiShoppingCart size={20} />
+        {totalItems > 0 && (
+          <motion.span
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            className="absolute -top-1 -right-1 bg-indigo-600 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center"
+          >
+            {totalItems}
+          </motion.span>
+        )}
+      </motion.button>
+
+      {/* New Shopping List Upload Button */}
+      <motion.button
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+        onClick={() => router.push('/appstore/upload')}
+        className="p-2 bg-green-100 text-green-600 rounded-full hover:bg-green-200 transition-colors"
+        aria-label="Upload shopping list"
+      >
+        <FiUpload size={20} />
+      </motion.button>
+    </div>
+  </div>
+  
+  {/* Category Navigation remains the same */}
+  <div className="max-w-7xl mx-auto px-4 py-1 overflow-x-auto flex items-center space-x-2 no-scrollbar">
+    {getCategories().map(category => (
+      <motion.button
+        key={category}
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+        onClick={() => setActiveCategory(category)}
+        className={`py-2 px-4 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${
+          activeCategory === category 
+            ? 'bg-indigo-600 text-white' 
+            : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-100'
+        }`}
+      >
+        {category}
+      </motion.button>
+    ))}
+  </div>
+</div>
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 py-8">

@@ -1,4 +1,5 @@
 
+
 "use client";
 
 import { createContext, useContext, useState, useEffect } from "react";
@@ -10,6 +11,7 @@ interface User {
   name: string;
   email: string;
   isVerified?: boolean;
+  isAdmin?: boolean; // Add isAdmin to match backend expectations
 }
 
 interface AuthContextType {
@@ -17,34 +19,46 @@ interface AuthContextType {
   user: User | null;
   isSigningUp: boolean;
   isVerifyingOTP: boolean;
-  isLoggingIn: boolean; // Add loading state for login
+  isLoggingIn: boolean;
+  isAuthLoading: boolean; // New loading state for auth initialization
   signup: (data: { fullName: string; email: string; password: string }) => Promise<void>;
   verifyOTP: (data: { email: string; otp: string }) => Promise<void>;
   googleSignup: (token: string) => Promise<void>;
-  login: (data: { email: string; password: string }) => Promise<void>; // Update login signature
+  login: (data: { email: string; password: string }) => Promise<void>;
   logout: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
+// const BASE_URL = "https://spawnback.vercel.app/api";
 const BASE_URL = "https://spawnback.vercel.app/api";
+
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [token, setToken] = useState<string | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [isSigningUp, setIsSigningUp] = useState(false);
   const [isVerifyingOTP, setIsVerifyingOTP] = useState(false);
-  const [isLoggingIn, setIsLoggingIn] = useState(false); // New state
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
+  const [isAuthLoading, setIsAuthLoading] = useState(true); // New state
 
   useEffect(() => {
-    const storedToken = localStorage.getItem("authToken");
-    const storedUser = localStorage.getItem("authUser");
-    if (storedToken) setToken(storedToken);
-    if (storedUser) {
-      const parsedUser = JSON.parse(storedUser);
-      setUser({ id: parsedUser.id, name: parsedUser.name, email: parsedUser.email, isVerified: parsedUser.isVerified });
-    }
-  }, []);
+  const storedToken = localStorage.getItem("authToken");
+  const storedUser = localStorage.getItem("authUser");
+  if (storedToken) setToken(storedToken);
+  if (storedUser) {
+    const parsedUser = JSON.parse(storedUser);
+    setUser({
+      id: parsedUser.id,
+      name: parsedUser.name,
+      email: parsedUser.email,
+      isVerified: parsedUser.isVerified,
+      isAdmin: parsedUser.isAdmin
+    });
+  }
+  setIsAuthLoading(false);
+}, []);
+
   const signup = async (data: { fullName: string; email: string; password: string }) => {
     setIsSigningUp(true);
     try {
@@ -122,7 +136,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       toast.error(
         axios.isAxiosError(error) ? error.response?.data?.message || "Login failed" : "An unexpected error occurred"
       );
-      throw error; // Re-throw to let the caller handle it
+      throw error;
     } finally {
       setIsLoggingIn(false);
     }
@@ -137,7 +151,19 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <AuthContext.Provider
-      value={{ token, user, isSigningUp, isVerifyingOTP, isLoggingIn, signup, verifyOTP, googleSignup, login, logout }}
+      value={{
+        token,
+        user,
+        isSigningUp,
+        isVerifyingOTP,
+        isLoggingIn,
+        isAuthLoading, // Expose new loading state
+        signup,
+        verifyOTP,
+        googleSignup,
+        login,
+        logout,
+      }}
     >
       {children}
     </AuthContext.Provider>

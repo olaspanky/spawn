@@ -1,18 +1,10 @@
-
-
-
-
-
-
-
 import React from 'react'
-import Stores from './goods/Stores'
-import { Store } from 'lucide-react'
+import ShoppingListUpload from '@/app/components/store/ShoppingListUpload'
 
 const page = () => {
   return (
     <div>
-      <Stores />
+        <ShoppingListUpload />
     </div>
   )
 }

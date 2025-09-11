@@ -9,7 +9,7 @@ import { Roboto_Slab } from "next/font/google";
 import ClientAuthProvider from "./components/ClientAuthProvider";
 import DisableZoom from "./components/DisableZoom";
 import InstallPWA from "./components/InstallPWA";
-
+import { CartProvider } from "./context/CartContext"; // Import CartProvider
 
 import Theme from "./components/Theme";
 import { Toaster } from "react-hot-toast"; // Import Toaster
@@ -36,13 +36,13 @@ export const metadata: Metadata = {
   title: "SpawnHub",
   description: "Sell your clutter easily",
   viewport: {
-    width: 'device-width',
+    width: "device-width",
     initialScale: 1,
-    viewportFit: 'cover', // Ensures the viewport accounts for the notch
+    viewportFit: "cover", // Ensures the viewport accounts for the notch
   },
   other: {
-    'apple-mobile-web-app-capable': 'yes',
-    'apple-mobile-web-app-status-bar-style': 'black-translucent', // Blends status bar with background
+    "apple-mobile-web-app-capable": "yes",
+    "apple-mobile-web-app-status-bar-style": "black-translucent", // Blends status bar with background
   },
 };
 
@@ -54,7 +54,6 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-      
         <meta name="theme-color" content="#f97316" />
         <link rel="manifest" href="/manifest.json" />
         <link rel="apple-touch-icon" href="/icon512_rounded.png" />
@@ -65,21 +64,19 @@ export default function RootLayout({
         />
       </head>
       <body
-  className={`${geistSans.variable} ${geistMono.variable} ${font1.variable} ${font2.variable} antialiased`}
->
-  <DisableZoom />
-  <InstallPWA /> {/* ← MOVE HERE */}
-
-  <Theme />
-  <AuthProvider>
-    <ClientAuthProvider />
-    <LayoutWrapper>
-      {children}
-    </LayoutWrapper>
-    <Toaster />
-  </AuthProvider>
-</body>
-
+        className={`${geistSans.variable} ${geistMono.variable} ${font1.variable} ${font2.variable} antialiased`}
+      >
+        <DisableZoom />
+        <InstallPWA /> {/* ← MOVE HERE */}
+        <Theme />
+        <AuthProvider>
+          <ClientAuthProvider />
+          <LayoutWrapper>
+            <CartProvider>{children}</CartProvider>
+          </LayoutWrapper>
+          <Toaster />
+        </AuthProvider>
+      </body>
     </html>
   );
 }
