@@ -33,8 +33,8 @@ const font2 = Roboto_Slab({
 });
 
 export const metadata: Metadata = {
-  title: "SpawnHub",
-  description: "Sell your clutter easily",
+  title: "OjaRunz",
+  description: "Keep moving",
   viewport: {
     width: "device-width",
     initialScale: 1,
