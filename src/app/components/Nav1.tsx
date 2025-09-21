@@ -360,8 +360,8 @@ const Navbar: React.FC<NavbarProps> = ({ tabs, activeTab, setActiveTab, setIsCar
                     onClick={() => setActiveTab(tab.id)}
                     className={`px-4 py-2 rounded-xl text-sm font-medium transition-all whitespace-nowrap flex-shrink-0 ${
                       activeTab === tab.id
-                        ? 'bg-blue-500 text-white shadow-lg'
-                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                        ? 'bg-[#8d4817] text-white shadow-lg'
+                        : 'bg-gray-100 text-[#8d4817] hover:bg-gray-200'
                     }`}
                     aria-label={`Select ${tab.shortLabel} tab`}
                   >
