@@ -1,10 +1,4 @@
 
-
-
-
-
-
-
 import React from 'react'
 import Stores from './goods/Stores'
 import { Store } from 'lucide-react'

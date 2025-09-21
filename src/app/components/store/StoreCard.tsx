@@ -69,7 +69,7 @@ const GoodCard = ({ good }: GoodCardProps) => {
             disabled={!good.available}
             className={`px-4 py-2 rounded-lg text-sm font-medium ${
               good.available
-                ? 'bg-blue-600 text-white hover:bg-blue-700'
+                ? 'bg-[#8d4817] text-white hover:bg-[#96735a]'
                 : 'bg-gray-300 text-gray-500 cursor-not-allowed'
             }`}
           >

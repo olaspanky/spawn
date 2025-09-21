@@ -137,7 +137,7 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
               <button
                 onClick={handleCheckout}
                 disabled={isCheckingOut}
-                className={`mt-4 w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors ${
+                className={`mt-4 w-full bg-[#8d4817] text-white py-3 rounded-lg hover:bg-[#6d5341] transition-colors ${
                   isCheckingOut ? 'opacity-50 cursor-not-allowed' : ''
                 }`}
               >

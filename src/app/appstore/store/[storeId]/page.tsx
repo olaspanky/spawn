@@ -703,7 +703,7 @@ const StoreDetail: React.FC = () => {
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                       onClick={handleCheckout}
-                      className="w-full py-4 bg-indigo-600 text-white rounded-xl font-semibold hover:bg-indigo-700 shadow-md hover:shadow-lg transition flex items-center justify-center space-x-2"
+                      className="w-full py-4 bg-[#8d4817] text-white rounded-xl font-semibold hover:bg-indigo-700 shadow-md hover:shadow-lg transition flex items-center justify-center space-x-2"
                     >
                       <span>Proceed to Checkout</span>
                       <svg className="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">

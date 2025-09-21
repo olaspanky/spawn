@@ -91,7 +91,7 @@ const StoreWebapp: React.FC = () => {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 sm:h-16 sm:w-16 border-t-4 border-b-4 border-blue-500 mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 sm:h-16 sm:w-16 border-t-4 border-b-4 borde-[#8d4817] mx-auto mb-4"></div>
           <p className="text-gray-600 text-base sm:text-lg">Loading goods...</p>
         </div>
       </div>
@@ -101,7 +101,7 @@ const StoreWebapp: React.FC = () => {
   if (error) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
-        <div className="bg-red-100 border border-red-300 p-4 sm:p-6 rounded-xl text-red-700 max-w-md w-full">
+        <div className="bg-[#8d4817] p-4 sm:p-6 rounded-xl text-red-700 max-w-md w-full">
           <h3 className="font-bold text-base sm:text-lg mb-2">Error Loading Goods</h3>
           <p className="text-sm sm:text-base">{error}</p>
           <button
@@ -157,7 +157,7 @@ const StoreWebapp: React.FC = () => {
                 title="Market Area"
                 icon={MapPin}
                 goods={categorizedGoods.market_area}
-                color="bg-blue-600"
+                color="bg-[#8d4817]"
               />
             )}
             {(activeTab === 'all' || activeTab === 'package_deals') && (

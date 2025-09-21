@@ -123,7 +123,7 @@ const Navbar: React.FC<NavbarProps> = ({ tabs, activeTab, setActiveTab, setIsCar
             <div className="flex items-center justify-between py-4">
               <div className="flex items-center">
                 <Link href="/" className="flex flex-col items-center">
-                  <Image src="/assets/oja.jpeg" alt="Oja Logo" width={80} height={80} className="rounded-lg" />
+                  <Image src="/oja.png" alt="Oja Logo" width={80} height={80} className="rounded-lg" />
                     <p className="text-xs text-gray-500 italic">Keep moving, let's do the running</p>
                 </Link>
               </div>
@@ -140,7 +140,7 @@ const Navbar: React.FC<NavbarProps> = ({ tabs, activeTab, setActiveTab, setIsCar
 
                 <button
                   
-                  className="relative bg-white border-2 border-gray-200 text-gray-700 px-4 py-2.5 rounded-xl hover:border-blue-300 hover:text-blue-600 transition-all flex items-center group"
+                  className="relative bg-white border-2 border-[#8d4817] text-gray-700 px-4 py-2.5 rounded-xl hover:border-blue-300 hover:text-blue-600 transition-all flex items-center group"
                   aria-label="Open Cart"
                 >
                   <Link href="/goods/list" className="flex items-center">
@@ -151,7 +151,7 @@ const Navbar: React.FC<NavbarProps> = ({ tabs, activeTab, setActiveTab, setIsCar
                 </button>
                 <button
                   onClick={() => setIsCartOpen(true)}
-                  className="relative bg-white border-2 border-gray-200 text-gray-700 px-4 py-2.5 rounded-xl hover:border-blue-300 hover:text-blue-600 transition-all flex items-center group"
+                  className="relative bg-white border-2 border-[#8d4817] text-gray-700 px-4 py-2.5 rounded-xl hover:border-blue-300 hover:text-blue-600 transition-all flex items-center group"
                   aria-label="Open Cart"
                 >
                   <ShoppingCart className="w-5 h-5 mr-2 group-hover:scale-110 transition-transform" />
@@ -171,7 +171,7 @@ const Navbar: React.FC<NavbarProps> = ({ tabs, activeTab, setActiveTab, setIsCar
                   <>
                     <button className="p-3 rounded-xl hover:bg-gray-100 transition-colors relative" aria-label="Notifications">
                       <BellIcon className="h-5 w-5 text-gray-600" />
-                      <div className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full"></div>
+                      <div className="absolute top-2 right-2 w-2 h-2 bg-[#8d4817] rounded-full"></div>
                     </button>
 
                     <div className="relative" ref={dropdownRef}>
@@ -195,7 +195,7 @@ const Navbar: React.FC<NavbarProps> = ({ tabs, activeTab, setActiveTab, setIsCar
                             exit={{ opacity: 0, y: 10, scale: 0.95 }}
                             className="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-xl border border-gray-200 overflow-hidden"
                           >
-                            <div className="p-4 border-b border-gray-100">
+                            <div className="p-4 border-b border-[#8d4817]">
                               <p className="font-semibold text-gray-800">{user?.name || 'User'}</p>
                               <p className="text-sm text-gray-500">{user?.email || 'No email'}</p>
                             </div>
@@ -260,7 +260,7 @@ const Navbar: React.FC<NavbarProps> = ({ tabs, activeTab, setActiveTab, setIsCar
                     <motion.button
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
-                      className="bg-gradient-to-r from-orange-500 to-orange-600 text-white px-6 py-2.5 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all"
+                      className="bg-[#8d4817] text-white px-6 py-2.5 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all"
                       aria-label="Sign In"
                     >
                       Sign In
@@ -279,7 +279,7 @@ const Navbar: React.FC<NavbarProps> = ({ tabs, activeTab, setActiveTab, setIsCar
                     onClick={() => setActiveTab(tab.id)}
                     className={`px-4 py-2.5 rounded-lg text-sm font-medium transition-all whitespace-nowrap ${
                       activeTab === tab.id
-                        ? 'bg-white text-blue-600 shadow-sm'
+                        ? 'bg-white text-[#8d4817] shadow-sm'
                         : 'text-gray-600 hover:text-gray-900 hover:bg-white/50'
                     }`}
                     aria-label={`Select ${tab.label} tab`}
@@ -295,7 +295,7 @@ const Navbar: React.FC<NavbarProps> = ({ tabs, activeTab, setActiveTab, setIsCar
           <div className="lg:hidden">
             <div className="flex justify-between items-center py-3">
               <Link href="/" className="flex items-center">
-                <Image src="/assets/oja.jpeg" alt="Oja Logo" width={60} height={60} className="rounded-lg" />
+                <Image src="/oja.png" alt="Oja Logo" width={60} height={60} className="rounded-lg" />
                 <span className="ml-2 text-lg font-bold text-gray-900">Oja</span>
               </Link>
 
@@ -379,10 +379,10 @@ const Navbar: React.FC<NavbarProps> = ({ tabs, activeTab, setActiveTab, setIsCar
         <motion.button
           whileHover={{ scale: 1.1, rotate: 5 }}
           whileTap={{ scale: 0.95 }}
-          className="fixed bottom-6 right-6 bg-gradient-to-r from-emerald-500 to-green-600 text-white p-4 rounded-full shadow-lg hover:shadow-xl transition-all group z-[60] sm:bottom-8 sm:right-8"
+          className="fixed bottom-6 right-6 bg-[#8d4817] text-white p-4 rounded-full shadow-lg hover:shadow-xl transition-all group z-[60] sm:bottom-8 sm:right-8"
           aria-label="Upload List"
         >
-          <div className="absolute inset-0 bg-gradient-to-r from-emerald-400 to-green-500 opacity-0 group-hover:opacity-100 transition-opacity rounded-full"></div>
+          <div className="absolute inset-0 bg-[#8d4817] opacity-0 group-hover:opacity-100 transition-opacity rounded-full"></div>
           <div className="relative flex items-center justify-center">
             <Upload className="w-6 h-6" />
           </div>
@@ -415,7 +415,7 @@ const Navbar: React.FC<NavbarProps> = ({ tabs, activeTab, setActiveTab, setIsCar
           >
             <div className="p-6">
               <div className="flex items-center mb-6">
-                <Image src="/assets/oja.jpeg" alt="Oja Logo" width={40} height={40} className="rounded-lg" />
+                <Image src="/oja.png" alt="Oja Logo" width={40} height={40} className="rounded-lg" />
                 <div className="ml-3">
                   <h1 className="text-xl font-bold text-gray-900">Oja</h1>
                   <p className="text-xs text-gray-500 italic">Keep moving, let's do the running</p>
