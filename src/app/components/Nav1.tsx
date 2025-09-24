@@ -116,14 +116,14 @@ const Navbar: React.FC<NavbarProps> = ({ tabs, activeTab, setActiveTab, setIsCar
 
   return (
     <>
-      <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md shadow-sm border-b border-gray-100">
+      <header className="sticky top-0 z-50 bg-gradient-to-br from-amber-50 to-yellow-100 backdrop-blur-md shadow-sm border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Desktop Navbar */}
           <div className="hidden lg:block">
             <div className="flex items-center justify-between py-4">
               <div className="flex items-center">
                 <Link href="/" className="flex flex-col items-center">
-                  <Image src="/oja.png" alt="Oja Logo" width={80} height={80} className="rounded-lg" />
+                  <Image src="/oj.png" alt="Oja Logo" width={80} height={80} className="rounded-lg" />
                     <p className="text-xs text-gray-500 italic">Keep moving, let's do the running</p>
                 </Link>
               </div>

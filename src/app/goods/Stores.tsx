@@ -89,7 +89,7 @@ const StoreWebapp: React.FC = () => {
 
   if (loading || isAuthLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
+      <div className="min-h-screen flex items-center justify-center px-4">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 sm:h-16 sm:w-16 border-t-4 border-b-4 borde-[#8d4817] mx-auto mb-4"></div>
           <p className="text-gray-600 text-base sm:text-lg">Loading goods...</p>
@@ -125,7 +125,7 @@ const StoreWebapp: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen ">
       {/* Navbar Component */}
       <Navbar
         tabs={tabs}
