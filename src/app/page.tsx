@@ -1,8 +1,10 @@
-"use client"
+"use client";
+
 import React, { useState, useEffect } from 'react';
 import { ChevronRight, CheckCircle, Truck, Clock, Shield, Star, Phone, Mail, MapPin, ShoppingBag, Users, Award, Heart } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import EnhancedNavbar from './components/MNav';
 
 const OjarunzHomepage = () => {
   const [email, setEmail] = useState('');
@@ -15,7 +17,6 @@ const OjarunzHomepage = () => {
     if (email && phone && location) {
       setIsSubmitted(true);
       console.log('Waitlist signup:', { email, phone, location });
-      
       setTimeout(() => {
         setIsSubmitted(false);
         setEmail('');
@@ -25,7 +26,6 @@ const OjarunzHomepage = () => {
     }
   };
 
-  // Smooth scroll function
   interface ScrollToSection {
     (sectionId: string): void;
   }
@@ -37,7 +37,6 @@ const OjarunzHomepage = () => {
     }
   };
 
-  // Update active section on scroll
   useEffect(() => {
     const handleScroll = () => {
       const sections = ['home', 'about', 'services', 'location', 'photos', 'contact'];
@@ -48,7 +47,6 @@ const OjarunzHomepage = () => {
         if (element) {
           const offsetTop = element.offsetTop;
           const offsetHeight = element.offsetHeight;
-          
           if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
             setActiveSection(section);
             break;
@@ -67,65 +65,34 @@ const OjarunzHomepage = () => {
     { id: 'services', label: 'Services' },
     { id: 'location', label: 'Location' },
     { id: 'photos', label: 'Photos' },
-    { id: 'contact', label: 'Contact' }
+    { id: 'contact', label: 'Contact' },
   ];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-amber-50 to-yellow-100">
       {/* Header Section */}
       <div id="home" className="relative min-h-screen overflow-hidden">
-        {/* Navigation */}
-        <nav className="fixed top-0 left-0 right-0 z-50  backdrop-blur-md shadow-sm">
-          <div className="flex justify-between items-center px-6 md:px-16 py-4">
-            <div className="flex items-center">
-              <Link href="/" className="flex flex-col items-center">
-                <Image src="/oj.png" alt="Oja Logo" width={60} height={60} className="rounded-lg" />
-                <p className="text-xs text-gray-500 italic">Keep moving, let's do the running</p>
-              </Link>
-              <Link href="/home" className="flex flex-col items-center">
-                <p className="text-xs text-gray-500 ">Market floor</p>
-              </Link>
-            </div>
-            
-            <div className="flex space-x-8">
-              {navItems.map((item) => (
-                <button
-                  key={item.id}
-                  onClick={() => scrollToSection(item.id)}
-                  className={`${
-                    activeSection === item.id 
-                      ? 'text-green-600 border-b-2 border-green-600' 
-                      : 'text-gray-600 hover:text-green-600'
-                  } transition-colors font-medium pb-1`}
-                >
-                  {item.label}
-                </button>
-              ))}
-            </div>
-          </div>
-        </nav>
-
-        {/* Main Hero Content */}
-        <div className="relative z-10 flex items-center min-h-screen px-6 md:px-36 pt-20">
+        <EnhancedNavbar 
+          navItems={navItems}
+          activeSection={activeSection}
+          scrollToSection={scrollToSection}
+        />
+        <div className="relative z-10 flex items-center min-h-screen px-4 sm:px-6 md:px-12 lg:px-24 xl:px-36 pt-20">
           <div className="flex flex-col lg:flex-row items-center w-full mx-auto">
-            {/* Left Content */}
-            <div className="flex-1 lg:pr-12 mb-12 lg:mb-0">
-              <div className="inline-block bg-green-600 text-white px-6 py-3 rounded-full text-sm font-medium mb-8">
+            <div className="flex-1 lg:pr-8 mb-8 lg:mb-0">
+              <div className="inline-block bg-green-600 text-white px-4 py-2 rounded-full text-xs sm:text-sm font-medium mb-6">
                 Fresh Farm Produce and Foodstuffs
               </div>
-              
-              <h1 className="text-5xl lg:text-7xl font-bold text-gray-900 mb-6 leading-tight">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-gray-900 mb-4 leading-tight">
                 OJARUNZ
               </h1>
-              
-              <p className="text-gray-600 text-lg lg:text-xl mb-8 max-w-lg">
+              <p className="text-gray-600 text-base sm:text-lg lg:text-xl mb-6 max-w-md">
                 Get fresh farm produce and foodstuffs directly from Nigerian markets delivered to your doorstep. 
                 Quality produce, unbeatable convenience.
               </p>
-              
-              <div className="flex space-x-6 mb-12">
+              <div className="flex flex-wrap gap-4 mb-8">
                 {[2, 3, 4, 5].map((num) => (
-                  <div key={num} className="w-24 h-24 bg-green-500 rounded-full flex items-center justify-center overflow-hidden">
+                  <div key={num} className="w-16 h-16 sm:w-20 sm:h-20 bg-green-500 rounded-full flex items-center justify-center overflow-hidden">
                     <img 
                       src={`/oj${num}.jpg`}
                       alt="Fresh Produce" 
@@ -134,24 +101,20 @@ const OjarunzHomepage = () => {
                   </div>
                 ))}
               </div>
-              
               <button 
                 onClick={() => scrollToSection('services')}
-                className="bg-green-600 text-white px-8 py-4 rounded-2xl font-semibold hover:bg-green-700 transition-colors flex items-center space-x-2"
+                className="bg-green-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-green-700 transition-colors flex items-center space-x-2 text-sm sm:text-base"
               >
-                <ShoppingBag className="w-5 h-5" />
+                <ShoppingBag className="w-4 h-4 sm:w-5 sm:h-5" />
                 <span>Explore Our Services</span>
-                <ChevronRight className="w-4 h-4" />
+                <ChevronRight className="w-3 h-3 sm:w-4 sm:h-4" />
               </button>
             </div>
-            
-            {/* Right Content */}
             <div className="flex-1 flex justify-center lg:justify-end">
               <div className="relative">
-                <div className="absolute -inset-8 bg-yellow-400 rounded-full opacity-20"></div>
-                <div className="absolute -inset-4 bg-yellow-500 rounded-full opacity-30"></div>
-                
-                <div className="relative w-96 h-96 lg:w-[600px] lg:h-[600px] bg-yellow-600 rounded-full overflow-hidden border-8 border-white shadow-2xl">
+                <div className="absolute -inset-6 sm:-inset-8 bg-yellow-400 rounded-full opacity-20"></div>
+                <div className="absolute -inset-3 sm:-inset-4 bg-yellow-500 rounded-full opacity-30"></div>
+                <div className="relative w-64 h-64 sm:w-80 sm:h-80 md:w-96 md:h-96 lg:w-[500px] lg:h-[500px] bg-yellow-600 rounded-full overflow-hidden border-6 border-white shadow-xl">
                   <img 
                     src="/oj1.jpg"
                     alt="Fresh Produce" 
@@ -165,123 +128,117 @@ const OjarunzHomepage = () => {
       </div>
 
       {/* About Section */}
-      <section id="about" className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-6 md:px-16">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">About Ojarunz</h2>
-            <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+      <section id="about" className="py-16 sm:py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12 lg:px-16">
+          <div className="text-center mb-12 sm:mb-16">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4">About Ojarunz</h2>
+            <p className="text-gray-600 text-base sm:text-lg max-w-2xl mx-auto">
               Your trusted partner for fresh Nigerian produce delivery
             </p>
           </div>
-          
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
+          <div className="grid lg:grid-cols-2 gap-8 sm:gap-12">
             <div>
-              <div className="bg-green-100 p-8 rounded-3xl mb-8">
-                <h3 className="text-2xl font-bold text-gray-900 mb-4">Our Story</h3>
-                <p className="text-gray-600 mb-4">
+              <div className="bg-green-100 p-6 sm:p-8 rounded-2xl mb-6 sm:mb-8">
+                <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4">Our Story</h3>
+                <p className="text-gray-600 text-sm sm:text-base mb-4">
                   Ojarunz was born from a simple idea: making fresh, authentic Nigerian produce accessible to everyone. 
                   We understand the importance of quality ingredients in creating delicious Nigerian meals.
                 </p>
-                <p className="text-gray-600">
+                <p className="text-gray-600 text-sm sm:text-base">
                   Our team works directly with local farmers and trusted market vendors to bring you the freshest 
                   produce while supporting local agriculture.
                 </p>
               </div>
-              
               <div className="grid grid-cols-2 gap-4">
-                <div className="bg-yellow-50 p-6 rounded-2xl text-center">
-                  <Users className="w-8 h-8 text-yellow-600 mx-auto mb-2" />
-                  <div className="text-2xl font-bold text-gray-900">500+</div>
-                  <div className="text-sm text-gray-600">Happy Customers</div>
+                <div className="bg-yellow-50 p-4 sm:p-6 rounded-xl text-center">
+                  <Users className="w-6 h-6 sm:w-8 sm:h-8 text-yellow-600 mx-auto mb-2" />
+                  <div className="text-xl sm:text-2xl font-bold text-gray-900">500+</div>
+                  <div className="text-xs sm:text-sm text-gray-600">Happy Customers</div>
                 </div>
-                <div className="bg-green-50 p-6 rounded-2xl text-center">
-                  <Award className="w-8 h-8 text-green-600 mx-auto mb-2" />
-                  <div className="text-2xl font-bold text-gray-900">50+</div>
-                  <div className="text-sm text-gray-600">Local Farmers</div>
+                <div className="bg-green-50 p-4 sm:p-6 rounded-xl text-center">
+                  <Award className="w-6 h-6 sm:w-8 sm:h-8 text-green-600 mx-auto mb-2" />
+                  <div className="text-xl sm:text-2xl font-bold text-gray-900">50+</div>
+                  <div className="text-xs sm:text-sm text-gray-600">Local Farmers</div>
                 </div>
               </div>
             </div>
-            
             <div className="grid grid-cols-2 gap-4">
-              <img src="/oj2.jpg" alt="Farm Fresh" className="rounded-2xl h-64 object-cover" />
-              <img src="/oj3.jpg" alt="Market Quality" className="rounded-2xl h-64 object-cover mt-8" />
-              <img src="/oj4.jpg" alt="Fresh Vegetables" className="rounded-2xl h-64 object-cover" />
-              <img src="/oj5.jpg" alt="Quality Produce" className="rounded-2xl h-64 object-cover mt-8" />
+              <img src="/oj2.jpg" alt="Farm Fresh" className="rounded-xl h-48 sm:h-64 object-cover" />
+              <img src="/oj3.jpg" alt="Market Quality" className="rounded-xl h-48 sm:h-64 object-cover mt-4 sm:mt-8" />
+              <img src="/oj4.jpg" alt="Fresh Vegetables" className="rounded-xl h-48 sm:h-64 object-cover" />
+              <img src="/oj5.jpg" alt="Quality Produce" className="rounded-xl h-48 sm:h-64 object-cover mt-4 sm:mt-8" />
             </div>
           </div>
         </div>
       </section>
 
       {/* Services Section */}
-      <section id="services" className="py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-6 md:px-16">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Our Services</h2>
-            <p className="text-gray-600 text-lg">Everything you need for your kitchen, delivered fresh</p>
+      <section id="services" className="py-16 sm:py-20 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12 lg:px-16">
+          <div className="text-center mb-12 sm:mb-16">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4">Our Services</h2>
+            <p className="text-gray-600 text-base sm:text-lg">Everything you need for your kitchen, delivered fresh</p>
           </div>
-          
-          <div className="grid md:grid-cols-3 gap-8 mb-12">
-            <div className="bg-white p-8 rounded-3xl shadow-lg text-center">
-              <Truck className="w-16 h-16 text-green-600 mx-auto mb-6" />
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">Same-Day Delivery</h3>
-              <p className="text-gray-600 mb-4">
+          <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8">
+            <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-md text-center">
+              <Truck className="w-12 h-12 sm:w-16 sm:h-16 text-green-600 mx-auto mb-4 sm:mb-6" />
+              <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4">Same-Day Delivery</h3>
+              <p className="text-gray-600 text-sm sm:text-base mb-4">
                 Order by 12 PM and receive your fresh produce the same day. Perfect for last-minute cooking needs.
               </p>
-              <ul className="text-left text-gray-600 space-y-2">
+              <ul className="text-left text-gray-600 text-sm sm:text-base space-y-2">
                 <li className="flex items-center">
-                  <CheckCircle className="w-4 h-4 text-green-500 mr-2" />
+                  <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4 text-green-500 mr-2" />
                   Fast and reliable delivery
                 </li>
                 <li className="flex items-center">
-                  <CheckCircle className="w-4 h-4 text-green-500 mr-2" />
+                  <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4 text-green-500 mr-2" />
                   Real-time tracking
                 </li>
                 <li className="flex items-center">
-                  <CheckCircle className="w-4 h-4 text-green-500 mr-2" />
+                  <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4 text-green-500 mr-2" />
                   Flexible time slots
                 </li>
               </ul>
             </div>
-            
-            <div className="bg-white p-8 rounded-3xl shadow-lg text-center">
-              <Shield className="w-16 h-16 text-yellow-600 mx-auto mb-6" />
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">Quality Guarantee</h3>
-              <p className="text-gray-600 mb-4">
+            <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-md text-center">
+              <Shield className="w-12 h-12 sm:w-16 sm:h-16 text-yellow-600 mx-auto mb-4 sm:mb-6" />
+              <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4">Quality Guarantee</h3>
+              <p className="text-gray-600 text-sm sm:text-base mb-4">
                 Every item is hand-picked and inspected for freshness. We maintain traditional market quality standards.
               </p>
-              <ul className="text-left text-gray-600 space-y-2">
+              <ul className="text-left text-gray-600 text-sm sm:text-base space-y-2">
                 <li className="flex items-center">
-                  <CheckCircle className="w-4 h-4 text-green-500 mr-2" />
+                  <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4 text-green-500 mr-2" />
                   Freshness guaranteed
                 </li>
                 <li className="flex items-center">
-                  <CheckCircle className="w-4 h-4 text-green-500 mr-2" />
+                  <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4 text-green-500 mr-2" />
                   Direct from farms & markets
                 </li>
                 <li className="flex items-center">
-                  <CheckCircle className="w-4 h-4 text-green-500 mr-2" />
+                  <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4 text-green-500 mr-2" />
                   Quality inspection
                 </li>
               </ul>
             </div>
-            
-            <div className="bg-white p-8 rounded-3xl shadow-lg text-center">
-              <Clock className="w-16 h-16 text-orange-600 mx-auto mb-6" />
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">Weekly Subscriptions</h3>
-              <p className="text-gray-600 mb-4">
+            <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-md text-center">
+              <Clock className="w-12 h-12 sm:w-16 sm:h-16 text-orange-600 mx-auto mb-4 sm:mb-6" />
+              <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4">Weekly Subscriptions</h3>
+              <p className="text-gray-600 text-sm sm:text-base mb-4">
                 Subscribe to weekly deliveries and never run out of essentials. Customize your box based on preferences.
               </p>
-              <ul className="text-left text-gray-600 space-y-2">
+              <ul className="text-left text-gray-600 text-sm sm:text-base space-y-2">
                 <li className="flex items-center">
-                  <CheckCircle className="w-4 h-4 text-green-500 mr-2" />
+                  <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4 text-green-500 mr-2" />
                   Regular deliveries
                 </li>
                 <li className="flex items-center">
-                  <CheckCircle className="w-4 h-4 text-green-500 mr-2" />
+                  <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4 text-green-500 mr-2" />
                   Customizable boxes
                 </li>
                 <li className="flex items-center">
-                  <CheckCircle className="w-4 h-4 text-green-500 mr-2" />
+                  <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4 text-green-500 mr-2" />
                   Pause or cancel anytime
                 </li>
               </ul>
@@ -291,29 +248,28 @@ const OjarunzHomepage = () => {
       </section>
 
       {/* Location Section */}
-      <section id="location" className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-6 md:px-16">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Delivery Locations</h2>
-            <p className="text-gray-600 text-lg">Currently serving major cities across Nigeria</p>
+      <section id="location" className="py-16 sm:py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12 lg:px-16">
+          <div className="text-center mb-12 sm:mb-16">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4">Delivery Locations</h2>
+            <p className="text-gray-600 text-base sm:text-lg">Currently serving major cities across Nigeria</p>
           </div>
-          
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
             {[
               { city: 'Lagos', areas: ['Lekki', 'Victoria Island', 'Ikoyi', 'Surulere', 'Ikeja'] },
               { city: 'Abuja', areas: ['Maitama', 'Wuse', 'Garki', 'Asokoro', 'Gwarinpa'] },
               { city: 'Port Harcourt', areas: ['GRA', 'Rumuola', 'Trans-Amadi', 'Old GRA'] },
-              { city: 'Ibadan', areas: ['Bodija', 'Iwo Road', 'Mokola', 'UI Area'] }
+              { city: 'Ibadan', areas: ['Bodija', 'Iwo Road', 'Mokola', 'UI Area'] },
             ].map((location, index) => (
-              <div key={index} className="bg-green-50 p-6 rounded-2xl">
-                <div className="flex items-center mb-4">
-                  <MapPin className="w-6 h-6 text-green-600 mr-2" />
-                  <h3 className="text-xl font-bold text-gray-900">{location.city}</h3>
+              <div key={index} className="bg-green-50 p-4 sm:p-6 rounded-xl">
+                <div className="flex items-center mb-3 sm:mb-4">
+                  <MapPin className="w-5 h-5 sm:w-6 sm:h-6 text-green-600 mr-2" />
+                  <h3 className="text-lg sm:text-xl font-bold text-gray-900">{location.city}</h3>
                 </div>
-                <ul className="space-y-2">
+                <ul className="space-y-2 text-sm sm:text-base">
                   {location.areas.map((area, areaIndex) => (
                     <li key={areaIndex} className="flex items-center text-gray-600">
-                      <div className="w-2 h-2 bg-green-400 rounded-full mr-3"></div>
+                      <div className="w-2 h-2 bg-green-400 rounded-full mr-2 sm:mr-3"></div>
                       {area}
                     </li>
                   ))}
@@ -321,14 +277,13 @@ const OjarunzHomepage = () => {
               </div>
             ))}
           </div>
-          
-          <div className="text-center">
-            <p className="text-gray-600 mb-4">
+          <div className="text-center mt-8 sm:mt-12">
+            <p className="text-gray-600 text-sm sm:text-base mb-4">
               Don't see your area? Join our waitlist and we'll notify you when we expand to your location!
             </p>
             <button 
               onClick={() => scrollToSection('contact')}
-              className="bg-green-600 text-white px-6 py-3 rounded-2xl font-semibold hover:bg-green-700 transition-colors"
+              className="bg-green-600 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-xl font-semibold hover:bg-green-700 transition-colors text-sm sm:text-base"
             >
               Request Your Area
             </button>
@@ -337,97 +292,88 @@ const OjarunzHomepage = () => {
       </section>
 
       {/* Photos Section */}
-      <section id="photos" className="py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-6 md:px-16">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Fresh From Our Markets</h2>
-            <p className="text-gray-600 text-lg">See the quality and variety of produce we deliver</p>
+      <section id="photos" className="py-16 sm:py-20 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12 lg:px-16">
+          <div className="text-center mb-12 sm:mb-16">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4">Fresh From Our Markets</h2>
+            <p className="text-gray-600 text-base sm:text-lg">See the quality and variety of produce we deliver</p>
           </div>
-          
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-12">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 mb-8 sm:mb-12">
             {[1, 2, 3, 4, 5, 6, 7, 8].map((num) => (
-              <div key={num} className="relative group overflow-hidden rounded-2xl">
+              <div key={num} className="relative group overflow-hidden rounded-xl">
                 <img 
                   src={`/oj${num}.jpg`} 
                   alt={`Fresh Produce ${num}`}
-                  className="w-full h-48 object-cover transition-transform group-hover:scale-110"
+                  className="w-full h-40 sm:h-48 object-cover transition-transform group-hover:scale-110"
                 />
                 <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                  <Heart className="w-8 h-8 text-white" />
+                  <Heart className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
                 </div>
               </div>
             ))}
           </div>
-          
           <div className="text-center">
-            <h3 className="text-2xl font-bold text-gray-900 mb-4">What We Offer</h3>
-            <div className="grid md:grid-cols-4 gap-4 text-gray-600">
-              <div className="bg-white p-4 rounded-xl">Fresh Vegetables</div>
-              <div className="bg-white p-4 rounded-xl">Seasonal Fruits</div>
-              <div className="bg-white p-4 rounded-xl">Nigerian Staples</div>
-              <div className="bg-white p-4 rounded-xl">Spices & Herbs</div>
+            <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4">What We Offer</h3>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-sm sm:text-base text-gray-600">
+              <div className="bg-white p-3 sm:p-4 rounded-xl">Fresh Vegetables</div>
+              <div className="bg-white p-3 sm:p-4 rounded-xl">Seasonal Fruits</div>
+              <div className="bg-white p-3 sm:p-4 rounded-xl">Nigerian Staples</div>
+              <div className="bg-white p-3 sm:p-4 rounded-xl">Spices & Herbs</div>
             </div>
           </div>
         </div>
       </section>
 
       {/* Contact Section */}
-      <section id="contact" className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-6 md:px-16">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Get In Touch</h2>
-            <p className="text-gray-600 text-lg">We'd love to hear from you</p>
+      <section id="contact" className="py-16 sm:py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12 lg:px-16">
+          <div className="text-center mb-12 sm:mb-16">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4">Get In Touch</h2>
+            <p className="text-gray-600 text-base sm:text-lg">We'd love to hear from you</p>
           </div>
-          
-          <div className="grid lg:grid-cols-2 gap-12">
+          <div className="grid lg:grid-cols-2 gap-8 sm:gap-12">
             <div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-6">Contact Information</h3>
-              
-              <div className="space-y-6">
+              <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">Contact Information</h3>
+              <div className="space-y-4 sm:space-y-6">
                 <div className="flex items-center">
-                  <Phone className="w-6 h-6 text-green-600 mr-4" />
+                  <Phone className="w-5 h-5 sm:w-6 sm:h-6 text-green-600 mr-3 sm:mr-4" />
                   <div>
-                    <div className="font-semibold text-gray-900">Phone</div>
-                    <div className="text-gray-600">+234 800 OJA RUNZ</div>
+                    <div className="font-semibold text-gray-900 text-sm sm:text-base">Phone</div>
+                    <div className="text-gray-600 text-sm sm:text-base">+234 800 OJA RUNZ</div>
                   </div>
                 </div>
-                
                 <div className="flex items-center">
-                  <Mail className="w-6 h-6 text-green-600 mr-4" />
+                  <Mail className="w-5 h-5 sm:w-6 sm:h-6 text-green-600 mr-3 sm:mr-4" />
                   <div>
-                    <div className="font-semibold text-gray-900">Email</div>
-                    <div className="text-gray-600">hello@ojarunz.ng</div>
+                    <div className="font-semibold text-gray-900 text-sm sm:text-base">Email</div>
+                    <div className="text-gray-600 text-sm sm:text-base">hello@ojarunz.ng</div>
                   </div>
                 </div>
-                
                 <div className="flex items-center">
-                  <MapPin className="w-6 h-6 text-green-600 mr-4" />
+                  <MapPin className="w-5 h-5 sm:w-6 sm:h-6 text-green-600 mr-3 sm:mr-4" />
                   <div>
-                    <div className="font-semibold text-gray-900">Office</div>
-                    <div className="text-gray-600">Lagos, Nigeria</div>
+                    <div className="font-semibold text-gray-900 text-sm sm:text-base">Office</div>
+                    <div className="text-gray-600 text-sm sm:text-base">Lagos, Nigeria</div>
                   </div>
                 </div>
               </div>
-              
-              <div className="mt-8 bg-green-50 p-6 rounded-2xl">
-                <h4 className="font-bold text-gray-900 mb-2">Business Hours</h4>
-                <div className="text-gray-600 space-y-1">
+              <div className="mt-6 sm:mt-8 bg-green-50 p-4 sm:p-6 rounded-xl">
+                <h4 className="font-bold text-gray-900 text-sm sm:text-base mb-2">Business Hours</h4>
+                <div className="text-gray-600 text-sm sm:text-base space-y-1">
                   <div>Monday - Friday: 6:00 AM - 9:00 PM</div>
                   <div>Saturday: 7:00 AM - 8:00 PM</div>
                   <div>Sunday: 8:00 AM - 6:00 PM</div>
                 </div>
               </div>
             </div>
-            
             <div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-6">Join Our Waitlist</h3>
-              <p className="text-gray-600 mb-6">
+              <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">Join Our Waitlist</h3>
+              <p className="text-gray-600 text-sm sm:text-base mb-4 sm:mb-6">
                 Be the first to experience fresh Nigerian produce delivered to your doorstep. 
                 Sign up now for exclusive early access!
               </p>
-              
               {!isSubmitted ? (
-                <div className="bg-gray-50 rounded-2xl p-6">
+                <div className="bg-gray-50 rounded-xl p-4 sm:p-6">
                   <div className="space-y-4">
                     <div>
                       <input
@@ -435,25 +381,23 @@ const OjarunzHomepage = () => {
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         placeholder="Enter your email address"
-                        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:border-green-500 focus:outline-none"
+                        className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:border-green-500 focus:outline-none text-sm sm:text-base"
                       />
                     </div>
-                    
                     <div>
                       <input
                         type="tel"
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
                         placeholder="Your phone number"
-                        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:border-green-500 focus:outline-none"
+                        className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:border-green-500 focus:outline-none text-sm sm:text-base"
                       />
                     </div>
-                    
                     <div>
                       <select
                         value={location}
                         onChange={(e) => setLocation(e.target.value)}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:border-green-500 focus:outline-none bg-white"
+                        className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:border-green-500 focus:outline-none bg-white text-sm sm:text-base"
                       >
                         <option value="">Select your location</option>
                         <option value="lagos">Lagos</option>
@@ -463,20 +407,19 @@ const OjarunzHomepage = () => {
                         <option value="other">Other</option>
                       </select>
                     </div>
-                    
                     <button
                       onClick={handleWaitlistSubmit}
-                      className="w-full bg-green-600 text-white py-3 px-6 rounded-xl font-semibold hover:bg-green-700 transition-colors"
+                      className="w-full bg-green-600 text-white py-2 sm:py-3 px-4 sm:px-6 rounded-lg font-semibold hover:bg-green-700 transition-colors text-sm sm:text-base"
                     >
                       Join Waitlist
                     </button>
                   </div>
                 </div>
               ) : (
-                <div className="bg-green-50 rounded-2xl p-6 text-center">
-                  <CheckCircle className="w-12 h-12 text-green-500 mx-auto mb-4" />
-                  <h4 className="text-xl font-bold text-gray-900 mb-2">Thank You!</h4>
-                  <p className="text-gray-600">
+                <div className="bg-green-50 rounded-xl p-4 sm:p-6 text-center">
+                  <CheckCircle className="w-8 h-8 sm:w-12 sm:h-12 text-green-500 mx-auto mb-3 sm:mb-4" />
+                  <h4 className="text-lg sm:text-xl font-bold text-gray-900 mb-2">Thank You!</h4>
+                  <p className="text-gray-600 text-sm sm:text-base">
                     We've added you to our waitlist. You'll be the first to know when we launch in your area!
                   </p>
                 </div>
@@ -487,65 +430,61 @@ const OjarunzHomepage = () => {
       </section>
 
       {/* Features Section */}
-      <section className="py-20 bg-gradient-to-r from-green-600 to-green-700">
-        <div className="max-w-4xl mx-auto px-6 md:px-16 text-center">
-          <h2 className="text-4xl font-bold text-white mb-4">Why Choose Ojarunz?</h2>
-          
-          <div className="grid md:grid-cols-3 gap-8 mt-12">
+      <section className="py-16 sm:py-20 bg-gradient-to-r from-green-600 to-green-700">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 md:px-12 lg:px-16 text-center">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-4">Why Choose Ojarunz?</h2>
+          <div className="grid sm:grid-cols-3 gap-6 sm:gap-8 mt-8 sm:mt-12">
             <div className="text-center">
-              <Truck className="w-12 h-12 text-white mx-auto mb-4" />
-              <h3 className="text-xl font-bold text-white mb-2">Fast Delivery</h3>
-              <p className="text-green-100">Same-day delivery to your doorstep</p>
+              <Truck className="w-8 h-8 sm:w-12 sm:h-12 text-white mx-auto mb-3 sm:mb-4" />
+              <h3 className="text-lg sm:text-xl font-bold text-white mb-2">Fast Delivery</h3>
+              <p className="text-green-100 text-sm sm:text-base">Same-day delivery to your doorstep</p>
             </div>
-            
             <div className="text-center">
-              <Shield className="w-12 h-12 text-white mx-auto mb-4" />
-              <h3 className="text-xl font-bold text-white mb-2">Quality Guaranteed</h3>
-              <p className="text-green-100">Fresh from trusted Nigerian markets</p>
+              <Shield className="w-8 h-8 sm:w-12 sm:h-12 text-white mx-auto mb-3 sm:mb-4" />
+              <h3 className="text-lg sm:text-xl font-bold text-white mb-2">Quality Guaranteed</h3>
+              <p className="text-green-100 text-sm sm:text-base">Fresh from trusted Nigerian markets</p>
             </div>
-            
             <div className="text-center">
-              <Clock className="w-12 h-12 text-white mx-auto mb-4" />
-              <h3 className="text-xl font-bold text-white mb-2">Save Time</h3>
-              <p className="text-green-100">Skip market queues and traffic</p>
+              <Clock className="w-8 h-8 sm:w-12 sm:h-12 text-white mx-auto mb-3 sm:mb-4" />
+              <h3 className="text-lg sm:text-xl font-bold text-white mb-2">Save Time</h3>
+              <p className="text-green-100 text-sm sm:text-base">Skip market queues and traffic</p>
             </div>
           </div>
         </div>
       </section>
 
       {/* Testimonials Section */}
-      <section className="py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-6 md:px-16">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Customer Reviews</h2>
+      <section className="py-16 sm:py-20 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12 lg:px-16">
+          <div className="text-center mb-12 sm:mb-16">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4">Customer Reviews</h2>
           </div>
-          
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8">
             {[
               {
                 text: "Finally! Fresh tomatoes and peppers delivered to my house in Lekki. The quality is exactly like what I get from Mile 12 market.",
                 author: "Funmi A. - Lagos",
-                rating: 5
+                rating: 5,
               },
               {
                 text: "As a busy mom, Ojarunz saves me so much time. No more market wahala, fresh vegetables delivered same day!",
                 author: "Kemi O. - Abuja",
-                rating: 5
+                rating: 5,
               },
               {
                 text: "The prices are reasonable and the delivery is always on time. I can focus on cooking instead of market runs.",
                 author: "David M. - Port Harcourt",
-                rating: 5
-              }
+                rating: 5,
+              },
             ].map((testimonial, index) => (
-              <div key={index} className="bg-white p-6 rounded-2xl shadow-lg">
-                <div className="flex text-yellow-400 mb-4">
+              <div key={index} className="bg-white p-4 sm:p-6 rounded-xl shadow-md">
+                <div className="flex text-yellow-400 mb-3 sm:mb-4">
                   {[...Array(testimonial.rating)].map((_, i) => (
-                    <Star key={i} className="w-5 h-5 fill-current" />
+                    <Star key={i} className="w-4 h-4 sm:w-5 sm:h-5 fill-current" />
                   ))}
                 </div>
-                <p className="text-gray-600 mb-4 italic">"{testimonial.text}"</p>
-                <div className="font-semibold text-gray-900">{testimonial.author}</div>
+                <p className="text-gray-600 text-sm sm:text-base mb-3 sm:mb-4 italic">"{testimonial.text}"</p>
+                <div className="font-semibold text-gray-900 text-sm sm:text-base">{testimonial.author}</div>
               </div>
             ))}
           </div>
@@ -553,20 +492,19 @@ const OjarunzHomepage = () => {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gradient-to-br from-amber-50 to-yellow-100 text-black py-16">
-        <div className="max-w-7xl mx-auto px-6 md:px-16">
-          <div className="grid md:grid-cols-4 gap-8">
+      <footer className="bg-gradient-to-br from-amber-50 to-yellow-100 text-black py-12 sm:py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12 lg:px-16">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
             <div>
-              <h3 className="text-2xl font-bold mb-4">Ojarunz</h3>
-              <p className="text-gray-900 mb-4">
+              <h3 className="text-xl sm:text-2xl font-bold mb-4">Ojarunz</h3>
+              <p className="text-gray-900 text-sm sm:text-base mb-4">
                 Fresh fruits and vegetables from Nigerian markets, delivered to your doorstep.
               </p>
-              <div className="text-sm text-gray-500">Made with ❤️ for Nigerians</div>
+              <div className="text-xs sm:text-sm text-gray-500">Made with ❤️ for Nigerians</div>
             </div>
-            
             <div>
-              <h4 className="font-semibold mb-4">Quick Links</h4>
-              <ul className="space-y-2 text-gray-900">
+              <h4 className="font-semibold text-sm sm:text-base mb-4">Quick Links</h4>
+              <ul className="space-y-2 text-gray-900 text-sm sm:text-base">
                 {navItems.map((item) => (
                   <li key={item.id}>
                     <button 
@@ -579,19 +517,17 @@ const OjarunzHomepage = () => {
                 ))}
               </ul>
             </div>
-            
             <div>
-              <h4 className="font-semibold mb-4">Support</h4>
-              <ul className="space-y-2 text-gray-900">
+              <h4 className="font-semibold text-sm sm:text-base mb-4">Support</h4>
+              <ul className="space-y-2 text-gray-900 text-sm sm:text-base">
                 <li><button className="hover:text-green-600 transition-colors">Help Center</button></li>
                 <li><button className="hover:text-green-600 transition-colors">Track Order</button></li>
                 <li><button className="hover:text-green-600 transition-colors">Returns & Refunds</button></li>
               </ul>
             </div>
-            
             <div>
-              <h4 className="font-semibold mb-4">Contact Info</h4>
-              <div className="space-y-2 text-gray-900">
+              <h4 className="font-semibold text-sm sm:text-base mb-4">Contact Info</h4>
+              <div className="space-y-2 text-gray-900 text-sm sm:text-base">
                 <div className="flex items-center">
                   <Mail className="w-4 h-4 mr-2" />
                   hello@ojarunz.ng
@@ -607,8 +543,7 @@ const OjarunzHomepage = () => {
               </div>
             </div>
           </div>
-          
-          <div className="border-t border-gray-300 mt-12 pt-8 text-center text-gray-900">
+          <div className="border-t border-gray-300 mt-8 sm:mt-12 pt-6 sm:pt-8 text-center text-gray-900 text-sm sm:text-base">
             <p>&copy; 2024 Ojarunz. All rights reserved.</p>
           </div>
         </div>
