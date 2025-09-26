@@ -26,7 +26,11 @@ const OjarunzHomepage = () => {
   };
 
   // Smooth scroll function
-  const scrollToSection = (sectionId) => {
+  interface ScrollToSection {
+    (sectionId: string): void;
+  }
+
+  const scrollToSection: ScrollToSection = (sectionId) => {
     const element = document.getElementById(sectionId);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
