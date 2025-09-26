@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation'; // Import useRouter for navigation
 import { ChevronRight, CheckCircle, Truck, Clock, Shield, Star, Phone, Mail, MapPin, ShoppingBag, Users, Award, Heart } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -12,6 +13,7 @@ const OjarunzHomepage = () => {
   const [location, setLocation] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
+  const router = useRouter(); // Initialize useRouter
 
   const handleWaitlistSubmit = () => {
     if (email && phone && location) {
@@ -102,11 +104,11 @@ const OjarunzHomepage = () => {
                 ))}
               </div>
               <button 
-                onClick={() => scrollToSection('services')}
+                onClick={() => router.push('/shop')} // Navigate to /pages/shop
                 className="bg-green-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-green-700 transition-colors flex items-center space-x-2 text-sm sm:text-base"
               >
                 <ShoppingBag className="w-4 h-4 sm:w-5 sm:h-5" />
-                <span>Explore Our Services</span>
+                <span>Shop now</span>
                 <ChevronRight className="w-3 h-3 sm:w-4 sm:h-4" />
               </button>
             </div>

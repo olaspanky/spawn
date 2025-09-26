@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X, ChevronDown } from 'lucide-react';
 import Image from 'next/image';
-
+import { useRouter } from 'next/navigation'; // Import useRouter
 interface NavItem {
   id: string;
   label: string;
@@ -18,6 +18,8 @@ interface EnhancedNavbarProps {
 const EnhancedNavbar: React.FC<EnhancedNavbarProps> = ({ navItems, activeSection, scrollToSection }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+    const router = useRouter(); // Initialize useRouter
+  
 
   useEffect(() => {
     const handleScroll = () => {
@@ -64,8 +66,10 @@ const EnhancedNavbar: React.FC<EnhancedNavbarProps> = ({ navItems, activeSection
               </button>
             ))}
             <div className="hidden lg:block ml-6">
-              <button className="flex items-center space-x-2 px-3 py-2 bg-green-50 text-green-700 rounded-lg hover:bg-green-100 transition-colors text-sm">
+              <button                 onClick={() => router.push('/shop')} // Navigate to /pages/shop
+ className="flex items-center space-x-2 px-3 py-2 bg-green-50 text-green-700 rounded-lg hover:bg-green-100 transition-colors text-sm">
                 <span className="font-medium">Market Floor</span>
+                
                 <ChevronDown className="w-4 h-4" />
               </button>
             </div>
@@ -89,7 +93,8 @@ const EnhancedNavbar: React.FC<EnhancedNavbarProps> = ({ navItems, activeSection
           isMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
         }`}>
           <div className="py-4 space-y-2 border-t border-gray-100">
-            <button className="w-full flex items-center justify-between px-4 py-3 text-left text-green-700 bg-green-50 rounded-lg hover:bg-green-100 transition-colors">
+            <button                 onClick={() => router.push('/shop')} // Navigate to /pages/shop
+ className="w-full flex items-center justify-between px-4 py-3 text-left text-green-700 bg-green-50 rounded-lg hover:bg-green-100 transition-colors">
               <span className="font-medium text-sm">Market Floor</span>
               <ChevronDown className="w-4 h-4" />
             </button>
