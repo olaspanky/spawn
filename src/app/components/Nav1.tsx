@@ -295,7 +295,7 @@ const Navbar: React.FC<NavbarProps> = ({ tabs, activeTab, setActiveTab, setIsCar
           <div className="lg:hidden">
             <div className="flex justify-between items-center py-3">
               <Link href="/" className="flex items-center">
-                <Image src="/oja.png" alt="Oja Logo" width={60} height={60} className="rounded-lg" />
+                <Image src="/oj.png" alt="Oja Logo" width={60} height={60} className="rounded-lg" />
               </Link>
 
               <div className="flex items-center space-x-2">
