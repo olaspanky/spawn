@@ -19,7 +19,7 @@ const OjarunzHomepage = () => {
 const handleWaitlistSubmit = async () => {
   if (email && phone && location) {
     try {
-      const response = await fetch('http://localhost:5000/api/waitlist', {
+      const response = await fetch('https://spawnback.vercel.app/api/waitlist', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
