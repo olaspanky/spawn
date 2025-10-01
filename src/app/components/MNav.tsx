@@ -43,8 +43,7 @@ const EnhancedNavbar: React.FC<EnhancedNavbarProps> = ({ navItems, activeSection
         <div className="flex justify-between items-center h-16 sm:h-20">
           <div className="flex items-center space-x-3 sm:space-x-4">
             <div className="flex items-center space-x-2 sm:space-x-3 group cursor-pointer">
-              <Image src="/oj.png" alt="Oja Logo" width={40} height={40} className="rounded-lg sm:w-12 sm:h-12" />
-              <span className="text-lg sm:text-xl font-bold text-gray-900">Ojarunz</span>
+              <Image src="/oj.png" alt="Oja Logo" width={40} height={40} className="rounded-lg sm:w-auto sm:h-12" />
             </div>
           </div>
 

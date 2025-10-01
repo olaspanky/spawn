@@ -9,24 +9,48 @@ import EnhancedNavbar from './components/MNav';
 
 const OjarunzHomepage = () => {
   const [email, setEmail] = useState('');
+  const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [location, setLocation] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
   const router = useRouter(); // Initialize useRouter
 
-  const handleWaitlistSubmit = () => {
-    if (email && phone && location) {
-      setIsSubmitted(true);
-      console.log('Waitlist signup:', { email, phone, location });
-      setTimeout(() => {
-        setIsSubmitted(false);
-        setEmail('');
-        setPhone('');
-        setLocation('');
-      }, 3000);
+const handleWaitlistSubmit = async () => {
+  if (email && phone && location) {
+    try {
+      const response = await fetch('http://localhost:5000/api/waitlist', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name, email, phone, location }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setIsSubmitted(true);
+        console.log('Waitlist signup successful:', data);
+        setTimeout(() => {
+          setIsSubmitted(false);
+          setName('');
+          setEmail('');
+          setPhone('');
+          setLocation('');
+        }, 3000);
+      } else {
+        console.error('Waitlist signup failed:', data.message);
+        alert(data.message); // Show error to user
+      }
+    } catch (error) {
+      console.error('Error submitting waitlist:', error);
+      alert('An error occurred. Please try again later.');
     }
-  };
+  } else {
+    alert('Please fill in all required fields.');
+  }
+};
 
   interface ScrollToSection {
     (sectionId: string): void;
@@ -186,7 +210,7 @@ const OjarunzHomepage = () => {
               <Truck className="w-12 h-12 sm:w-16 sm:h-16 text-green-600 mx-auto mb-4 sm:mb-6" />
               <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4">Same-Day Delivery</h3>
               <p className="text-gray-600 text-sm sm:text-base mb-4">
-                Order by 12 PM and receive your fresh produce the same day. Perfect for last-minute cooking needs.
+                Order before 2PM and receive your fresh produce the same day. Perfect for last-minute cooking needs.
               </p>
               <ul className="text-left text-gray-600 text-sm sm:text-base space-y-2">
                 <li className="flex items-center">
@@ -256,12 +280,13 @@ const OjarunzHomepage = () => {
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4">Delivery Locations</h2>
             <p className="text-gray-600 text-base sm:text-lg">Currently serving major cities across Nigeria</p>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 place-content-center">
             {[
-              { city: 'Lagos', areas: ['Lekki', 'Victoria Island', 'Ikoyi', 'Surulere', 'Ikeja'] },
-              { city: 'Abuja', areas: ['Maitama', 'Wuse', 'Garki', 'Asokoro', 'Gwarinpa'] },
-              { city: 'Port Harcourt', areas: ['GRA', 'Rumuola', 'Trans-Amadi', 'Old GRA'] },
-              { city: 'Ibadan', areas: ['Bodija', 'Iwo Road', 'Mokola', 'UI Area'] },
+                            { city: 'Ibadan', areas: ['Orogun', 'Bodija', 'Mokola', 'UI Area'] },
+
+              { city: 'Lagos', areas: ['Coming soon'] },
+              { city: 'Abuja', areas: ['Coming soon'] },
+              { city: 'Port Harcourt', areas: ['Coming soon'] },
             ].map((location, index) => (
               <div key={index} className="bg-green-50 p-4 sm:p-6 rounded-xl">
                 <div className="flex items-center mb-3 sm:mb-4">
@@ -341,30 +366,29 @@ const OjarunzHomepage = () => {
                   <Phone className="w-5 h-5 sm:w-6 sm:h-6 text-green-600 mr-3 sm:mr-4" />
                   <div>
                     <div className="font-semibold text-gray-900 text-sm sm:text-base">Phone</div>
-                    <div className="text-gray-600 text-sm sm:text-base">+234 800 OJA RUNZ</div>
+                    <div className="text-gray-600 text-sm sm:text-base">+234 7049374912</div>
                   </div>
                 </div>
                 <div className="flex items-center">
                   <Mail className="w-5 h-5 sm:w-6 sm:h-6 text-green-600 mr-3 sm:mr-4" />
                   <div>
                     <div className="font-semibold text-gray-900 text-sm sm:text-base">Email</div>
-                    <div className="text-gray-600 text-sm sm:text-base">hello@ojarunz.ng</div>
+                    <div className="text-gray-600 text-sm sm:text-base">service@ojarunz.ng</div>
                   </div>
                 </div>
                 <div className="flex items-center">
                   <MapPin className="w-5 h-5 sm:w-6 sm:h-6 text-green-600 mr-3 sm:mr-4" />
                   <div>
                     <div className="font-semibold text-gray-900 text-sm sm:text-base">Office</div>
-                    <div className="text-gray-600 text-sm sm:text-base">Lagos, Nigeria</div>
+                    <div className="text-gray-600 text-sm sm:text-base"> Ibadan, Nigeria</div>
                   </div>
                 </div>
               </div>
               <div className="mt-6 sm:mt-8 bg-green-50 p-4 sm:p-6 rounded-xl">
                 <h4 className="font-bold text-gray-900 text-sm sm:text-base mb-2">Business Hours</h4>
                 <div className="text-gray-600 text-sm sm:text-base space-y-1">
-                  <div>Monday - Friday: 6:00 AM - 9:00 PM</div>
-                  <div>Saturday: 7:00 AM - 8:00 PM</div>
-                  <div>Sunday: 8:00 AM - 6:00 PM</div>
+                  <div>Monday - Friday:8:00 AM - 6:00 PM</div>
+                  <div>Saturday: 8:00 AM - 6:00 PM</div>
                 </div>
               </div>
             </div>
@@ -377,6 +401,15 @@ const OjarunzHomepage = () => {
               {!isSubmitted ? (
                 <div className="bg-gray-50 rounded-xl p-4 sm:p-6">
                   <div className="space-y-4">
+                    <div>
+                      <input
+                        type="name"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        placeholder="Enter your name"
+                        className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:border-green-500 focus:outline-none text-sm sm:text-base"
+                      />
+                    </div>
                     <div>
                       <input
                         type="email"
@@ -464,18 +497,18 @@ const OjarunzHomepage = () => {
           <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8">
             {[
               {
-                text: "Finally! Fresh tomatoes and peppers delivered to my house in Lekki. The quality is exactly like what I get from Mile 12 market.",
-                author: "Funmi A. - Lagos",
+                text: "Finally! Fresh tomatoes and peppers delivered to my hostel in CMF. The quality is exactly like what I get from Bodija market.",
+                author: "Funmi A. - Ui",
                 rating: 5,
               },
               {
-                text: "As a busy mom, Ojarunz saves me so much time. No more market wahala, fresh vegetables delivered same day!",
-                author: "Kemi O. - Abuja",
+                text: "As a busy student, Ojarunz saves me so much time. No more market wahala, fresh vegetables delivered same day!",
+                author: "Kemi O. - UI",
                 rating: 5,
               },
               {
-                text: "The prices are reasonable and the delivery is always on time. I can focus on cooking instead of market runs.",
-                author: "David M. - Port Harcourt",
+                text: "The prices are reasonable and the delivery is always on time. I can focus on working instead of market runs.",
+                author: "David M. - Barika",
                 rating: 5,
               },
             ].map((testimonial, index) => (
@@ -532,15 +565,15 @@ const OjarunzHomepage = () => {
               <div className="space-y-2 text-gray-900 text-sm sm:text-base">
                 <div className="flex items-center">
                   <Mail className="w-4 h-4 mr-2" />
-                  hello@ojarunz.ng
+                  services@ojarunz.ng
                 </div>
                 <div className="flex items-center">
                   <Phone className="w-4 h-4 mr-2" />
-                  +234 800 OJA RUNZ
+                  +234 7019312514
                 </div>
                 <div className="flex items-center">
                   <MapPin className="w-4 h-4 mr-2" />
-                  Lagos, Nigeria
+                  Ibadan, Nigeria
                 </div>
               </div>
             </div>
