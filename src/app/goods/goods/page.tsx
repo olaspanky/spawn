@@ -36,6 +36,8 @@ export default function GoodsPage() {
     }
   };
 
+  console.log('Goods loaded:', goods);
+
   const handleDelete = async (id: string) => {
     if (!token) {
       toast.error('Please log in to delete a good');

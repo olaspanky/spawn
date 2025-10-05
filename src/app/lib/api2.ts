@@ -1,6 +1,95 @@
-import { Good, Category } from '../types/goods';
+// import { Good, Category } from '../types/goods';
 
-const API_BASE_URL = 'https://spawnback.vercel.app/api/store';
+// const API_BASE_URL = 'http://localhost:5000/api/store';
+
+// export const goodsApi = {
+//   // Get all goods (public, no auth required)
+//   getGoods: async (category?: Category, available?: boolean, search?: string): Promise<Good[]> => {
+//     const params = new URLSearchParams();
+//     if (category) params.append('category', category);
+//     if (available !== undefined) params.append('available', available.toString());
+//     if (search) params.append('search', search);
+
+//     const response = await fetch(`${API_BASE_URL}/goods?${params}`);
+//     if (!response.ok) throw new Error('Failed to fetch goods');
+//     return response.json();
+//   },
+
+//   // Get single good (public, no auth required)
+//   getGood: async (id: string): Promise<Good> => {
+//     const response = await fetch(`${API_BASE_URL}/${id}`);
+//     if (!response.ok) throw new Error('Failed to fetch good');
+//     return response.json();
+//   },
+
+//   // Create good (requires auth)
+//   createGood: async (good: FormData, token: string): Promise<Good> => {
+//     const response = await fetch(`${API_BASE_URL}/goods`, {
+//       method: 'POST',
+//       headers: {
+//         'x-auth-token': token, // Include token
+//       },
+//       body: good,
+//     });
+//     if (!response.ok) {
+//       if (response.status === 401) throw new Error('Unauthorized: Invalid or missing token');
+//       throw new Error('Failed to create good');
+//     }
+//     return response.json();
+//   },
+
+//   // Update good (requires auth)
+//   updateGood: async (id: string, good: FormData, token: string): Promise<Good> => {
+//     const response = await fetch(`${API_BASE_URL}/${id}`, {
+//       method: 'PUT',
+//       headers: {
+//         'x-auth-token': token, // Include token
+//       },
+//       body: good,
+//     });
+//     if (!response.ok) {
+//       if (response.status === 401) throw new Error('Unauthorized: Invalid or missing token');
+//       throw new Error('Failed to update good');
+//     }
+//     return response.json();
+//   },
+
+//   // Delete good (requires auth)
+//   deleteGood: async (id: string, token: string): Promise<void> => {
+//     const response = await fetch(`${API_BASE_URL}/${id}`, {
+//       method: 'DELETE',
+//       headers: {
+//         'x-auth-token': token, // Include token
+//       },
+//     });
+//     if (!response.ok) {
+//       if (response.status === 401) throw new Error('Unauthorized: Invalid or missing token');
+//       throw new Error('Failed to delete good');
+//     }
+//   },
+
+//   // Toggle availability (requires auth)
+//   toggleAvailability: async (id: string, token: string): Promise<Good> => {
+//     const response = await fetch(`${API_BASE_URL}/${id}/availability`, {
+//       method: 'PUT',
+//       headers: {
+//         'x-auth-token': token, // Include token
+//       },
+//     });
+//     if (!response.ok) {
+//       if (response.status === 401) throw new Error('Unauthorized: Invalid or missing token');
+//       throw new Error('Failed to toggle availability');
+//     }
+//     return response.json();
+//   },
+
+
+// };
+
+
+import { Good, Category, Purchase } from '../types/goods';
+
+const API_BASE_URL = 'http://localhost:5000/api/store';
 
 export const goodsApi = {
   // Get all goods (public, no auth required)
@@ -17,7 +106,7 @@ export const goodsApi = {
 
   // Get single good (public, no auth required)
   getGood: async (id: string): Promise<Good> => {
-    const response = await fetch(`${API_BASE_URL}/goods/${id}`);
+    const response = await fetch(`${API_BASE_URL}/${id}`);
     if (!response.ok) throw new Error('Failed to fetch good');
     return response.json();
   },
@@ -27,7 +116,7 @@ export const goodsApi = {
     const response = await fetch(`${API_BASE_URL}/goods`, {
       method: 'POST',
       headers: {
-        'x-auth-token': token, // Include token
+        'x-auth-token': token,
       },
       body: good,
     });
@@ -40,10 +129,10 @@ export const goodsApi = {
 
   // Update good (requires auth)
   updateGood: async (id: string, good: FormData, token: string): Promise<Good> => {
-    const response = await fetch(`${API_BASE_URL}/goods/${id}`, {
+    const response = await fetch(`${API_BASE_URL}/${id}`, {
       method: 'PUT',
       headers: {
-        'x-auth-token': token, // Include token
+        'x-auth-token': token,
       },
       body: good,
     });
@@ -56,10 +145,10 @@ export const goodsApi = {
 
   // Delete good (requires auth)
   deleteGood: async (id: string, token: string): Promise<void> => {
-    const response = await fetch(`${API_BASE_URL}/goods/${id}`, {
+    const response = await fetch(`${API_BASE_URL}/${id}`, {
       method: 'DELETE',
       headers: {
-        'x-auth-token': token, // Include token
+        'x-auth-token': token,
       },
     });
     if (!response.ok) {
@@ -70,10 +159,10 @@ export const goodsApi = {
 
   // Toggle availability (requires auth)
   toggleAvailability: async (id: string, token: string): Promise<Good> => {
-    const response = await fetch(`${API_BASE_URL}/goods/${id}/availability`, {
+    const response = await fetch(`${API_BASE_URL}/${id}/availability`, {
       method: 'PUT',
       headers: {
-        'x-auth-token': token, // Include token
+        'x-auth-token': token,
       },
     });
     if (!response.ok) {
@@ -83,16 +172,71 @@ export const goodsApi = {
     return response.json();
   },
 
-  // Get category stats (assume public, adjust if auth required)
-//   getCategoryStats: async (token?: string): Promise<any> => {
-//     const headers = token ? { 'x-auth-token': token } : {};
-//     const response = await fetch(`${API_BASE_URL}/goods/stats`, {
-//       headers,
-//     });
-//     if (!response.ok) {
-//       if (response.status === 401) throw new Error('Unauthorized: Invalid or missing token');
-//       throw new Error('Failed to fetch stats');
-//     }
-//     return response.json();
-//   },
+  // Confirm payment (requires auth)
+  confirmPayment: async (
+    cart: { storeId: string; item: { _id: string; name: string; price: number }; quantity: number }[],
+    paymentReference: string,
+    token: string,
+  ): Promise<{ message: string; purchaseId: string }> => {
+    const response = await fetch(`${API_BASE_URL}/confirm-payment`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-auth-token': token,
+      },
+      body: JSON.stringify({ cart, paymentReference }),
+    });
+    if (!response.ok) {
+      if (response.status === 401) throw new Error('Unauthorized: Invalid or missing token');
+      throw new Error('Failed to submit payment reference');
+    }
+    return response.json();
+  },
+
+  // Get all purchases (admin-only, requires auth)
+  getAllPurchases: async (token: string): Promise<Purchase[]> => {
+    const response = await fetch(`${API_BASE_URL}/purchases/all`, {
+      headers: {
+        'x-auth-token': token,
+      },
+    });
+    if (!response.ok) {
+      if (response.status === 401) throw new Error('Unauthorized: Invalid or missing token');
+      if (response.status === 403) throw new Error('Admin access required');
+      throw new Error('Failed to fetch purchases');
+    }
+    return response.json();
+  },
+
+  // Get user purchases (requires auth)
+  getUserPurchases: async (token: string): Promise<Purchase[]> => {
+    const response = await fetch(`${API_BASE_URL}/purchases`, {
+      headers: {
+        'x-auth-token': token,
+      },
+    });
+    if (!response.ok) {
+      if (response.status === 401) throw new Error('Unauthorized: Invalid or missing token');
+      throw new Error('Failed to fetch user purchases');
+    }
+    return response.json();
+  },
+
+  // Update purchase status (admin-only, requires auth)
+  updatePurchaseStatus: async (purchaseId: string, status: 'pending' | 'confirmed' | 'cancelled', token: string): Promise<Purchase> => {
+    const response = await fetch(`${API_BASE_URL}/purchases/${purchaseId}/status`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-auth-token': token,
+      },
+      body: JSON.stringify({ status }),
+    });
+    if (!response.ok) {
+      if (response.status === 401) throw new Error('Unauthorized: Invalid or missing token');
+      if (response.status === 403) throw new Error('Admin access required');
+      throw new Error('Failed to update purchase status');
+    }
+    return response.json();
+  },
 };

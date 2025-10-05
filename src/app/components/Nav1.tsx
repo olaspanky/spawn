@@ -209,16 +209,9 @@ const Navbar: React.FC<NavbarProps> = ({ tabs, activeTab, setActiveTab, setIsCar
                                 <Upload className="h-5 w-5 mr-3 text-gray-500" />
                                 <span className="text-gray-700">Upload List</span>
                               </Link>
+                             
                               <Link
-                                href="/pages/chat"
-                                onClick={closeAllMenus}
-                                className="flex items-center px-4 py-3 hover:bg-gray-50 transition-colors"
-                              >
-                                <MessageCircle className="h-5 w-5 mr-3 text-gray-500" />
-                                <span className="text-gray-700">Messages</span>
-                              </Link>
-                              <Link
-                                href="/declutter/purchases"
+                                href="/goods/purchase"
                                 onClick={closeAllMenus}
                                 className="flex items-center px-4 py-3 hover:bg-gray-50 transition-colors"
                               >
@@ -428,8 +421,7 @@ const Navbar: React.FC<NavbarProps> = ({ tabs, activeTab, setActiveTab, setIsCar
                   </div>
                   <MobileNavItem href="/" icon={HomeIcon} label="Home" />
                   <MobileNavItem href="/goods/list" icon={Upload} label="Upload List" highlight />
-                  <MobileNavItem href="/pages/chat" icon={MessageCircle} label="Messages" />
-                  <MobileNavItem href="/declutter/purchases" icon={CreditCardIcon} label="Transactions" />
+                  <MobileNavItem href="/goods/purchase" icon={CreditCardIcon} label="Transactions" />
                   {storeId && (
                     <MobileNavItem href={`/appstore/managestore/${storeId}`} icon={Settings2} label="Manage Store" />
                   )}

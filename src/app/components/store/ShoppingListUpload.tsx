@@ -218,7 +218,7 @@ const ShoppingListUpload: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 py-12 px-4 ">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 py-12 px-4 mt-9 lg:mt-20">
 
       <Link href="/" className="absolute top-4 left-4 text-indigo-600 hover:text-indigo-800 flex items-center space-x-1">
         <FiX className="transform rotate-45" />

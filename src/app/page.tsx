@@ -98,11 +98,7 @@ const handleWaitlistSubmit = async () => {
     <div className="min-h-screen bg-gradient-to-br from-amber-50 to-yellow-100">
       {/* Header Section */}
       <div id="home" className="relative min-h-screen overflow-hidden">
-        <EnhancedNavbar 
-          navItems={navItems}
-          activeSection={activeSection}
-          scrollToSection={scrollToSection}
-        />
+       
         <div className="relative z-10 flex items-center min-h-screen px-4 sm:px-6 md:px-12 lg:px-24 xl:px-36 pt-20">
           <div className="flex flex-col lg:flex-row items-center w-full mx-auto">
             <div className="flex-1 lg:pr-8 mb-8 lg:mb-0">

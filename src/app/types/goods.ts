@@ -10,6 +10,28 @@ export interface PackageItem {
   description?: string;
 }
 
+export interface Purchase {
+  _id: string;
+  userId: {
+    _id: string;
+    username: string;
+    email: string;
+  };
+  items: {
+    storeId: string;
+    item: {
+      _id: string;
+      name: string;
+      price: number;
+      quantity: number;
+    };
+  }[];
+  totalAmount: number;
+  paymentReference: string;
+  status: 'pending' | 'confirmed' | 'cancelled';
+  createdAt: string;
+}
+
 export interface Good {
   _id: string;
   name: string;

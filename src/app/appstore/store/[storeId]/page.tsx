@@ -306,7 +306,6 @@ const StoreDetail: React.FC = () => {
     <div className="min-h-screen bg-gray-50 font-sans">
       {/* Hero Header with Parallax */}
        <div className="hidden lg:flex items-center"> 
-            <Navbar searchTerm="" setSearchTerm={() => {}} />
       
             </div>
       <motion.div 
