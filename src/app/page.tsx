@@ -322,7 +322,7 @@ const handleWaitlistSubmit = async () => {
             <p className="text-gray-600 text-base sm:text-lg">See the quality and variety of produce we deliver</p>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 mb-8 sm:mb-12">
-            {[1, 2, 3, 4, 5, 6, 7, 8].map((num) => (
+            {[1, 2, 3, 4, 5].map((num) => (
               <div key={num} className="relative group overflow-hidden rounded-xl">
                 <img 
                   src={`/oj${num}.jpg`} 

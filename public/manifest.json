@@ -5,13 +5,13 @@
     {
       "purpose": "maskable",
       "sizes": "512x512",
-      "src": "icon512_maskable.png",
+      "src": "oj.png",
       "type": "image/png"
     },
     {
       "purpose": "any",
       "sizes": "512x512",
-      "src": "icon512_rounded.png",
+      "src": "oj.png",
       "type": "image/png"
     }
   ],
@@ -21,8 +21,8 @@
   "lang": "en-US",
   "name": "SpawnHub",
   "short_name": "SpawnHub", 
-  "start_url": "https://spawn-nine.vercel.app/",
-  "scope": "https://spawn-nine.vercel.app/",
+  "start_url": "https://ojarunz.ng/",
+  "scope": "https://ojarunz.ng/",
   "description": "Buuy and sell with ease",
-  "id": "https://spawn-nine.vercel.app/"
+  "id": "https://ojarunz.ng/"
 }
