@@ -565,7 +565,7 @@ const handleWaitlistSubmit = async () => {
                 </div>
                 <div className="flex items-center">
                   <Phone className="w-4 h-4 mr-2" />
-                  +234 7019312514
+                  +2347049374912
                 </div>
                 <div className="flex items-center">
                   <MapPin className="w-4 h-4 mr-2" />
