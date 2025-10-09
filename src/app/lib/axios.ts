@@ -24,8 +24,8 @@ import axios from "axios";
 const axiosInstance = axios.create({
   baseURL:
     process.env.NODE_ENV === "development"
-      ? "https://chatapp-jwtsecret.up.railway.app/api" // Express backend
-      : "https://chatapp-jwtsecret.up.railway.app/api",
+      ? "https://spawnback.vercel.app/api" // Express backend
+      : "https://spawnback.vercel.app/api",
   headers: { "Content-Type": "application/json" },
   withCredentials: true, // For cookies if needed
 });

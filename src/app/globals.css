@@ -134,3 +134,13 @@ html {
   position: relative;
   z-index: 1; /* Ensures content stays above the background but respects safe area */
 }
+
+.isidora {
+  font-family: var(--font-isi), sans-serif;
+}
+.isidora2 {
+  font-family: var(--font-isidora);
+}
+.work {
+  font-family: var(--work), sans-serif;
+}

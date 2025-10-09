@@ -27,6 +27,10 @@ export interface Purchase {
     };
   }[];
   totalAmount: number;
+  serviceCharge: number;
+  deliveryFee: number;
+  dropOffLocation: string;
+  addressDetails: string;
   paymentReference: string;
   status: 'pending' | 'confirmed' | 'cancelled';
   createdAt: string;

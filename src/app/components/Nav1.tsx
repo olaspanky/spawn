@@ -116,7 +116,7 @@ const Navbar: React.FC<NavbarProps> = ({ tabs, activeTab, setActiveTab, setIsCar
 
   return (
     <>
-      <header className="sticky top-0 z-50 bg-gradient-to-br from-amber-50 to-yellow-100 backdrop-blur-md shadow-sm border-b border-gray-100">
+      <header className="sticky top-0 z-50 bg-gradient-to-br from-amber-50 to-yellow-100 backdrop-blur-md shadow-sm border-b border-gray-100 isidora">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Desktop Navbar */}
           <div className="hidden lg:block">

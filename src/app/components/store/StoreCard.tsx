@@ -10,7 +10,7 @@ interface GoodCardProps {
 
 const GoodCard = ({ good }: GoodCardProps) => {
   const { addToCart } = useCart();
-
+console.log('GoodCard rendered with good:', good); // Debugging line
   return (
     <div className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100">
       <div className="relative h-48 bg-gradient-to-br from-blue-500 to-purple-600 rounded-t-xl overflow-hidden">

@@ -11,8 +11,8 @@ import { AuthStore } from "../types/chat";
 const BASE_URL =
   process.env.NEXT_PUBLIC_API_URL ||
   (process.env.NODE_ENV === "development"
-    ? "https://chatapp-jwtsecret.up.railway.app/api"
-    : "https://chatapp-jwtsecret.up.railway.app/api");
+    ? "https://spawnback.vercel.app/api"
+    : "https://spawnback.vercel.app/api");
 
 const SOCKET_URL = "https://chatapp-jwtsecret.up.railway.app";
 

@@ -173,25 +173,39 @@ export const goodsApi = {
   },
 
   // Confirm payment (requires auth)
-  confirmPayment: async (
-    cart: { storeId: string; item: { _id: string; name: string; price: number }; quantity: number }[],
-    paymentReference: string,
-    token: string,
-  ): Promise<{ message: string; purchaseId: string }> => {
-    const response = await fetch(`${API_BASE_URL}/confirm-payment`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-auth-token': token,
-      },
-      body: JSON.stringify({ cart, paymentReference }),
-    });
-    if (!response.ok) {
-      if (response.status === 401) throw new Error('Unauthorized: Invalid or missing token');
-      throw new Error('Failed to submit payment reference');
-    }
-    return response.json();
+ confirmPayment: async (
+  data: {
+    cart: { storeId: string; item: { _id: string; name: string; price: number }; quantity: number }[];
+    paymentReference: string;
+    serviceCharge: number;
+    deliveryFee: number;
+    dropOffLocation: string;
+    addressDetails: string;
   },
+  token: string,
+): Promise<{ message: string; purchaseId: string }> => {
+  const response = await fetch(`${API_BASE_URL}/confirm-payment`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-auth-token': token,
+    },
+    body: JSON.stringify({
+      cart: data.cart,
+      paymentReference: data.paymentReference,
+      serviceCharge: data.serviceCharge,
+      deliveryFee: data.deliveryFee,
+      dropOffLocation: data.dropOffLocation,
+      addressDetails: data.addressDetails,
+    }),
+  });
+  if (!response.ok) {
+    if (response.status === 401) throw new Error('Unauthorized: Invalid or missing token');
+    const errorData = await response.json();
+    throw new Error(errorData.message || 'Failed to submit payment reference');
+  }
+  return response.json();
+},
 
   // Get all purchases (admin-only, requires auth)
   getAllPurchases: async (token: string): Promise<Purchase[]> => {

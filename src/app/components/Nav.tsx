@@ -369,7 +369,7 @@ const EnhancedNavbar: React.FC<EnhancedNavbarProps> = ({ navItems, activeSection
   };
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 mb-12 lg:mb-96 ${
+    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 mb-12 lg:mb-96 isidora ${
       scrolled 
         ? 'bg-white/95 backdrop-blur-xl shadow-lg border-b border-gray-100' 
         : 'bg-white/80 backdrop-blur-md shadow-sm'

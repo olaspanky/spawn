@@ -95,7 +95,7 @@ const handleWaitlistSubmit = async () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 to-yellow-100">
+    <div className="min-h-screen bg-gradient-to-br from-amber-50 to-yellow-100 isidora">
       {/* Header Section */}
       <div id="home" className="relative min-h-screen overflow-hidden">
        
@@ -131,6 +131,16 @@ const handleWaitlistSubmit = async () => {
                 <span>Shop now</span>
                 <ChevronRight className="w-3 h-3 sm:w-4 sm:h-4" />
               </button> */}
+              <Link href="#contact">
+
+              <button 
+                className="bg-green-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-green-700 transition-colors flex items-center space-x-2 text-sm sm:text-base"
+              >
+                <ShoppingBag className="w-4 h-4 sm:w-5 sm:h-5" />
+                <span>Join waitlist</span>
+                <ChevronRight className="w-3 h-3 sm:w-4 sm:h-4" />
+              </button>
+              </Link>
             </div>
             <div className="flex-1 flex justify-center lg:justify-end">
               <div className="relative">

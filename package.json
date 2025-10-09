@@ -18,7 +18,7 @@
     "@paystack/inline-js": "^2.22.2",
     "@react-oauth/google": "^0.12.1",
     "@stripe/stripe-js": "^7.9.0",
-    "axios": "^1.7.7",
+    "axios": "^1.12.2",
     "flutterwave-react-v3": "^1.3.2",
     "framer-motion": "^12.4.1",
     "lucide-react": "^0.471.2",

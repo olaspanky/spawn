@@ -6,10 +6,10 @@ import { AuthProvider } from "./context/AuthContext";
 import LayoutWrapper from "./components/LayoutWrapper";
 import { Montserrat } from "next/font/google";
 import { Roboto_Slab } from "next/font/google";
-import ClientAuthProvider from "./components/ClientAuthProvider";
-import DisableZoom from "./components/DisableZoom";
 import InstallPWA from "./components/InstallPWA";
 import { CartProvider } from "./context/CartContext"; // Import CartProvider
+import localFont from "next/font/local";
+import { Work_Sans } from 'next/font/google';
 
 import Theme from "./components/Theme";
 import { Toaster } from "react-hot-toast"; // Import Toaster
@@ -31,6 +31,24 @@ const font2 = Roboto_Slab({
   variable: "--font-robo-slab",
   subsets: ["latin"],
 });
+
+
+const work = Work_Sans({
+  variable: "--work",
+  subsets: ["latin"],
+});
+
+const isidora = localFont({
+  src: '/fonts/IsidoraSans-Medium.otf',
+  variable: '--font-isi',
+  display: 'swap',
+});
+const isidora2 = localFont({
+  src: '/fonts/IsidoraSans-Light.otf',
+  variable: '--font-isidora',
+  display: 'swap',
+});
+
 
 export const metadata: Metadata = {
   title: "OjaRunz",
@@ -64,13 +82,11 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${font1.variable} ${font2.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${font1.variable} ${font2.variable} ${isidora.variable} ${work.variable} ${isidora2.variable} antialiased`}
       >
-        <DisableZoom />
         <InstallPWA /> {/* ← MOVE HERE */}
         <Theme />
         <AuthProvider>
-          <ClientAuthProvider />
            <CartProvider>
           <LayoutWrapper>
            {children}

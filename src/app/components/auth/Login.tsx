@@ -18,7 +18,7 @@ export default function LoginPage() {
 
     try {
       await login(formData); // Call login from AuthContext
-      router.push("/"); // Redirect on success
+      router.push("/shop"); // Redirect on success
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong");
     }

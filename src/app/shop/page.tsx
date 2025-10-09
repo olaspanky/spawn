@@ -5,7 +5,7 @@ import { Store } from 'lucide-react'
 
 const page = () => {
   return (
-    <div className='bg-gradient-to-br from-amber-50 to-yellow-100'>
+    <div className='bg-gradient-to-br from-amber-50 to-yellow-100 isidora'>
       <Stores />
     </div>
   )
