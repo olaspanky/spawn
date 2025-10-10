@@ -201,7 +201,7 @@
 //               <>
 //                 <NavButton href="/appstore/stores">Marketplace</NavButton>
 //                 <NavButton href="/declutter/upload">Sell Items</NavButton>
-//                 <Link href="/declutter/login">
+//                 <Link href="/shop/login">
 //                   <motion.button
 //                     whileHover={{ scale: 1.05 }}
 //                     whileTap={{ scale: 0.95 }}
@@ -295,7 +295,7 @@
 //                   <MobileNavItem href="/" icon={HomeIcon} label="Home" />
 //                   <MobileNavItem href="/appstore/stores" icon={StarIcon} label="Marketplace" />
 //                   <MobileNavItem href="/declutter/upload" icon={ShoppingCartIcon} label="Sell Items" />
-//                   <Link href="/declutter/login">
+//                   <Link href="/shop/login">
 //                     <motion.button
 //                       whileTap={{ scale: 0.95 }}
 //                       className="w-full mt-4 bg-[#1A1A1A] px-6 py-3 rounded-lg font-medium flex items-center justify-center"

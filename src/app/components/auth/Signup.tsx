@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { useAuth } from "../../context/AuthContext"; // Adjust the import path
 import { Eye, EyeOff, Loader2, Lock, Mail, MessageSquare, User } from "lucide-react";
-import AuthImagePattern from "../../components/AuthImagePattern";
 import toast from "react-hot-toast";
 import Link from "next/link";
 import { useRouter } from "next/navigation"; // For redirection
@@ -70,7 +69,7 @@ const SignUpPage: React.FC = () => {
     try {
       await verifyOTP({ email: formData.email, otp });
       toast.success("Account verified! Redirecting to login...");
-      setTimeout(() => router.push("/declutter/login"), 1500); // Delay for user to see success message
+      setTimeout(() => router.push("/shop/login"), 1500); // Delay for user to see success message
     } catch (error) {
       if (error instanceof Error) {
         console.error("OTP verification failed:", (error as any)?.response?.data || error.message);
@@ -85,7 +84,7 @@ const SignUpPage: React.FC = () => {
     try {
       await googleSignup(response.credential);
       toast.success("Signed up with Google! Redirecting to login...");
-      setTimeout(() => router.push("/declutter/login"), 1500);
+      setTimeout(() => router.push("/shop/login"), 1500);
     } catch (error) {
       if (error instanceof Error) {
         console.error("Google signup failed:", (error as any)?.response?.data || error.message);
@@ -228,17 +227,14 @@ const SignUpPage: React.FC = () => {
             <div className="text-center">
               <p className="text-base-content/60">
                 Already have an account?{" "}
-                <Link href="/declutter/login" className="link link-primary">
+                <Link href="/shop/login" className="link link-primary">
                   Sign in
                 </Link>
               </p>
             </div>
           </div>
         </div>
-        <AuthImagePattern
-          title="Join our community"
-          subtitle="Connect with friends, share moments, and stay in touch with your loved ones."
-        />
+       
       </div>
     </GoogleOAuthProvider>
   );

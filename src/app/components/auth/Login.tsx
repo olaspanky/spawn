@@ -60,7 +60,7 @@ export default function LoginPage() {
         </form>
         <p className="mt-6 text-center text-sm text-gray-600">
           Don’t have an account?{" "}
-          <Link href="/declutter/signup" className="text-orange-600 hover:underline">
+          <Link href="/shop/signup" className="text-orange-600 hover:underline">
             Sign up
           </Link>
         </p>

@@ -48,7 +48,7 @@ const AdminShoppingListManager: React.FC = () => {
           const message = error.response?.data?.message || "Failed to fetch shopping lists";
           toast.error(message);
           if (error.response?.status === 401 || error.response?.status === 403) {
-            router.push("/declutter/login");
+            router.push("/shop/login");
           }
         } else {
           toast.error("Failed to fetch shopping lists");
@@ -69,7 +69,7 @@ const AdminShoppingListManager: React.FC = () => {
   const handleStatusUpdate = async (id: string, status: string) => {
     if (!token || !user?.isAdmin) {
       toast.error("Admin access required");
-      router.push("/declutter/login");
+      router.push("/shop/login");
       return;
     }
 
@@ -95,7 +95,7 @@ const AdminShoppingListManager: React.FC = () => {
         const message = error.response?.data?.message || "Failed to update status";
         toast.error(message);
         if (error.response?.status === 401 || error.response?.status === 403) {
-          router.push("/declutter/login");
+          router.push("/shop/login");
         }
       } else {
         toast.error("Failed to update status");

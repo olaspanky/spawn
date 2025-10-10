@@ -249,7 +249,7 @@ const Navbar: React.FC<NavbarProps> = ({ tabs, activeTab, setActiveTab, setIsCar
                     </div>
                   </>
                 ) : (
-                  <Link href="/declutter/login">
+                  <Link href="/shop/login">
                     <motion.button
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
@@ -444,7 +444,7 @@ const Navbar: React.FC<NavbarProps> = ({ tabs, activeTab, setActiveTab, setIsCar
                   <MobileNavItem href="/" icon={HomeIcon} label="Home" />
                   <MobileNavItem href="/goods/list" icon={Upload} label="Upload List" highlight />
                   <div className="pt-4">
-                    <Link href="/declutter/login" onClick={closeAllMenus}>
+                    <Link href="/shop/login" onClick={closeAllMenus}>
                       <motion.button
                         whileTap={{ scale: 0.98 }}
                         className="w-full bg-gray-800 hover:bg-gray-900 text-white p-4 mx-4 rounded-lg font-semibold flex items-center justify-center transition-colors"
