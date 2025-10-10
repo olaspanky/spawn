@@ -99,7 +99,7 @@ const handleWaitlistSubmit = async () => {
       {/* Header Section */}
       <div id="home" className="relative min-h-screen overflow-hidden">
        
-        <div className="relative z-10 flex items-center min-h-screen px-4 sm:px-6 md:px-12 lg:px-24 xl:px-36 pt-12 lg:pt-20">
+        <div className="relative z-10 flex items-center min-h-screen px-4 sm:px-6 md:px-12 lg:px-24 xl:px-36 lg:pt-20">
           <div className="flex flex-col lg:flex-row items-center w-full mx-auto">
             <div className="flex-1 lg:pr-8 mb-8 lg:mb-0">
               <div className="inline-block bg-green-600 text-white px-4 py-2 rounded-full text-xs sm:text-sm font-medium mb-6">
