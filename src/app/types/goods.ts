@@ -27,6 +27,11 @@ export interface Purchase {
     };
   }[];
   totalAmount: number;
+  guestInfo: {
+    name: string;
+    phone: string;
+    email: string;
+  } | null;
   serviceCharge: number;
   deliveryFee: number;
   dropOffLocation: string;

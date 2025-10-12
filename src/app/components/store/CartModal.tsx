@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useCart } from "@/app/context/CartContext";
 import { useAuth } from "@/app/context/AuthContext";
 import toast from "react-hot-toast";
-import { ShoppingCart, X, Minus, Plus, Trash2, MapPin, MessageCircle } from "lucide-react";
+import { ShoppingCart, X, Minus, Plus, Trash2, MapPin, MessageCircle, Gift, UserPlus } from "lucide-react";
 import { goodsApi } from "@/app/lib/api2";
 
 interface CartModalProps {
@@ -21,6 +21,9 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
   const [paymentReference, setPaymentReference] = useState("");
   const [selectedLocation, setSelectedLocation] = useState("");
   const [addressDetails, setAddressDetails] = useState("");
+  const [guestPhone, setGuestPhone] = useState("");
+  const [guestName, setGuestName] = useState("");
+  const [guestEmail, setGuestEmail] = useState("");
 
   // UI-restricted drop-off locations (UI hostels and campus areas)
   const uiLocations = [
@@ -64,73 +67,127 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
       .join("\n");
 
     const serviceChargePercent = ((serviceCharge / cartTotal) * 100).toFixed(1);
+    const customerInfo = token 
+      ? "Registered Customer" 
+      : `Guest Customer\nName: ${guestName}\nPhone: ${guestPhone}\nEmail: ${guestEmail}`;
 
-    return `New Order from UI Campus:\n\n${orderSummary}\n\nSubtotal: ₦${cartTotal.toFixed(2)}\nService Charge: ₦${serviceCharge.toFixed(2)} (${serviceChargePercent}%)\nDelivery Fee: ₦${DELIVERY_FEE}\nTotal: ₦${totalWithServiceCharge.toFixed(2)}\n\nDrop-off Location: ${selectedLocation}\nAddress Details: ${addressDetails}\n\n*Payment screenshot attached*`;
+    return `New Order from UI Campus:\n\n${customerInfo}\n\n${orderSummary}\n\nSubtotal: ₦${cartTotal.toFixed(2)}\nService Charge: ₦${serviceCharge.toFixed(2)} (${serviceChargePercent}%)\nDelivery Fee: ₦${DELIVERY_FEE}\nTotal: ₦${totalWithServiceCharge.toFixed(2)}\n\nDrop-off Location: ${selectedLocation}\nAddress Details: ${addressDetails}\n\n*Payment screenshot attached*`;
+  };
+
+  // Validate guest checkout fields
+  const validateGuestCheckout = (): boolean => {
+    if (!token) {
+      if (!guestName.trim()) {
+        toast.error("Please enter your name");
+        return false;
+      }
+      if (!guestPhone.trim()) {
+        toast.error("Please enter your phone number");
+        return false;
+      }
+      if (guestPhone.trim().length < 11) {
+        toast.error("Please enter a valid phone number (at least 11 digits)");
+        return false;
+      }
+      if (!guestEmail.trim()) {
+        toast.error("Please enter your email address");
+        return false;
+      }
+      if (!guestEmail.includes('@')) {
+        toast.error("Please enter a valid email address");
+        return false;
+      }
+    }
+    return true;
   };
 
   // Handle payment with reference number
-  // Handle payment with reference number
-const handleConfirmWithReference = async () => {
-  if (!token) {
-    toast.error("Please log in to proceed with payment");
-    return;
-  }
-  if (!paymentReference.trim()) {
-    toast.error("Please enter a payment reference number");
-    return;
-  }
-  if (paymentReference.trim().length < 6) {
-    toast.error("Payment reference must be at least 6 characters");
-    return;
-  }
-  if (!selectedLocation) {
-    toast.error("Please select a drop-off location");
-    return;
-  }
-  if (!addressDetails.trim()) {
-    toast.error("Please enter address details (e.g., Room number)");
-    return;
-  }
-
-  setIsSubmitting(true);
-  try {
-    await goodsApi.confirmPayment(
-      {
-        cart,
-        paymentReference,
-        serviceCharge,
-        deliveryFee: DELIVERY_FEE,
-        dropOffLocation: selectedLocation,
-        addressDetails,
-      },
-      token
-    );
-    toast.success("Order confirmed successfully! We'll verify your payment and process your order.");
-
-    clearCart();
-
-    setTimeout(() => {
-      const confirmView = window.confirm("Would you like to view your purchases?");
-      if (confirmView) {
-        router.push("/goods/purchase");
-      } else {
-        onClose();
-      }
-    }, 500);
-  } catch (error: any) {
-    if (error.message?.includes("Unauthorized")) {
-      toast.error("Session expired. Please log in again.");
-      logout();
-    } else {
-      toast.error(error.message || "Order confirmation failed. Please try again.");
+  const handleConfirmWithReference = async () => {
+    if (!validateGuestCheckout()) return;
+    
+    if (!paymentReference.trim()) {
+      toast.error("Please enter a payment reference number");
+      return;
     }
-  } finally {
-    setIsSubmitting(false);
-  }
-};
+    if (paymentReference.trim().length < 6) {
+      toast.error("Payment reference must be at least 6 characters");
+      return;
+    }
+    if (!selectedLocation) {
+      toast.error("Please select a drop-off location");
+      return;
+    }
+    if (!addressDetails.trim()) {
+      toast.error("Please enter address details (e.g., Room number)");
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      if (token) {
+        // Registered user checkout
+        await goodsApi.confirmPayment(
+          {
+            cart,
+            paymentReference,
+            serviceCharge,
+            deliveryFee: DELIVERY_FEE,
+            dropOffLocation: selectedLocation,
+            addressDetails,
+          },
+          token
+        );
+        toast.success("Order confirmed successfully! We'll verify your payment and process your order.");
+        
+        clearCart();
+
+        setTimeout(() => {
+          const confirmView = window.confirm("Would you like to view your purchases?");
+          if (confirmView) {
+            router.push("/goods/purchase");
+          } else {
+            onClose();
+          }
+        }, 500);
+      } else {
+        // Guest checkout with reference
+        await goodsApi.confirmGuestPayment({
+          cart,
+          paymentReference,
+          serviceCharge,
+          deliveryFee: DELIVERY_FEE,
+          dropOffLocation: selectedLocation,
+          addressDetails,
+          guestInfo: {
+            name: guestName,
+            phone: guestPhone,
+            email: guestEmail,
+          },
+        });
+        toast.success("Order confirmed successfully! We'll verify your payment and process your order.");
+        
+        clearCart();
+
+        setTimeout(() => {
+          onClose();
+        }, 500);
+      }
+    } catch (error: any) {
+      if (error.message?.includes("Unauthorized")) {
+        toast.error("Session expired. Please log in again.");
+        logout();
+      } else {
+        toast.error(error.message || "Order confirmation failed. Please try again.");
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   // Handle payment via WhatsApp screenshot
   const handleShareOnWhatsApp = () => {
+    if (!validateGuestCheckout()) return;
+    
     if (!selectedLocation) {
       toast.error("Please select a drop-off location");
       return;
@@ -139,7 +196,6 @@ const handleConfirmWithReference = async () => {
       toast.error("Please enter address details");
       return;
     }
-    handleConfirmWithReference()
 
     const whatsappNumber = "2347049374912";
     const message = generateWhatsAppMessage();
@@ -149,12 +205,10 @@ const handleConfirmWithReference = async () => {
     window.open(whatsappUrl, "_blank");
     toast.success("Opening WhatsApp... Please attach your payment screenshot");
     
-    // Optional: Clear cart after opening WhatsApp
+    // Clear cart after opening WhatsApp
     setTimeout(() => {
-   
-        clearCart();
-        onClose();
-      
+      clearCart();
+      onClose();
     }, 2000);
   };
 
@@ -184,6 +238,28 @@ const handleConfirmWithReference = async () => {
           </div>
         ) : (
           <>
+            {/* Account Benefits Banner for Guest Users */}
+            {!token && (
+              <div className="bg-gradient-to-r from-[#8d4817] to-[#6d5341] text-white p-4 rounded-lg mb-6 shadow-md">
+                <div className="flex items-start">
+                  <Gift className="w-6 h-6 mr-3 flex-shrink-0 mt-1" />
+                  <div className="flex-1">
+                    <h3 className="font-semibold text-lg mb-1">Want Exclusive Bonuses & Promos?</h3>
+                    <p className="text-sm text-white/90 mb-3">
+                      Create an account to unlock special discounts, loyalty rewards, and exclusive offers!
+                    </p>
+                    <button
+                      onClick={() => router.push("/auth/signup")}
+                      className="bg-white text-[#8d4817] px-4 py-2 rounded-lg font-semibold text-sm hover:bg-gray-100 transition-colors flex items-center"
+                    >
+                      <UserPlus className="w-4 h-4 mr-2" />
+                      Create Account Now
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
             {/* Cart Items */}
             <div className="space-y-4 mb-6">
               {cart.map((cartItem) => (
@@ -272,6 +348,55 @@ const handleConfirmWithReference = async () => {
                 </p>
               </div>
 
+              {/* Guest Information (if not logged in) */}
+              {!token && (
+                <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 space-y-3">
+                  <h3 className="font-semibold text-gray-900 mb-2">Your Contact Information</h3>
+                  <div>
+                    <label htmlFor="guestName" className="block text-gray-700 font-medium mb-2">
+                      Full Name *
+                    </label>
+                    <input
+                      type="text"
+                      id="guestName"
+                      value={guestName}
+                      onChange={(e) => setGuestName(e.target.value)}
+                      placeholder="Enter your full name"
+                      className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#8d4817] text-gray-900 placeholder-gray-400"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="guestPhone" className="block text-gray-700 font-medium mb-2">
+                      Phone Number *
+                    </label>
+                    <input
+                      type="tel"
+                      id="guestPhone"
+                      value={guestPhone}
+                      onChange={(e) => setGuestPhone(e.target.value)}
+                      placeholder="e.g., 08012345678"
+                      className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#8d4817] text-gray-900 placeholder-gray-400"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="guestEmail" className="block text-gray-700 font-medium mb-2">
+                      Email Address *
+                    </label>
+                    <input
+                      type="email"
+                      id="guestEmail"
+                      value={guestEmail}
+                      onChange={(e) => setGuestEmail(e.target.value)}
+                      placeholder="e.g., youremail@example.com"
+                      className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#8d4817] text-gray-900 placeholder-gray-400"
+                      required
+                    />
+                  </div>
+                </div>
+              )}
+
               {/* Drop-off Location */}
               <div>
                 <label htmlFor="dropOffLocation" className="block text-gray-700 font-medium mb-2 flex items-center">
@@ -325,7 +450,9 @@ const handleConfirmWithReference = async () => {
 
               {/* Option 1: With Reference Number */}
               <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-                <h3 className="font-semibold text-gray-900 mb-2">Option 1: Have Payment Reference?</h3>
+                <h3 className="font-semibold text-gray-900 mb-2">
+                  {token ? "Option 1: Have Payment Reference?" : "Option 1: Submit Payment Reference"}
+                </h3>
                 <p className="text-sm text-gray-700 mb-3">If your payment generated a reference number, enter it below:</p>
                 <input
                   type="text"
@@ -336,9 +463,9 @@ const handleConfirmWithReference = async () => {
                 />
                 <button
                   onClick={handleConfirmWithReference}
-                  disabled={isSubmitting || !paymentReference.trim() || !selectedLocation || !addressDetails.trim()}
+                  disabled={isSubmitting || !paymentReference.trim() || !selectedLocation || !addressDetails.trim() || (!token && (!guestName.trim() || !guestPhone.trim() || !guestEmail.trim()))}
                   className={`w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition-colors font-semibold ${
-                    isSubmitting || !paymentReference.trim() || !selectedLocation || !addressDetails.trim()
+                    isSubmitting || !paymentReference.trim() || !selectedLocation || !addressDetails.trim() || (!token && (!guestName.trim() || !guestPhone.trim() || !guestEmail.trim()))
                       ? "opacity-50 cursor-not-allowed"
                       : ""
                   }`}
@@ -349,13 +476,15 @@ const handleConfirmWithReference = async () => {
 
               {/* Option 2: Share Screenshot on WhatsApp */}
               <div className="bg-orange-50 border border-orange-200 rounded-lg p-4">
-                <h3 className="font-semibold text-gray-900 mb-2">Option 2: No Reference Number?</h3>
+                <h3 className="font-semibold text-gray-900 mb-2">
+                  {token ? "Option 2: No Reference Number?" : "Complete Your Order"}
+                </h3>
                 <p className="text-sm text-gray-700 mb-3">Share your payment screenshot directly on WhatsApp:</p>
                 <button
                   onClick={handleShareOnWhatsApp}
-                  disabled={!selectedLocation || !addressDetails.trim()}
+                  disabled={!selectedLocation || !addressDetails.trim() || (!token && (!guestName.trim() || !guestPhone.trim() || !guestEmail.trim()))}
                   className={`w-full bg-[#25D366] text-white py-3 rounded-lg hover:bg-[#20BA5A] transition-colors font-semibold flex items-center justify-center ${
-                    !selectedLocation || !addressDetails.trim()
+                    !selectedLocation || !addressDetails.trim() || (!token && (!guestName.trim() || !guestPhone.trim() || !guestEmail.trim()))
                       ? "opacity-50 cursor-not-allowed"
                       : ""
                   }`}

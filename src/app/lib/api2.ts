@@ -207,6 +207,33 @@ export const goodsApi = {
   return response.json();
 },
 
+confirmGuestPayment: async (data: {
+  cart: { storeId: string; item: { _id: string; name: string; price: number }; quantity: number }[];
+  paymentReference: string;
+  serviceCharge: number;
+  deliveryFee: number;
+  dropOffLocation: string;
+  addressDetails: string;
+  guestInfo: {
+    name: string;
+    phone: string;
+    email: string;
+  };
+}): Promise<{ message: string; purchaseId: string }> => {
+  const response = await fetch(`${API_BASE_URL}/confirm-guest-payment`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  });
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || 'Failed to submit guest payment reference');
+  }
+  return response.json();
+},
+
   // Get all purchases (admin-only, requires auth)
   getAllPurchases: async (token: string): Promise<Purchase[]> => {
     const response = await fetch(`${API_BASE_URL}/purchases/all`, {
