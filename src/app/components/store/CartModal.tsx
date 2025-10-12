@@ -166,14 +166,9 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
         );
         toast.success("Order confirmed! We'll verify your payment and process your order.");
         clearCart();
-        setTimeout(() => {
-          const confirmView = window.confirm("Would you like to view your purchases?");
-          if (confirmView) {
-            router.push("/goods/purchase");
-          } else {
-            onClose();
-          }
-        }, 500);
+                    router.push("/goods/purchase");
+
+       ;
       } else {
         await goodsApi.confirmGuestPayment({
           cart,
