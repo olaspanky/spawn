@@ -37,6 +37,7 @@ export interface Purchase {
   dropOffLocation: string;
   addressDetails: string;
   paymentReference: string;
+  deliveryType: any,
   status: 'pending' | 'confirmed' | 'cancelled';
   createdAt: string;
 }

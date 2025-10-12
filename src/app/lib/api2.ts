@@ -179,6 +179,8 @@ export const goodsApi = {
     paymentReference: string;
     serviceCharge: number;
     deliveryFee: number;
+    deliveryType: string;
+    expectedDelivery: any,
     dropOffLocation: string;
     addressDetails: string;
   },
@@ -193,6 +195,8 @@ export const goodsApi = {
     body: JSON.stringify({
       cart: data.cart,
       paymentReference: data.paymentReference,
+      deliveryType: data.deliveryType,
+      expectedDelivery: data.expectedDelivery,
       serviceCharge: data.serviceCharge,
       deliveryFee: data.deliveryFee,
       dropOffLocation: data.dropOffLocation,
@@ -210,8 +214,10 @@ export const goodsApi = {
 confirmGuestPayment: async (data: {
   cart: { storeId: string; item: { _id: string; name: string; price: number }; quantity: number }[];
   paymentReference: string;
+  expectedDelivery: any;
   serviceCharge: number;
   deliveryFee: number;
+  deliveryType: string;
   dropOffLocation: string;
   addressDetails: string;
   guestInfo: {

@@ -103,6 +103,7 @@ export interface Order {
   price: number;
   quantity?: number; // Add optional quantity field
   paymentReference: string;
+  deliveryType: any,
   status: 'pending' | 'completed' | 'cancelled' | 'refund_requested';
   trackingStatus: 'paid' | 'meeting_scheduled' | 'completed' | 'refund_requested' | 'refunded';
   meetingDetails?: MeetingDetails;
