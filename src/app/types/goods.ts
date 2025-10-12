@@ -42,7 +42,7 @@ export interface Good {
   description: string;
   measurement: Measurement;
   price: number;
-  category: 'market_area' | 'package_deals' | 'drinks' | 'provisions_groceries';
+  category: 'market_area' | 'package_deals' | 'drinks' | 'provisions_groceries' | 'meal_prep' | 'frozen_foods';
   image?: string;
   available: boolean;
   isPackageDeal: boolean;

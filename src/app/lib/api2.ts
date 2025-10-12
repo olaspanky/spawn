@@ -89,7 +89,7 @@
 
 import { Good, Category, Purchase } from '../types/goods';
 
-const API_BASE_URL = 'https://spawnback.vercel.app/api/store';
+const API_BASE_URL = 'http://localhost:5000/api/store';
 
 export const goodsApi = {
   // Get all goods (public, no auth required)

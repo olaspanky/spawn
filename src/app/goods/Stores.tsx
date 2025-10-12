@@ -6,10 +6,10 @@ import { useCart } from '../context/CartContext';
 import CartModal from '../components/store/CartModal';
 import { goodsApi } from '../lib/api2';
 import { Good, Category } from '../types/goods';
-import { ShoppingCart, Package, Coffee, Apple, MapPin } from 'lucide-react';
+import { ShoppingCart, Package, Coffee, Apple, MapPin, Utensils, Snowflake } from 'lucide-react';
 import toast from 'react-hot-toast';
 import GoodCard from '../components/store/StoreCard';
-import Navbar from '../components/Nav1'; // Import the new Navbar component
+import Navbar from '../components/Nav1';
 
 interface CategorySectionProps {
   title: string;
@@ -70,15 +70,13 @@ const StoreWebapp: React.FC = () => {
     fetchGoods();
   }, [activeTab]);
 
- 
-
   const categorizeGoods = (goods: Good[]) => {
     const categories = {
       market_area: [] as Good[],
       package_deals: [] as Good[],
       drinks: [] as Good[],
       provisions_groceries: [] as Good[],
-    meal_prep: [] as Good[],
+      meal_prep: [] as Good[],
       frozen_foods: [] as Good[],
     };
 
@@ -122,14 +120,14 @@ const StoreWebapp: React.FC = () => {
     { id: 'all', label: 'All', shortLabel: 'All', count: goods.length },
     { id: 'market_area', label: 'Market Area', shortLabel: 'Market', count: categorizedGoods.market_area.length },
     { id: 'package_deals', label: 'Package Deals', shortLabel: 'Packages', count: categorizedGoods.package_deals.length },
-    { id: 'meal_prep', label: 'Meal Prep', shortLabel: 'meal preps', count: categorizedGoods.meal_prep.length },
-    { id: 'frozen_foods', label: 'Frozen Foods', shortLabel: 'Packages', count: categorizedGoods.frozen_foods.length },
+    { id: 'meal_prep', label: 'Meal Prep', shortLabel: 'Meal Prep', count: categorizedGoods.meal_prep.length },
+    { id: 'frozen_foods', label: 'Frozen Foods', shortLabel: 'Frozen', count: categorizedGoods.frozen_foods.length },
     { id: 'drinks', label: 'Drinks', shortLabel: 'Drinks', count: categorizedGoods.drinks.length },
     { id: 'provisions_groceries', label: 'Provisions & Groceries', shortLabel: 'Groceries', count: categorizedGoods.provisions_groceries.length },
   ];
 
   return (
-    <div className="min-h-screen ">
+    <div className="min-h-screen">
       {/* Navbar Component */}
       <Navbar
         tabs={tabs}
@@ -170,6 +168,22 @@ const StoreWebapp: React.FC = () => {
                 icon={Package}
                 goods={categorizedGoods.package_deals}
                 color="bg-green-600"
+              />
+            )}
+            {(activeTab === 'all' || activeTab === 'meal_prep') && (
+              <CategorySection
+                title="Meal Prep"
+                icon={Utensils}
+                goods={categorizedGoods.meal_prep}
+                color="bg-blue-600"
+              />
+            )}
+            {(activeTab === 'all' || activeTab === 'frozen_foods') && (
+              <CategorySection
+                title="Frozen Foods"
+                icon={Snowflake}
+                goods={categorizedGoods.frozen_foods}
+                color="bg-teal-600"
               />
             )}
             {(activeTab === 'all' || activeTab === 'drinks') && (

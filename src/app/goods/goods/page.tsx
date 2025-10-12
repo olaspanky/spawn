@@ -82,8 +82,50 @@ export default function GoodsPage() {
     }
   };
 
+  const handleUpdate = async (id: string, updates: Partial<Good>) => {
+    if (!token) {
+      toast.error('Please log in to update a good');
+      return;
+    }
+
+    try {
+      // Create FormData for the API call
+      const formData = new FormData();
+      
+      if (updates.name) formData.append('name', updates.name);
+      if (updates.description) formData.append('description', updates.description);
+      if (updates.category) formData.append('category', updates.category);
+      if (updates.price !== undefined) formData.append('price', updates.price.toString());
+      
+      if (updates.measurement) {
+        formData.append('measurement[value]', updates.measurement.value.toString());
+        formData.append('measurement[unit]', updates.measurement.unit);
+        if (updates.measurement.customUnit) {
+          formData.append('measurement[customUnit]', updates.measurement.customUnit);
+        }
+      }
+
+      const updatedGood = await goodsApi.updateGood(id, formData, token);
+      
+      // Update the local state with the updated good
+      setGoods(goods.map(good => 
+        good._id === id ? updatedGood : good
+      ));
+      
+      toast.success('Good updated successfully');
+    } catch (error: any) {
+      if (error.message.includes('Unauthorized')) {
+        toast.error('Session expired. Please log in again.');
+        logout();
+      } else {
+        toast.error(error.message || 'Failed to update good');
+      }
+      throw error; // Re-throw to let the table component handle it
+    }
+  };
+
   return (
-    <div className="container mx-auto px-4 py-8 mtt-12 lg:mt-20">
+    <div className="container mx-auto px-4 py-8 mt-12 lg:mt-20">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold text-gray-900">Goods Management</h1>
         <Link
@@ -153,6 +195,7 @@ export default function GoodsPage() {
           goods={goods}
           onDelete={handleDelete}
           onToggleAvailability={handleToggleAvailability}
+          onUpdate={handleUpdate}
         />
       )}
     </div>
