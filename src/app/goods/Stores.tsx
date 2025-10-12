@@ -78,6 +78,8 @@ const StoreWebapp: React.FC = () => {
       package_deals: [] as Good[],
       drinks: [] as Good[],
       provisions_groceries: [] as Good[],
+    meal_prep: [] as Good[],
+      frozen_foods: [] as Good[],
     };
 
     goods.forEach((good) => {
@@ -120,6 +122,8 @@ const StoreWebapp: React.FC = () => {
     { id: 'all', label: 'All', shortLabel: 'All', count: goods.length },
     { id: 'market_area', label: 'Market Area', shortLabel: 'Market', count: categorizedGoods.market_area.length },
     { id: 'package_deals', label: 'Package Deals', shortLabel: 'Packages', count: categorizedGoods.package_deals.length },
+    { id: 'meal_prep', label: 'Meal Prep', shortLabel: 'meal preps', count: categorizedGoods.meal_prep.length },
+    { id: 'frozen_foods', label: 'Frozen Foods', shortLabel: 'Packages', count: categorizedGoods.frozen_foods.length },
     { id: 'drinks', label: 'Drinks', shortLabel: 'Drinks', count: categorizedGoods.drinks.length },
     { id: 'provisions_groceries', label: 'Provisions & Groceries', shortLabel: 'Groceries', count: categorizedGoods.provisions_groceries.length },
   ];

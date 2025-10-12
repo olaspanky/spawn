@@ -66,7 +66,9 @@ export const CATEGORIES = {
   MARKET_AREA: 'market_area',
   PACKAGE_DEALS: 'package_deals',
   DRINKS: 'drinks',
-  PROVISIONS_GROCERIES: 'provisions_groceries'
+  PROVISIONS_GROCERIES: 'provisions_groceries',
+  MEAL_PREP: 'meal_prep',
+  FROZEN_FOODS: 'frozen_foods'
 } as const;
 
 export type Category = typeof CATEGORIES[keyof typeof CATEGORIES];
