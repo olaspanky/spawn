@@ -43,7 +43,7 @@ export default function InstallPWA() {
       onClick={handleInstallClick}
       className="fixed bottom-4 right-4 bg-orange-500 text-white py-2 px-4 rounded-xl shadow-xl z-50"
     >
-      Install SpawnHub
+      Install Ojarunz
     </button>
   );
 }
