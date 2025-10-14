@@ -13,7 +13,7 @@ const SignUpPage: React.FC = () => {
   const [formData, setFormData] = useState({ fullName: "", email: "", password: "" });
   const [otp, setOtp] = useState("");
   const [isOtpSent, setIsOtpSent] = useState(false);
-  const { signup, isSigningUp, verifyOTP, isVerifyingOTP, googleSignup } = useAuth();
+  const { signup, isSigningUp, verifyOTP, isVerifyingOTP, resendOTP, isResendingOTP, googleSignup } = useAuth();
   const router = useRouter(); // For navigation
 
   const validateForm = () => {
@@ -77,6 +77,19 @@ const SignUpPage: React.FC = () => {
         console.error("OTP verification failed:", error);
       }
       // Error handling is already in AuthContext, but toast is shown there
+    }
+  };
+
+  const handleResendOTP = async () => {
+    try {
+      await resendOTP(formData.email);
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error("Resend OTP failed:", (error as any)?.response?.data || error.message);
+      } else {
+        console.error("Resend OTP failed:", error);
+      }
+      // Error handling is already in AuthContext
     }
   };
 
@@ -221,6 +234,20 @@ const SignUpPage: React.FC = () => {
                     )}
                   </button>
                 </form>
+                
+                <div className="text-center">
+                  <p className="text-base-content/60 text-sm">
+                    Didn't receive the code?{" "}
+                    <button
+                      type="button"
+                      onClick={handleResendOTP}
+                      disabled={isResendingOTP}
+                      className="link link-primary font-medium"
+                    >
+                      {isResendingOTP ? "Sending..." : "Resend OTP"}
+                    </button>
+                  </p>
+                </div>
               </div>
             )}
 

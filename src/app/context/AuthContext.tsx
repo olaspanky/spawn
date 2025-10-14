@@ -1,5 +1,3 @@
-
-
 "use client";
 
 import { createContext, useContext, useState, useEffect } from "react";
@@ -11,7 +9,7 @@ interface User {
   name: string;
   email: string;
   isVerified?: boolean;
-  isAdmin?: boolean; // Add isAdmin to match backend expectations
+  isAdmin?: boolean;
 }
 
 interface AuthContextType {
@@ -19,10 +17,12 @@ interface AuthContextType {
   user: User | null;
   isSigningUp: boolean;
   isVerifyingOTP: boolean;
+  isResendingOTP: boolean; // New loading state for resend OTP
   isLoggingIn: boolean;
-  isAuthLoading: boolean; // New loading state for auth initialization
+  isAuthLoading: boolean;
   signup: (data: { fullName: string; email: string; password: string }) => Promise<void>;
   verifyOTP: (data: { email: string; otp: string }) => Promise<void>;
+  resendOTP: (email: string) => Promise<void>; // New function
   googleSignup: (token: string) => Promise<void>;
   login: (data: { email: string; password: string }) => Promise<void>;
   logout: () => void;
@@ -33,31 +33,31 @@ const AuthContext = createContext<AuthContextType | null>(null);
 const BASE_URL = "https://spawnback.vercel.app/api";
 // const BASE_URL = "http://localhost:5000/api";
 
-
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [token, setToken] = useState<string | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [isSigningUp, setIsSigningUp] = useState(false);
   const [isVerifyingOTP, setIsVerifyingOTP] = useState(false);
+  const [isResendingOTP, setIsResendingOTP] = useState(false); // New state
   const [isLoggingIn, setIsLoggingIn] = useState(false);
-  const [isAuthLoading, setIsAuthLoading] = useState(true); // New state
+  const [isAuthLoading, setIsAuthLoading] = useState(true);
 
   useEffect(() => {
-  const storedToken = localStorage.getItem("authToken");
-  const storedUser = localStorage.getItem("authUser");
-  if (storedToken) setToken(storedToken);
-  if (storedUser) {
-    const parsedUser = JSON.parse(storedUser);
-    setUser({
-      id: parsedUser.id,
-      name: parsedUser.name,
-      email: parsedUser.email,
-      isVerified: parsedUser.isVerified,
-      isAdmin: parsedUser.isAdmin
-    });
-  }
-  setIsAuthLoading(false);
-}, []);
+    const storedToken = localStorage.getItem("authToken");
+    const storedUser = localStorage.getItem("authUser");
+    if (storedToken) setToken(storedToken);
+    if (storedUser) {
+      const parsedUser = JSON.parse(storedUser);
+      setUser({
+        id: parsedUser.id,
+        name: parsedUser.name,
+        email: parsedUser.email,
+        isVerified: parsedUser.isVerified,
+        isAdmin: parsedUser.isAdmin
+      });
+    }
+    setIsAuthLoading(false);
+  }, []);
 
   const signup = async (data: { fullName: string; email: string; password: string }) => {
     setIsSigningUp(true);
@@ -100,6 +100,20 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       );
     } finally {
       setIsVerifyingOTP(false);
+    }
+  };
+
+  const resendOTP = async (email: string) => {
+    setIsResendingOTP(true);
+    try {
+      const res = await axios.post(`${BASE_URL}/users/resend-otp`, { email });
+      toast.success(res.data.message || "OTP resent successfully. Please check your email.");
+    } catch (error) {
+      toast.error(
+        axios.isAxiosError(error) ? error.response?.data?.message || "Failed to resend OTP" : "An unexpected error occurred"
+      );
+    } finally {
+      setIsResendingOTP(false);
     }
   };
 
@@ -156,10 +170,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         user,
         isSigningUp,
         isVerifyingOTP,
+        isResendingOTP, // Expose new loading state
         isLoggingIn,
-        isAuthLoading, // Expose new loading state
+        isAuthLoading,
         signup,
         verifyOTP,
+        resendOTP, // Expose new function
         googleSignup,
         login,
         logout,
