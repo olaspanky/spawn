@@ -137,7 +137,7 @@ const StoreWebapp: React.FC = () => {
     { id: 'all', label: 'All Items', shortLabel: 'All' },
     { id: 'market_area', label: 'Market Area', shortLabel: 'Market' },
     { id: 'package_deals', label: 'Packages', shortLabel: 'Packages' },
-    { id: 'meal_prep', label: 'Meal Prep', shortLabel: 'Meals' },
+    { id: 'meal_prep', label: 'Meal Prep', shortLabel: 'Meal prep' },
     { id: 'frozen_foods', label: 'Frozen', shortLabel: 'Frozen' },
     { id: 'drinks', label: 'Drinks', shortLabel: 'Drinks' },
     { id: 'provisions_groceries', label: 'Groceries', shortLabel: 'Groceries' },
