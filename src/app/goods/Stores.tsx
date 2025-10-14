@@ -16,9 +16,10 @@ interface CategorySectionProps {
   icon: any;
   goods: Good[];
   color: string;
+  showFullDescription?: boolean;
 }
 
-const CategorySection = ({ title, icon: Icon, goods, color }: CategorySectionProps) => {
+const CategorySection = ({ title, icon: Icon, goods, color, showFullDescription = false }: CategorySectionProps) => {
   if (goods.length === 0) return null;
 
   return (
@@ -34,7 +35,11 @@ const CategorySection = ({ title, icon: Icon, goods, color }: CategorySectionPro
       </div>
       <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-6">
         {goods.map((good) => (
-          <GoodCard key={good._id} good={good} />
+          <GoodCard 
+            key={good._id} 
+            good={good} 
+            showFullDescription={showFullDescription}
+          />
         ))}
       </div>
     </div>
@@ -176,6 +181,7 @@ const StoreWebapp: React.FC = () => {
                 icon={Utensils}
                 goods={categorizedGoods.meal_prep}
                 color="bg-blue-600"
+                showFullDescription={true}
               />
             )}
             {(activeTab === 'all' || activeTab === 'frozen_foods') && (

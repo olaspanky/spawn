@@ -7,9 +7,10 @@ import { useState } from 'react';
 
 interface GoodCardProps {
   good: Good;
+  showFullDescription?: boolean;
 }
 
-const GoodCard = ({ good }: GoodCardProps) => {
+const GoodCard = ({ good, showFullDescription = false }: GoodCardProps) => {
   const { addToCart } = useCart();
   const [showPopup, setShowPopup] = useState(false);
   const [quantity, setQuantity] = useState(1);
@@ -67,7 +68,8 @@ const GoodCard = ({ good }: GoodCardProps) => {
 
         <div className="lg:p-6 p-2">
           <h3 className="lg:text-xl font-bold text-gray-900 lg:mb-2">{good.name}</h3>
-          <p className="text-gray-600 text-xs mb-3 line-clamp-2">{good.description}</p>
+            <p className={`text-gray-600 text-sm ${showFullDescription ? '' : 'line-clamp-2'}`}>
+{good.description}</p>
 
           <div className="mb-2">
             <p className="text-gray-800 font-medium text-xs">NGN {good.price}</p>
