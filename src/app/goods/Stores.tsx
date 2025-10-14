@@ -1,12 +1,12 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
 import CartModal from '../components/store/CartModal';
 import { goodsApi } from '../lib/api2';
 import { Good, Category } from '../types/goods';
-import { ShoppingCart, Package, Coffee, Apple, MapPin, Utensils, Snowflake } from 'lucide-react';
+import { ShoppingCart, Package, Coffee, Apple, MapPin, Utensils, Snowflake, Search, X } from 'lucide-react';
 import toast from 'react-hot-toast';
 import GoodCard from '../components/store/StoreCard';
 import Navbar from '../components/Nav1';
@@ -23,17 +23,17 @@ const CategorySection = ({ title, icon: Icon, goods, color, showFullDescription 
   if (goods.length === 0) return null;
 
   return (
-    <div className="mb-8 sm:mb-12">
-      <div className="flex items-center mb-4 sm:mb-6">
-        <div className={`p-2 sm:p-3 rounded-xl ${color} mr-3 sm:mr-4 flex-shrink-0`}>
-          <Icon className="w-4 h-4 sm:w-6 sm:h-6 text-white" />
+    <div className="mb-8 sm:mb-10">
+      <div className="flex items-center mb-4">
+        <div className={`p-2 rounded-lg ${color} mr-3 flex-shrink-0`}>
+          <Icon className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
         </div>
         <div className="min-w-0 flex-1">
-          <h2 className="text-lg sm:text-2xl font-bold text-gray-900 truncate">{title}</h2>
-          <p className="text-sm sm:text-base text-gray-600">{goods.length} item{goods.length > 1 ? 's' : ''} available</p>
+          <h2 className="text-base sm:text-xl font-semibold text-gray-900">{title}</h2>
+          <p className="text-xs sm:text-sm text-gray-500">{goods.length} available</p>
         </div>
       </div>
-      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-6">
+      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4">
         {goods.map((good) => (
           <GoodCard 
             key={good._id} 
@@ -51,6 +51,7 @@ const StoreWebapp: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState('all');
+  const [searchQuery, setSearchQuery] = useState('');
   const [isCartOpen, setIsCartOpen] = useState(false);
   const { cart, getItemCount } = useCart();
   const { token, isAuthLoading, logout } = useAuth();
@@ -75,6 +76,17 @@ const StoreWebapp: React.FC = () => {
     fetchGoods();
   }, [activeTab]);
 
+  // Filter goods by search query
+  const filteredGoods = useMemo(() => {
+    if (!searchQuery.trim()) return goods;
+    
+    const query = searchQuery.toLowerCase().trim();
+    return goods.filter(good => 
+      good.name.toLowerCase().includes(query) ||
+      good.description.toLowerCase().includes(query)
+    );
+  }, [goods, searchQuery]);
+
   const categorizeGoods = (goods: Good[]) => {
     const categories = {
       market_area: [] as Good[],
@@ -96,7 +108,7 @@ const StoreWebapp: React.FC = () => {
     return (
       <div className="min-h-screen flex items-center justify-center px-4">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 sm:h-16 sm:w-16 border-t-4 border-b-4 borde-[#8d4817] mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 sm:h-16 sm:w-16 border-t-4 border-b-4 border-[#8d4817] mx-auto mb-4"></div>
           <p className="text-gray-600 text-base sm:text-lg">Loading goods...</p>
         </div>
       </div>
@@ -106,7 +118,7 @@ const StoreWebapp: React.FC = () => {
   if (error) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
-        <div className="bg-[#8d4817] p-4 sm:p-6 rounded-xl text-red-700 max-w-md w-full">
+        <div className="bg-red-50 p-4 sm:p-6 rounded-xl text-red-700 max-w-md w-full">
           <h3 className="font-bold text-base sm:text-lg mb-2">Error Loading Goods</h3>
           <p className="text-sm sm:text-base">{error}</p>
           <button
@@ -120,19 +132,19 @@ const StoreWebapp: React.FC = () => {
     );
   }
 
-  const categorizedGoods = categorizeGoods(goods);
+  const categorizedGoods = categorizeGoods(filteredGoods);
   const tabs = [
-    { id: 'all', label: 'All', shortLabel: 'All', count: goods.length },
-    { id: 'market_area', label: 'Market Area', shortLabel: 'Market', count: categorizedGoods.market_area.length },
-    { id: 'package_deals', label: 'Package Deals', shortLabel: 'Packages', count: categorizedGoods.package_deals.length },
-    { id: 'meal_prep', label: 'Meal Prep', shortLabel: 'Meal Prep', count: categorizedGoods.meal_prep.length },
-    { id: 'frozen_foods', label: 'Frozen Foods', shortLabel: 'Frozen', count: categorizedGoods.frozen_foods.length },
-    { id: 'drinks', label: 'Drinks', shortLabel: 'Drinks', count: categorizedGoods.drinks.length },
-    { id: 'provisions_groceries', label: 'Provisions & Groceries', shortLabel: 'Groceries', count: categorizedGoods.provisions_groceries.length },
+    { id: 'all', label: 'All Items', shortLabel: 'All' },
+    { id: 'market_area', label: 'Market Area', shortLabel: 'Market' },
+    { id: 'package_deals', label: 'Packages', shortLabel: 'Packages' },
+    { id: 'meal_prep', label: 'Meal Prep', shortLabel: 'Meals' },
+    { id: 'frozen_foods', label: 'Frozen', shortLabel: 'Frozen' },
+    { id: 'drinks', label: 'Drinks', shortLabel: 'Drinks' },
+    { id: 'provisions_groceries', label: 'Groceries', shortLabel: 'Groceries' },
   ];
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-gray-50">
       {/* Navbar Component */}
       <Navbar
         tabs={tabs}
@@ -140,22 +152,38 @@ const StoreWebapp: React.FC = () => {
         setActiveTab={setActiveTab}
         setIsCartOpen={setIsCartOpen}
         goodsCount={goods.length}
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
       />
 
-      {/* Items count for mobile - shown below navbar */}
-      <div className="sm:hidden bg-blue-50 border-b px-4 py-2">
-        <p className="text-blue-800 text-sm font-medium text-center">
-          {goods.length} Total Items Available
-        </p>
-      </div>
+      {/* Search Results Info */}
+      {searchQuery && (
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
+          <div className="bg-amber-50 border border-amber-200 rounded-lg px-4 py-2.5 flex items-center justify-between">
+            <p className="text-sm text-gray-700">
+              <span className="font-semibold">{filteredGoods.length}</span> result{filteredGoods.length !== 1 ? 's' : ''} for <span className="font-medium">"{searchQuery}"</span>
+            </p>
+            <button
+              onClick={() => setSearchQuery('')}
+              className="text-gray-600 hover:text-gray-900 text-sm font-medium underline"
+            >
+              Clear
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8 py-4 sm:py-8">
-        {goods.length === 0 ? (
-          <div className="text-center py-12 sm:py-16">
-            <ShoppingCart className="w-12 h-12 sm:w-16 sm:h-16 text-gray-400 mx-auto mb-4" />
-            <p className="text-gray-600 text-lg sm:text-xl">No goods found</p>
-            <p className="text-gray-500 mt-2 text-sm sm:text-base">Check back later for new items!</p>
+        {filteredGoods.length === 0 ? (
+          <div className="text-center py-16 sm:py-20">
+           
+            <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2">
+              {searchQuery ? 'No results found' : 'No items available'}
+            </h3>
+            <p className="text-sm sm:text-base text-gray-500 max-w-md mx-auto">
+              {searchQuery ? `We couldn't find any items matching "${searchQuery}". Try different keywords.` : 'Check back later for new products.'}
+            </p>
           </div>
         ) : (
           <>
@@ -172,7 +200,7 @@ const StoreWebapp: React.FC = () => {
                 title="Package Deals"
                 icon={Package}
                 goods={categorizedGoods.package_deals}
-                color="bg-green-600"
+                color="bg-emerald-600"
               />
             )}
             {(activeTab === 'all' || activeTab === 'meal_prep') && (
@@ -189,7 +217,7 @@ const StoreWebapp: React.FC = () => {
                 title="Frozen Foods"
                 icon={Snowflake}
                 goods={categorizedGoods.frozen_foods}
-                color="bg-teal-600"
+                color="bg-cyan-600"
               />
             )}
             {(activeTab === 'all' || activeTab === 'drinks') && (

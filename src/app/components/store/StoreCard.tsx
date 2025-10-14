@@ -44,8 +44,8 @@ const GoodCard = ({ good, showFullDescription = false }: GoodCardProps) => {
 
   return (
     <>
-      <div className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100">
-        <div className="relative h-48 bg-gradient-to-br from-blue-500 to-purple-600 rounded-t-xl overflow-hidden">
+      <div className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100 flex flex-col h-full">
+        <div className="relative h-48 bg-gradient-to-br from-blue-500 to-purple-600 rounded-t-xl overflow-hidden flex-shrink-0">
           {good.image ? (
             <img
               src={good.image}
@@ -66,10 +66,11 @@ const GoodCard = ({ good, showFullDescription = false }: GoodCardProps) => {
           )}
         </div>
 
-        <div className="lg:p-6 p-2">
+        <div className="lg:p-6 p-2 flex flex-col flex-grow">
           <h3 className="lg:text-xl font-bold text-gray-900 lg:mb-2">{good.name}</h3>
-            <p className={`text-gray-600 text-sm ${showFullDescription ? '' : 'line-clamp-2'}`}>
-{good.description}</p>
+          <p className={`text-gray-600 text-sm mb-3 ${showFullDescription ? '' : 'line-clamp-2'}`}>
+            {good.description}
+          </p>
 
           <div className="mb-2">
             <p className="text-gray-800 font-medium text-xs">NGN {good.price}</p>
@@ -90,7 +91,7 @@ const GoodCard = ({ good, showFullDescription = false }: GoodCardProps) => {
             </div>
           )}
 
-          <div className="flex justify-between items-center">
+          <div className="flex justify-between items-center mt-auto pt-3">
             <div className="lg:flex items-center hidden">
               <Star className="w-4 h-4 text-yellow-500 mr-1" />
               <span className="text-sm text-gray-600">
