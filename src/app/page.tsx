@@ -123,15 +123,15 @@ const handleWaitlistSubmit = async () => {
                   </div>
                 ))}
               </div>
-              {/* <button 
+              <button 
                 onClick={() => router.push('/shop')} // Navigate to /pages/shop
                 className="bg-green-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-green-700 transition-colors flex items-center space-x-2 text-sm sm:text-base"
               >
                 <ShoppingBag className="w-4 h-4 sm:w-5 sm:h-5" />
                 <span>Shop now</span>
                 <ChevronRight className="w-3 h-3 sm:w-4 sm:h-4" />
-              </button> */}
-              <Link href="#contact">
+              </button>
+              {/* <Link href="#contact">
 
               <button 
                 className="bg-green-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-green-700 transition-colors flex items-center space-x-2 text-sm sm:text-base"
@@ -140,7 +140,7 @@ const handleWaitlistSubmit = async () => {
                 <span>Join waitlist</span>
                 <ChevronRight className="w-3 h-3 sm:w-4 sm:h-4" />
               </button>
-              </Link>
+              </Link> */}
             </div>
             <div className="flex-1 flex justify-center lg:justify-end">
               <div className="relative">
