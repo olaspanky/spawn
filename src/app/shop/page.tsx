@@ -140,7 +140,7 @@ const handleWaitlistSubmit = async () => {
                 ))}
               </div>
               <button 
-                onClick={() => router.push('/')} // Navigate to /pages/shop
+                onClick={() => router.push('/')}
                 className="bg-green-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-green-700 transition-colors flex items-center space-x-2 text-sm sm:text-base"
               >
                 <ShoppingBag className="w-4 h-4 sm:w-5 sm:h-5" />
