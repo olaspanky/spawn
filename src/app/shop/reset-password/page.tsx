@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "@/app/context/AuthContext";
 import toast from "react-hot-toast";
@@ -9,10 +9,16 @@ import toast from "react-hot-toast";
 export default function ResetPasswordPage() {
   const [newPassword, setNewPassword] = useState("");
   const [error, setError] = useState("");
+  const [token, setToken] = useState("");
   const { resetPassword, isResettingPassword } = useAuth();
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const token = searchParams.get("token") || "";
+
+  useEffect(() => {
+    // Get token from URL on mount
+    const params = new URLSearchParams(window.location.search);
+    const tokenFromUrl = params.get("token") || "";
+    setToken(tokenFromUrl);
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
