@@ -114,19 +114,13 @@ const StoreWebapp: React.FC = () => {
     return categories;
   };
 
-  if (loading || isAuthLoading) {
+  if (!goods) {
     return (
       <div className="min-h-screen flex items-center justify-center px-4">
+
+       
       <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
-        <Navbar
-          tabs={tabs}
-          activeTab={activeTab}
-          setActiveTab={setActiveTab}
-          setIsCartOpen={setIsCartOpen}
-          goodsCount={goods.length}
-          searchQuery={searchQuery}
-          onSearchChange={setSearchQuery}
-        />
+       
         <div className="bg-red-50 p-4 sm:p-6 rounded-xl text-red-700 max-w-md w-full">
           <h3 className="font-bold text-base sm:text-lg mb-2">Error Loading Goods</h3>
           <p className="text-sm sm:text-base">{error}</p>
@@ -188,12 +182,7 @@ const StoreWebapp: React.FC = () => {
         {filteredGoods.length === 0 ? (
           <div className="text-center py-16 sm:py-20">
            
-            <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2">
-              {searchQuery ? 'No results found' : 'No items available'}
-            </h3>
-            <p className="text-sm sm:text-base text-gray-500 max-w-md mx-auto">
-              {searchQuery ? `We couldn't find any items matching "${searchQuery}". Try different keywords.` : 'Check back later for new products.'}
-            </p>
+          
           </div>
         ) : (
           <>

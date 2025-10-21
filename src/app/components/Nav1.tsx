@@ -136,9 +136,7 @@ const Navbar: React.FC<NavbarProps> = ({
                 <Link href="/" className="flex items-center">
                   <Image src="/oj.png" alt="Oja Logo" width={48} height={48} className="rounded-lg" />
                 </Link>
-                <div>
-                  <p className="text-xs text-gray-500">Professional marketplace</p>
-                </div>
+              
               </div>
 
               {/* Desktop Search Icon and Search Bar */}
@@ -240,7 +238,7 @@ const Navbar: React.FC<NavbarProps> = ({
 
                             <div className="py-2">
                               <Link
-                                href="/goods/list"
+                                href="/shop/list"
                                 onClick={closeAllMenus}
                                 className="flex items-center px-4 py-2.5 hover:bg-gray-50 transition-colors"
                               >
@@ -248,7 +246,7 @@ const Navbar: React.FC<NavbarProps> = ({
                                 <span className="text-gray-700 text-sm">Upload List</span>
                               </Link>
                               <Link
-                                href="/goods/purchase"
+                                href="/shop/purchase"
                                 onClick={closeAllMenus}
                                 className="flex items-center px-4 py-2.5 hover:bg-gray-50 transition-colors"
                               >
@@ -451,7 +449,7 @@ const Navbar: React.FC<NavbarProps> = ({
       </header>
 
       {/* Floating Action Button for Upload List */}
-      <Link href="/goods/list">
+      <Link href="/shop/list">
         <motion.button
           whileHover={{ scale: 1.1, rotate: 5 }}
           whileTap={{ scale: 0.95 }}
@@ -489,9 +487,7 @@ const Navbar: React.FC<NavbarProps> = ({
             <div className="p-6">
               <div className="flex items-center mb-6">
                 <Image src="/oj.png" alt="Oja Logo" width={40} height={40} className="rounded-lg" />
-                <div className="ml-3">
-                  <p className="text-xs text-gray-500">Professional marketplace</p>
-                </div>
+               
               </div>
 
               {token && user ? (
@@ -501,8 +497,8 @@ const Navbar: React.FC<NavbarProps> = ({
                     <p className="text-sm text-gray-500">{user?.email || 'No email'}</p>
                   </div>
                   <MobileNavItem href="/" icon={HomeIcon} label="Home" />
-                  <MobileNavItem href="/goods/list" icon={Upload} label="Upload List" highlight />
-                  <MobileNavItem href="/goods/purchase" icon={CreditCardIcon} label="Transactions" />
+                  <MobileNavItem href="/shop/list" icon={Upload} label="Upload List" highlight />
+                  <MobileNavItem href="/shop/purchase" icon={CreditCardIcon} label="Transactions" />
                   {storeId && (
                     <MobileNavItem href={`/appstore/managestore/${storeId}`} icon={Settings2} label="Manage Store" />
                   )}
@@ -523,7 +519,7 @@ const Navbar: React.FC<NavbarProps> = ({
               ) : (
                 <>
                   <MobileNavItem href="/" icon={HomeIcon} label="Home" />
-                  <MobileNavItem href="/goods/list" icon={Upload} label="Upload List" highlight />
+                  <MobileNavItem href="/shop/list" icon={Upload} label="Upload List" highlight />
                   <div className="pt-4">
                     <Link href="/shop/login" onClick={closeAllMenus}>
                       <motion.button

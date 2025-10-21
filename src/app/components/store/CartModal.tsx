@@ -166,7 +166,7 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
         );
         toast.success("Order confirmed! We'll verify your payment and process your order.");
         clearCart();
-                    router.push("/goods/purchase");
+                    router.push("/shop/purchase");
 
        ;
       } else {

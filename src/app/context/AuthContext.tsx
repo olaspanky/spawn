@@ -17,29 +17,35 @@ interface AuthContextType {
   user: User | null;
   isSigningUp: boolean;
   isVerifyingOTP: boolean;
-  isResendingOTP: boolean; // New loading state for resend OTP
+  isResendingOTP: boolean;
   isLoggingIn: boolean;
   isAuthLoading: boolean;
+  isForgettingPassword: boolean; // New loading state
+  isResettingPassword: boolean; // New loading state
   signup: (data: { fullName: string; email: string; password: string }) => Promise<void>;
   verifyOTP: (data: { email: string; otp: string }) => Promise<void>;
-  resendOTP: (email: string) => Promise<void>; // New function
+  resendOTP: (email: string) => Promise<void>;
   googleSignup: (token: string) => Promise<void>;
   login: (data: { email: string; password: string }) => Promise<void>;
   logout: () => void;
+  forgotPassword: (email: string) => Promise<void>; // New function
+  resetPassword: (data: { token: string; newPassword: string }) => Promise<void>; // New function
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
-const BASE_URL = "https://spawnback.vercel.app/api";
-// const BASE_URL = "http://localhost:5000/api";
+// const BASE_URL = "https://spawnback.vercel.app/api";
+const BASE_URL = "http://localhost:5000/api";
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [token, setToken] = useState<string | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [isSigningUp, setIsSigningUp] = useState(false);
   const [isVerifyingOTP, setIsVerifyingOTP] = useState(false);
-  const [isResendingOTP, setIsResendingOTP] = useState(false); // New state
+  const [isResendingOTP, setIsResendingOTP] = useState(false);
   const [isLoggingIn, setIsLoggingIn] = useState(false);
+  const [isForgettingPassword, setIsForgettingPassword] = useState(false); // New state
+  const [isResettingPassword, setIsResettingPassword] = useState(false); // New state
   const [isAuthLoading, setIsAuthLoading] = useState(true);
 
   useEffect(() => {
@@ -53,11 +59,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         name: parsedUser.name,
         email: parsedUser.email,
         isVerified: parsedUser.isVerified,
-        isAdmin: parsedUser.isAdmin
+        isAdmin: parsedUser.isAdmin,
       });
     }
     setIsAuthLoading(false);
   }, []);
+
 
   const signup = async (data: { fullName: string; email: string; password: string }) => {
     setIsSigningUp(true);
@@ -163,22 +170,59 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setUser(null);
   };
 
+
+    const forgotPassword = async (email: string) => {
+    setIsForgettingPassword(true);
+    try {
+      const res = await axios.post(`${BASE_URL}/users/forgot-password`, { email });
+      toast.success(res.data.message || "Password reset email sent. Please check your email.");
+    } catch (error) {
+      toast.error(
+        axios.isAxiosError(error)
+          ? error.response?.data?.message || "Failed to send reset email"
+          : "An unexpected error occurred"
+      );
+    } finally {
+      setIsForgettingPassword(false);
+    }
+  };
+
+  const resetPassword = async (data: { token: string; newPassword: string }) => {
+    setIsResettingPassword(true);
+    try {
+      const res = await axios.post(`${BASE_URL}/users/reset-password`, data);
+      toast.success(res.data.message || "Password reset successfully");
+    } catch (error) {
+      toast.error(
+        axios.isAxiosError(error)
+          ? error.response?.data?.message || "Failed to reset password"
+          : "An unexpected error occurred"
+      );
+    } finally {
+      setIsResettingPassword(false);
+    }
+  };
+
   return (
-    <AuthContext.Provider
+     <AuthContext.Provider
       value={{
         token,
         user,
         isSigningUp,
         isVerifyingOTP,
-        isResendingOTP, // Expose new loading state
+        isResendingOTP,
         isLoggingIn,
+        isForgettingPassword, // Expose new loading state
+        isResettingPassword, // Expose new loading state
         isAuthLoading,
         signup,
         verifyOTP,
-        resendOTP, // Expose new function
+        resendOTP,
         googleSignup,
         login,
         logout,
+        forgotPassword, // Expose new function
+        resetPassword, // Expose new function
       }}
     >
       {children}
