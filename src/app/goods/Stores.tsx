@@ -57,6 +57,16 @@ const StoreWebapp: React.FC = () => {
   const { token, isAuthLoading, logout } = useAuth();
   const router = useRouter();
 
+  const tabs = [
+    { id: 'all', label: 'All Items', shortLabel: 'All' },
+    { id: 'market_area', label: 'Market Area', shortLabel: 'Market' },
+    { id: 'package_deals', label: 'Packages', shortLabel: 'Packages' },
+    { id: 'meal_prep', label: 'Meal Prep', shortLabel: 'Meal prep' },
+    { id: 'frozen_foods', label: 'Frozen', shortLabel: 'Frozen' },
+    { id: 'drinks', label: 'Drinks', shortLabel: 'Drinks' },
+    { id: 'provisions_groceries', label: 'Groceries', shortLabel: 'Groceries' },
+  ];
+
   useEffect(() => {
     const fetchGoods = async () => {
       try {
@@ -107,17 +117,16 @@ const StoreWebapp: React.FC = () => {
   if (loading || isAuthLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center px-4">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 sm:h-16 sm:w-16 border-t-4 border-b-4 border-[#8d4817] mx-auto mb-4"></div>
-          <p className="text-gray-600 text-base sm:text-lg">Loading goods...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
+        <Navbar
+          tabs={tabs}
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+          setIsCartOpen={setIsCartOpen}
+          goodsCount={goods.length}
+          searchQuery={searchQuery}
+          onSearchChange={setSearchQuery}
+        />
         <div className="bg-red-50 p-4 sm:p-6 rounded-xl text-red-700 max-w-md w-full">
           <h3 className="font-bold text-base sm:text-lg mb-2">Error Loading Goods</h3>
           <p className="text-sm sm:text-base">{error}</p>
@@ -129,19 +138,20 @@ const StoreWebapp: React.FC = () => {
           </button>
         </div>
       </div>
+          <h3 className="font-bold text-base sm:text-lg mb-2">Error Loading Goods</h3>
+          <p className="text-sm sm:text-base">{error}</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="mt-4 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors w-full sm:w-auto"
+          >
+            Try Again
+          </button>
+        </div>
     );
   }
 
   const categorizedGoods = categorizeGoods(filteredGoods);
-  const tabs = [
-    { id: 'all', label: 'All Items', shortLabel: 'All' },
-    { id: 'market_area', label: 'Market Area', shortLabel: 'Market' },
-    { id: 'package_deals', label: 'Packages', shortLabel: 'Packages' },
-    { id: 'meal_prep', label: 'Meal Prep', shortLabel: 'Meal prep' },
-    { id: 'frozen_foods', label: 'Frozen', shortLabel: 'Frozen' },
-    { id: 'drinks', label: 'Drinks', shortLabel: 'Drinks' },
-    { id: 'provisions_groceries', label: 'Groceries', shortLabel: 'Groceries' },
-  ];
+
 
   return (
     <div className="min-h-screen bg-gray-50">
