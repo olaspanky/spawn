@@ -20,7 +20,7 @@ export default function OrderForm() {
   const handleFile = (f: File | null) => {
     if (!f) return;
     const allowedTypes = ["image/", "application/pdf", "text/"];
-    if (allowedTypes.some(type => f.type.startsWith(type)) || f.name.endsWith(".docx")) {
+    if (allowedTypes.some((type) => f.type.startsWith(type)) || f.name.endsWith(".docx")) {
       setFile(f);
     } else {
       alert("Please upload an image, PDF, or text file.");
@@ -31,12 +31,12 @@ export default function OrderForm() {
     const serviceLabel = service === "express" ? "⚡ Express (1hr)" : "🕐 Timeframe";
     return encodeURIComponent(
       `Hello MarketRuz!\n\n` +
-      `👤 Name: ${name}\n` +
-      `📞 Phone: ${phone}\n` +
-      `📍 Address: ${address}\n` +
-      `🛒 Service: ${serviceLabel} — Fee: ₦${fee}\n` +
-      (notes ? `📝 Notes: ${notes}\n` : "") +
-      `\nI'll attach my shopping list shortly.`
+        `👤 Name: ${name}\n` +
+        `📞 Phone: ${phone}\n` +
+        `📍 Address: ${address}\n` +
+        `🛒 Service: ${serviceLabel} — Fee: ₦${fee}\n` +
+        (notes ? `📝 Notes: ${notes}\n` : "") +
+        `\nI'll attach my shopping list shortly.`
     );
   };
 
@@ -48,17 +48,17 @@ export default function OrderForm() {
 
   if (submitted) {
     return (
-      <div className="text-center py-12">
+      <div className="text-center py-12 px-4">
         <div className="text-6xl mb-6">🎉</div>
         <h3 className="font-display font-bold text-3xl mb-3 text-ruz-dark">Order received!</h3>
-        <p className="text-ruz-muted max-w-xs mx-auto mb-8">
+        <p className="text-ruz-muted max-w-xs mx-auto mb-8 leading-relaxed">
           Click below to continue on WhatsApp. Attach your shopping list there.
         </p>
         <a
           href={`https://wa.me/${contactDetails.whatsapp}?text=${buildWhatsAppMessage()}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-3 bg-[#25D366] text-white font-semibold px-8 py-4 rounded-2xl hover:bg-[#1ebe5a] transition-all active:scale-[0.97]"
+          className="inline-flex items-center justify-center gap-3 w-full bg-[#25D366] hover:bg-[#1ebe5a] text-white font-semibold py-4 rounded-2xl transition-all active:scale-[0.97]"
         >
           Open WhatsApp
         </a>
@@ -73,9 +73,9 @@ export default function OrderForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      {/* Service Selection */}
-      <div className="grid grid-cols-2 gap-4">
+    <form onSubmit={handleSubmit} className="space-y-8 px-1">
+      {/* Service Selection - Bigger & Better on Mobile */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {(["timeframe", "express"] as ServiceType[]).map((s) => {
           const isActive = service === s;
           return (
@@ -83,46 +83,56 @@ export default function OrderForm() {
               key={s}
               type="button"
               onClick={() => setService(s)}
-              className={`p-5 rounded-3xl border-2 text-left transition-all ${
+              className={`p-6 rounded-3xl border-2 text-left transition-all active:scale-[0.98] ${
                 isActive
                   ? s === "express"
-                    ? "border-orange-500 bg-orange-50"
-                    : "border-emerald-500 bg-emerald-50"
+                    ? "border-orange-500 bg-orange-50 shadow-sm"
+                    : "border-emerald-500 bg-emerald-50 shadow-sm"
                   : "border-gray-200 hover:border-gray-300 bg-white"
               }`}
             >
-              <p className={`font-semibold ${isActive ? (s === "express" ? "text-orange-600" : "text-emerald-600") : "text-ruz-dark"}`}>
-                {s === "express" ? "⚡ Express" : "🕐 Timeframe"}
+              <p
+                className={`font-display font-semibold text-lg ${
+                  isActive
+                    ? s === "express"
+                      ? "text-orange-600"
+                      : "text-emerald-600"
+                    : "text-ruz-dark"
+                }`}
+              >
+                {s === "express" ? "⚡ Express Delivery" : "🕐 Scheduled Run"}
               </p>
-              <p className="text-xs text-ruz-muted mt-1">
-                {s === "express" ? `₦${fee} • Within 1 hour` : `₦${fee} • Scheduled`}
+              <p className="text-sm text-ruz-muted mt-2 leading-snug">
+                {s === "express"
+                  ? `₦${fee.toLocaleString()} • Within 1 hour`
+                  : `₦${fee.toLocaleString()} • Morning or Evening slot`}
               </p>
             </button>
           );
         })}
       </div>
 
-      {/* Service Info Box */}
+      {/* Service Info */}
       {service === "timeframe" && (
-        <div className="bg-emerald-50 border border-emerald-100 rounded-2xl p-4 text-sm text-emerald-700">
-          🌅 Morning: Order before 12 PM → Delivered by 2 PM<br />
-          🌆 Evening: Delivered 7 PM – 9 PM
+        <div className="bg-emerald-50 border border-emerald-100 rounded-3xl p-5 text-sm text-emerald-700 leading-relaxed">
+          🌅 <strong>Morning:</strong> Order before 12 PM → Delivered by 2 PM<br />
+          🌆 <strong>Evening:</strong> Delivered between 7 PM – 9 PM
         </div>
       )}
       {service === "express" && (
-        <div className="bg-orange-50 border border-orange-100 rounded-2xl p-4 text-sm text-orange-700">
-          ⚡ Express delivery within 1 hour after confirmation.
+        <div className="bg-orange-50 border border-orange-100 rounded-3xl p-5 text-sm text-orange-700">
+          ⚡ Your items will be delivered within 1 hour after we confirm the order.
         </div>
       )}
 
       {/* Form Fields */}
-      <div className="space-y-4">
+      <div className="space-y-5">
         <input
           required
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder="Full name"
-          className="w-full rounded-2xl border border-gray-200 px-5 py-3.5 focus:border-emerald-500 focus:outline-none"
+          className="w-full rounded-2xl border border-gray-200 px-5 py-4 text-base focus:border-emerald-500 focus:outline-none"
         />
         <input
           required
@@ -130,28 +140,28 @@ export default function OrderForm() {
           value={phone}
           onChange={(e) => setPhone(e.target.value)}
           placeholder="Phone number"
-          className="w-full rounded-2xl border border-gray-200 px-5 py-3.5 focus:border-emerald-500 focus:outline-none"
+          className="w-full rounded-2xl border border-gray-200 px-5 py-4 text-base focus:border-emerald-500 focus:outline-none"
         />
         <input
           required
           value={address}
           onChange={(e) => setAddress(e.target.value)}
           placeholder="Delivery address in Lagos"
-          className="w-full rounded-2xl border border-gray-200 px-5 py-3.5 focus:border-emerald-500 focus:outline-none"
+          className="w-full rounded-2xl border border-gray-200 px-5 py-4 text-base focus:border-emerald-500 focus:outline-none"
         />
         <textarea
           value={notes}
           onChange={(e) => setNotes(e.target.value)}
-          placeholder="Any special requests or notes..."
+          placeholder="Any special requests or notes (optional)"
           rows={3}
-          className="w-full rounded-2xl border border-gray-200 px-5 py-3.5 focus:border-emerald-500 focus:outline-none resize-y"
+          className="w-full rounded-2xl border border-gray-200 px-5 py-4 text-base focus:border-emerald-500 focus:outline-none resize-y"
         />
       </div>
 
-      {/* File Upload */}
+      {/* File Upload - Improved for Mobile */}
       <div
         onClick={() => fileRef.current?.click()}
-        className="border-2 border-dashed border-gray-300 hover:border-emerald-300 rounded-3xl p-8 text-center cursor-pointer transition-colors"
+        className="border-2 border-dashed border-gray-300 hover:border-emerald-400 rounded-3xl p-10 text-center cursor-pointer transition-all active:bg-gray-50"
       >
         <input
           ref={fileRef}
@@ -160,41 +170,46 @@ export default function OrderForm() {
           accept="image/*,.pdf,.txt,.docx"
           onChange={(e) => handleFile(e.target.files?.[0] || null)}
         />
+
         {file ? (
-          <div className="flex items-center justify-center gap-3 text-emerald-600">
-            📎 <span className="font-medium truncate">{file.name}</span>
+          <div className="flex flex-col items-center gap-3 text-emerald-600">
+            <span className="text-3xl">📎</span>
+            <div className="font-medium text-center break-all px-4">{file.name}</div>
             <button
               type="button"
-              onClick={(e) => { e.stopPropagation(); setFile(null); }}
-              className="text-red-400 hover:text-red-600 ml-2"
+              onClick={(e) => {
+                e.stopPropagation();
+                setFile(null);
+              }}
+              className="text-red-500 hover:text-red-600 text-sm mt-2"
             >
-              ✕
+              Remove file
             </button>
           </div>
         ) : (
           <div>
-            <p className="text-4xl mb-3">📋</p>
-            <p className="font-medium text-ruz-dark">Upload your shopping list</p>
-            <p className="text-sm text-ruz-muted mt-1">Photo, PDF, or text file</p>
+            <p className="text-5xl mb-4">📋</p>
+            <p className="font-semibold text-ruz-dark text-lg">Upload your shopping list</p>
+            <p className="text-ruz-muted mt-2 text-sm">Photo, PDF, or text file accepted</p>
           </div>
         )}
       </div>
 
       {/* Fee Summary */}
-      <div className="bg-gray-50 border border-gray-100 rounded-3xl p-5 flex justify-between items-center">
+      <div className="bg-gray-50 border border-gray-100 rounded-3xl p-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <p className="text-xs text-ruz-muted">Service fee</p>
-          <p className="text-2xl font-bold text-ruz-dark">₦{fee.toLocaleString()}</p>
+          <p className="text-xs uppercase tracking-widest text-ruz-muted">Service + Delivery Fee</p>
+          <p className="text-3xl font-bold text-ruz-dark mt-1">₦{fee.toLocaleString()}</p>
         </div>
-        <div className="text-right">
-          <p className="text-xs text-ruz-muted">Items cost</p>
-          <p className="text-sm text-ruz-muted">Calculated after review</p>
+        <div className="text-right text-sm text-ruz-muted">
+          Items cost will be calculated<br />after we review your list
         </div>
       </div>
 
+      {/* Submit Button - Full width and taller on mobile */}
       <button
         type="submit"
-        className="w-full bg-ruz-green hover:bg-emerald-700 active:bg-emerald-800 text-white font-display font-bold py-4 rounded-2xl transition-all text-lg shadow-lg shadow-emerald-900/20"
+        className="w-full bg-ruz-green hover:bg-emerald-700 active:bg-emerald-800 text-white font-display font-bold py-4.5 rounded-2xl transition-all text-lg shadow-lg shadow-emerald-900/20 active:scale-[0.985]"
       >
         Continue on WhatsApp →
       </button>
