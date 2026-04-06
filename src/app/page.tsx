@@ -45,7 +45,7 @@ export default function Home() {
       <PriceTicker />
 
       {/* ── Hero + Order Form ────────────────────────────── */}
-      <section className="max-w-6xl mx-auto px-6 py-16 md:py-20">
+      <section className="max-w-6xl mx-auto px-2 lg:px-6 py-16 md:py-20">
         <div className="grid md:grid-cols-2 gap-12 lg:gap-16 items-center">
           {/* Hero Content */}
           <div>

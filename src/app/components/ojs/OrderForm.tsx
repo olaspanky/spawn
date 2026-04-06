@@ -48,7 +48,7 @@ export default function OrderForm() {
 
   if (submitted) {
     return (
-      <div className="text-center py-12 px-4">
+      <div className="text-center lg:py-12 p-2 lg:px-4">
         <div className="text-6xl mb-6">🎉</div>
         <h3 className="font-display font-bold text-3xl mb-3 text-ruz-dark">Order received!</h3>
         <p className="text-ruz-muted max-w-xs mx-auto mb-8 leading-relaxed">
@@ -73,7 +73,7 @@ export default function OrderForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-8 px-1">
+    <form onSubmit={handleSubmit} className="space-y-4 px-1">
       {/* Service Selection - Bigger & Better on Mobile */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {(["timeframe", "express"] as ServiceType[]).map((s) => {
