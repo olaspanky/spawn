@@ -8,6 +8,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "daisyui": "^5.5.19",
     "next": "15.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
