@@ -3,144 +3,85 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #ffffff;
+  --green: #1a6b3c;
+  --lime: #4caf50;
+  --orange: #e8640a;
+  --amber: #f5a623;
+  --cream: #fdf6ec;
+  --dark: #0f2417;
+  --muted: #6b7c6e;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #ffffff;
-    --foreground: #ededed;
-  }
+* {
+  box-sizing: border-box;
 }
 
-body {
-  color: var(--background);
-  background: white;
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-/* Custom transitions */
-.transition-shadow {
-  transition: box-shadow 0.2s ease-in-out;
-}
-
-/* Image hover effect */
-.listing-image {
-  transition: transform 0.3s ease;
-}
-
-.listing-card:hover .listing-image {
-  transform: scale(1.05);
-}
-
-.input{
-background-color: white;
-}
-
- .scrollbar-hidden::-webkit-scrollbar {
-   display: none;
- }
- .scrollbar-hidden {
-   -ms-overflow-style: none;
-  scrollbar-width: none;
- }
-
- @keyframes slideDown {
-  from { opacity: 0; transform: translateY(-10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-.animate-slideDown {
-  animation: slideDown 0.3s ease-out forwards;
-}
-
-/* global.css */
-
-/* Target all input elements, select, and textarea */
-input,
-select,
-textarea {
-  color: #000000 !important; /* Black text color for input content */
-  background-color: #ffffff !important; /* White background for contrast */
-  border: 1px solid #000000 !important; /* Black border for visibility */
-  outline: none !important; /* Remove default outline */
-  font-size: 16px !important; /* Ensure readable font size */
-  padding: 8px !important; /* Consistent padding */
-}
-
-/* Ensure placeholder text is visible */
-input::placeholder,
-textarea::placeholder {
-  color: #333333 !important; /* Dark gray for placeholders */
-  opacity: 1 !important; /* Full opacity for visibility */
-}
-
-/* Target all labels */
-label {
-  color: #000000 !important; /* Black text color for labels */
-  font-size: 16px !important; /* Readable font size */
-  font-weight: 600 !important; /* Slightly bold for emphasis */
-}
-
-/* Ensure focus state is visible */
-input:focus,
-select:focus,
-textarea:focus {
-  border-color: #000000 !important; /* Black border on focus */
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3) !important; /* Subtle shadow for focus */
-}
-
-/* Override any browser-specific or inherited styles */
-input:-webkit-autofill,
-input:-webkit-autofill:hover,
-input:-webkit-autofill:focus,
-textarea:-webkit-autofill,
-textarea:-webkit-autofill:hover,
-textarea:-webkit-autofill:focus,
-select:-webkit-autofill,
-select:-webkit-autofill:hover,
-select:-webkit-autofill:focus {
-  -webkit-text-fill-color: #000000 !important; /* Black text for autofill */
-  background-color: #ffffff !important; /* White background for autofill */
-  transition: background-color 5000s ease-in-out 0s !important; /* Prevent autofill background flicker */
-}
-
-
-/* styles/globals.css */
-.safe-area-wrapper {
-  background-color: #1A1A1A; /* Matches bg-[#1A1A1A] */
-  min-height: 100vh; /* Ensures the wrapper covers the full viewport height */
-  padding-top: env(safe-area-inset-top); /* Pushes content below the notch */
-  padding-bottom: env(safe-area-inset-bottom);
-  padding-left: env(safe-area-inset-left);
-  padding-right: env(safe-area-inset-right);
-  position: relative;
-  overflow-x: hidden; /* Prevents horizontal scroll issues */
-}
-
-/* Ensure the body matches the background color to avoid white flashes */
-body {
-  background-color: #1A1A1A;
-  margin: 0;
-}
-
-/* Ensure the root HTML element also matches */
 html {
-  background-color: #1A1A1A;
+  scroll-behavior: smooth;
 }
 
-/* Handle scrolling content */
-.safe-area-wrapper > * {
-  position: relative;
-  z-index: 1; /* Ensures content stays above the background but respects safe area */
+body {
+  background-color: var(--cream);
+  color: var(--dark);
 }
 
-.isidora {
-  font-family: var(--font-isi), sans-serif;
+/* Marquee ticker */
+.ticker-track {
+  display: flex;
+  width: max-content;
+  animation: ticker 100s linear infinite;
 }
-.isidora2 {
-  font-family: var(--font-isidora);
+.ticker-track:hover {
+  animation-play-state: paused;
 }
-.work {
-  font-family: var(--work), sans-serif;
+@keyframes ticker {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* Upload zone */
+.upload-zone {
+  border: 2px dashed #c5d9c9;
+  transition: border-color 0.2s, background 0.2s;
+}
+.upload-zone:hover, .upload-zone.drag-over {
+  border-color: var(--green);
+  background: #f0f7f2;
+}
+
+/* Button press effect */
+.btn-press:active {
+  transform: scale(0.97);
+}
+
+/* Card hover lift */
+.card-lift {
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+.card-lift:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(15, 36, 23, 0.12);
+}
+
+/* Pulse dot */
+@keyframes pulse-ring {
+  0%   { transform: scale(1); opacity: 1; }
+  100% { transform: scale(2.2); opacity: 0; }
+}
+.pulse-dot::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: var(--lime);
+  animation: pulse-ring 1.4s ease-out infinite;
+}
+
+/* Animate in */
+.fade-up {
+  animation: fadeUp 0.5s ease both;
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
