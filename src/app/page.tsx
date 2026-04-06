@@ -93,7 +93,7 @@ export default function Home() {
           </div>
 
           {/* Order Form Card */}
-          <div className="bg-white border border-gray-100 shadow-xl shadow-gray-100/80 rounded-3xl p-8 lg:p-10">
+          <div className="bg-white border border-gray-100 shadow-xl shadow-gray-100/80 rounded-3xl p-3 lg:p-10">
             <div className="mb-6">
               <h2 className="font-display font-bold text-2xl text-ruz-dark">Place your order</h2>
               <p className="text-ruz-muted text-sm mt-1">We'll reply with a price estimate on WhatsApp</p>
