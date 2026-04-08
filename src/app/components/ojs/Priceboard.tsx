@@ -61,11 +61,11 @@ export default function PriceBoard() {
         {/* Header */}
         <div className="text-center mb-12">
           <span className="inline-block bg-emerald-500/10 text-emerald-400 text-xs font-semibold uppercase tracking-widest px-5 py-2 rounded-full mb-4">
-            LAGOS MARKET + RECIPES
+            LOCAL MARKET + RECIPES
           </span>
           <h2 className="text-5xl font-bold tracking-tighter">Market Prices &amp; Recipes</h2>
           <p className="text-zinc-400 mt-3 text-lg">
-            Fresh Lagos rates • Delicious recipes using local ingredients
+            Fresh LOCAL rates • Delicious recipes using local ingredients
           </p>
         </div>
 

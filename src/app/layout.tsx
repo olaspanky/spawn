@@ -1,16 +1,14 @@
+// app/layout.tsx
 import type { Metadata } from "next";
 import "./globals.css";
+import { Providers } from "./components/Providers";
 
 export const metadata: Metadata = {
   title: "MarketRuz — Fresh Market Delivery",
-  description: "Upload your shopping list and we handle the rest. Fresh market runs, delivered fast.",
+  description: "Upload your shopping list and we handle the rest.",
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <head>
@@ -21,7 +19,9 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className="font-body bg-ruz-cream antialiased">{children}</body>
+      <body className="font-body bg-ruz-cream antialiased">
+        <Providers>{children}</Providers>
+      </body>
     </html>
   );
-}
+}// app/layout.tsx

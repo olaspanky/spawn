@@ -62,7 +62,7 @@ export default function Home() {
             </h1>
 
             <p className="text-xl text-ruz-muted max-w-lg mb-10">
-              Send your shopping list. We buy fresh from Lagos markets and deliver fast.
+              Send your shopping list. We buy fresh from LOCAL markets and deliver fast.
             </p>
 
             {/* Badges */}
@@ -119,7 +119,7 @@ export default function Home() {
                 Market<span className="text-ruz-lime">Ruz</span>
               </span>
             </div>
-            <p className="text-white/50 text-sm">Fresh market runs • Delivered fast in Lagos</p>
+            <p className="text-white/50 text-sm">Fresh market runs • Delivered fast in LOCAL</p>
           </div>
 
           <div className="flex gap-4">

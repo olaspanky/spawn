@@ -4,6 +4,12 @@ import { serviceConfig, contactDetails } from "../../lib/mp";
 
 type ServiceType = "timeframe" | "express";
 
+type SubmittedOrder = {
+  _id: string;
+  name: string;
+  status: string;
+};
+
 export default function OrderForm() {
   const [service, setService] = useState<ServiceType>("timeframe");
   const [name, setName] = useState("");
@@ -11,7 +17,12 @@ export default function OrderForm() {
   const [address, setAddress] = useState("");
   const [notes, setNotes] = useState("");
   const [file, setFile] = useState<File | null>(null);
+
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [submitted, setSubmitted] = useState(false);
+  const [order, setOrder] = useState<SubmittedOrder | null>(null);
+
   const fileRef = useRef<HTMLInputElement>(null);
 
   const cfg = serviceConfig[service];
@@ -20,42 +31,114 @@ export default function OrderForm() {
   const handleFile = (f: File | null) => {
     if (!f) return;
     const allowedTypes = ["image/", "application/pdf", "text/"];
-    if (allowedTypes.some((type) => f.type.startsWith(type)) || f.name.endsWith(".docx")) {
+    if (
+      allowedTypes.some((type) => f.type.startsWith(type)) ||
+      f.name.endsWith(".docx")
+    ) {
       setFile(f);
     } else {
       alert("Please upload an image, PDF, or text file.");
     }
   };
 
-  const buildWhatsAppMessage = () => {
-    const serviceLabel = service === "express" ? "⚡ Express (1hr)" : "🕐 Timeframe";
+  const buildWhatsAppMessage = (orderId: string) => {
+    const serviceLabel =
+      service === "express" ? "⚡ Express (1hr)" : "🕐 Timeframe";
     return encodeURIComponent(
       `Hello MarketRuz!\n\n` +
+        `🧾 Order ID: ${orderId}\n` +
         `👤 Name: ${name}\n` +
         `📞 Phone: ${phone}\n` +
         `📍 Address: ${address}\n` +
-        `🛒 Service: ${serviceLabel} — Fee: ₦${fee}\n` +
+        `🛒 Service: ${serviceLabel} — Fee: ₦${fee.toLocaleString()}\n` +
         (notes ? `📝 Notes: ${notes}\n` : "") +
         `\nI'll attach my shopping list shortly.`
     );
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!name || !phone || !address) return;
-    setSubmitted(true);
+  const uploadFile = async (f: File): Promise<object> => {
+    const formData = new FormData();
+    formData.append("file", f);
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/upload`,
+      { method: "POST", body: formData }
+    );
+    if (!res.ok) throw new Error("File upload failed");
+    const data = await res.json();
+    return data.file; // { url, publicId, originalName, mimeType }
   };
 
-  if (submitted) {
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+    setLoading(true);
+
+    try {
+      let fileMeta: object | null = null;
+      if (file) {
+        fileMeta = await uploadFile(file);
+      }
+
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/orders`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name,
+            phone,
+            address,
+            service,
+            notes,
+            file: fileMeta,
+          }),
+        }
+      );
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.message || "Failed to submit order");
+      }
+
+      setOrder(data.data);
+      setSubmitted(true);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Something went wrong");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleReset = () => {
+    setSubmitted(false);
+    setOrder(null);
+    setName("");
+    setPhone("");
+    setAddress("");
+    setNotes("");
+    setFile(null);
+    setService("timeframe");
+    setError(null);
+  };
+
+  // ── Success screen ──
+  if (submitted && order) {
     return (
       <div className="text-center lg:py-12 p-2 lg:px-4">
         <div className="text-6xl mb-6">🎉</div>
-        <h3 className="font-display font-bold text-3xl mb-3 text-ruz-dark">Order received!</h3>
-        <p className="text-ruz-muted max-w-xs mx-auto mb-8 leading-relaxed">
-          Click below to continue on WhatsApp. Attach your shopping list there.
+        <h3 className="font-display font-bold text-3xl mb-3 text-ruz-dark">
+          Order received!
+        </h3>
+        <p className="text-ruz-muted max-w-xs mx-auto mb-2 leading-relaxed">
+          Click below to continue on WhatsApp and attach your shopping list.
+        </p>
+        <p className="text-xs text-ruz-muted mb-8">
+          Order ID:{" "}
+          <span className="font-mono text-ruz-dark">{order._id}</span>
         </p>
         <a
-          href={`https://wa.me/${contactDetails.whatsapp}?text=${buildWhatsAppMessage()}`}
+          href={`https://wa.me/${contactDetails.whatsapp}?text=${buildWhatsAppMessage(order._id)}`}
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center justify-center gap-3 w-full bg-[#25D366] hover:bg-[#1ebe5a] text-white font-semibold py-4 rounded-2xl transition-all active:scale-[0.97]"
@@ -63,21 +146,23 @@ export default function OrderForm() {
           Open WhatsApp
         </a>
         <button
-          onClick={() => setSubmitted(false)}
+          onClick={handleReset}
           className="block mx-auto mt-6 text-sm text-ruz-muted underline"
         >
-          Edit order
+          Place another order
         </button>
       </div>
     );
   }
 
+  // ── Order form ──
   return (
     <form onSubmit={handleSubmit} className="space-y-4 px-1">
-      {/* Service Selection - Bigger & Better on Mobile */}
+      {/* Service Selection */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {(["timeframe", "express"] as ServiceType[]).map((s) => {
           const isActive = service === s;
+          const serviceFee = serviceConfig[s].fee;
           return (
             <button
               key={s}
@@ -104,8 +189,8 @@ export default function OrderForm() {
               </p>
               <p className="text-sm text-ruz-muted mt-2 leading-snug">
                 {s === "express"
-                  ? `₦${fee.toLocaleString()} • Within 1 hour`
-                  : `₦${fee.toLocaleString()} • Morning or Evening slot`}
+                  ? `₦${serviceFee.toLocaleString()} • Within 1 hour`
+                  : `₦${serviceFee.toLocaleString()} • Morning or Evening slot`}
               </p>
             </button>
           );
@@ -115,13 +200,15 @@ export default function OrderForm() {
       {/* Service Info */}
       {service === "timeframe" && (
         <div className="bg-emerald-50 border border-emerald-100 rounded-3xl p-5 text-sm text-emerald-700 leading-relaxed">
-          🌅 <strong>Morning:</strong> Order before 12 PM → Delivered by 2 PM<br />
+          🌅 <strong>Morning:</strong> Order before 12 PM → Delivered by 2 PM
+          <br />
           🌆 <strong>Evening:</strong> Delivered between 7 PM – 9 PM
         </div>
       )}
       {service === "express" && (
         <div className="bg-orange-50 border border-orange-100 rounded-3xl p-5 text-sm text-orange-700">
-          ⚡ Your items will be delivered within 1 hour after we confirm the order.
+          ⚡ Your items will be delivered within 1 hour after we confirm the
+          order.
         </div>
       )}
 
@@ -146,7 +233,7 @@ export default function OrderForm() {
           required
           value={address}
           onChange={(e) => setAddress(e.target.value)}
-          placeholder="Delivery address in Lagos"
+          placeholder="Delivery address in LOCAL"
           className="w-full rounded-2xl border border-gray-200 px-5 py-4 text-base focus:border-emerald-500 focus:outline-none"
         />
         <textarea
@@ -158,7 +245,7 @@ export default function OrderForm() {
         />
       </div>
 
-      {/* File Upload - Improved for Mobile */}
+      {/* File Upload */}
       <div
         onClick={() => fileRef.current?.click()}
         className="border-2 border-dashed border-gray-300 hover:border-emerald-400 rounded-3xl p-10 text-center cursor-pointer transition-all active:bg-gray-50"
@@ -170,11 +257,12 @@ export default function OrderForm() {
           accept="image/*,.pdf,.txt,.docx"
           onChange={(e) => handleFile(e.target.files?.[0] || null)}
         />
-
         {file ? (
           <div className="flex flex-col items-center gap-3 text-emerald-600">
             <span className="text-3xl">📎</span>
-            <div className="font-medium text-center break-all px-4">{file.name}</div>
+            <div className="font-medium text-center break-all px-4">
+              {file.name}
+            </div>
             <button
               type="button"
               onClick={(e) => {
@@ -189,8 +277,12 @@ export default function OrderForm() {
         ) : (
           <div>
             <p className="text-5xl mb-4">📋</p>
-            <p className="font-semibold text-ruz-dark text-lg">Upload your shopping list</p>
-            <p className="text-ruz-muted mt-2 text-sm">Photo, PDF, or text file accepted</p>
+            <p className="font-semibold text-ruz-dark text-lg">
+              Upload your shopping list
+            </p>
+            <p className="text-ruz-muted mt-2 text-sm">
+              Photo, PDF, or text file accepted
+            </p>
           </div>
         )}
       </div>
@@ -198,20 +290,34 @@ export default function OrderForm() {
       {/* Fee Summary */}
       <div className="bg-gray-50 border border-gray-100 rounded-3xl p-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <p className="text-xs uppercase tracking-widest text-ruz-muted">Service + Delivery Fee</p>
-          <p className="text-3xl font-bold text-ruz-dark mt-1">₦{fee.toLocaleString()}</p>
+          <p className="text-xs uppercase tracking-widest text-ruz-muted">
+            Service + Delivery Fee
+          </p>
+          <p className="text-3xl font-bold text-ruz-dark mt-1">
+            ₦{fee.toLocaleString()}
+          </p>
         </div>
         <div className="text-right text-sm text-ruz-muted">
-          Items cost will be calculated<br />after we review your list
+          Items cost will be calculated
+          <br />
+          after we review your list
         </div>
       </div>
 
-      {/* Submit Button - Full width and taller on mobile */}
+      {/* Error */}
+      {error && (
+        <div className="bg-red-50 border border-red-200 text-red-700 rounded-2xl px-5 py-4 text-sm">
+          ⚠️ {error}
+        </div>
+      )}
+
+      {/* Submit */}
       <button
         type="submit"
-        className="w-full bg-ruz-green hover:bg-emerald-700 active:bg-emerald-800 text-white font-display font-bold py-4.5 rounded-2xl transition-all text-lg shadow-lg shadow-emerald-900/20 active:scale-[0.985]"
+        disabled={loading}
+        className="w-full bg-ruz-green hover:bg-emerald-700 active:bg-emerald-800 disabled:opacity-60 disabled:cursor-not-allowed text-white font-display font-bold py-4 rounded-2xl transition-all text-lg shadow-lg shadow-emerald-900/20 active:scale-[0.985]"
       >
-        Continue on WhatsApp →
+        {loading ? "Submitting…" : "Continue on WhatsApp →"}
       </button>
     </form>
   );
